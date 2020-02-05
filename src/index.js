@@ -5,9 +5,11 @@ import configureStore from './configureStore'
 import { Route, Switch, Router, Redirect } from 'react-router-dom';
 import App from './layouts/app';
 import history from './history';
+
 import './assets/css/style.min.css';
 import './assets/css/bootstrap.min.css';
 import './assets/css/style.app.css';
+
 
 import { getAuth } from './components/auth';
 const isAuthenticated = getAuth();

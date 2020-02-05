@@ -14,7 +14,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import 'datatables.net';
 import * as authAction  from '../../actions/authAction';
-import {ArcGauge} from '@progress/kendo-react-gauges';
+// import {ArcGauge} from '@progress/kendo-react-gauges';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -22,9 +22,7 @@ const mapDispatchToProps = dispatch => ({
 	blankdispatch: () =>
 	dispatch(authAction.blankdispatch()),
 });
-const arcCenterRenderer = (currentValue, color) => {
-	return (<h3 style={{fontSize: 13, marginTop: 25, color: color}}>{currentValue}%</h3>);
-};
+
 class Userregister extends Component {
 	_isMounted = false
 	constructor(props) {
@@ -36,29 +34,13 @@ class Userregister extends Component {
 			loading:true
 		};
 	}
-	handlePaginationClick = () => {
-    window.dispatchEvent(new Event("resize"));
-  };
 
-  componentDidMount() {
-    this._isMounted = true;
+	componentDidMount() {
+		this._isMounted = true;
 
-    this.getUserData();
+		this.getUserData();
+	}
 
-    setTimeout(() => {
-      const elem = document.querySelector(
-        ".dataTables_paginate.paging_simple_numbers"
-      );
-      elem.addEventListener("click", this.handlePaginationClick);
-    }, 5000);
-  }
-  componentWillUnmount() {
-    this._isMounted = false;
-
-    document
-      .querySelector(".dataTables_paginate.paging_simple_numbers")
-      .removeEventListener("click", this.handlePaginationClick);
-  }
 	getUserData () {
 		this._isMounted = true;
 		this.setState({loading:true})
@@ -165,71 +147,66 @@ class Userregister extends Component {
 		}
 		return (
 			<div className="order_div">
-			<div className="content__header content__header--with-line">
-			<h2 className="title">{trls('User')}</h2>
-			</div>
-			<div className="orders">
-			<div className="orders__filters justify-content-between">
-			<Form inline style={{width:"100%"}}>
-			<Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}>{trls('Add_User')}</Button> 
-			<Adduserform
-			show={this.state.modalShow}
-			mode={this.state.mode}
-			onHide={() => this.onAddformHide()}
-			onGetUser={() => this.getUserData()}
-			userUpdateData={this.state.userUpdateData}
-			userID={this.state.userID}
-			updateflag={this.state.updateflag}
-			removeDetail={this.removeDetail}
-			/>  
-			</Form>
-			</div>
-			<div className="table-responsive">
-			<table id="example" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
-			<thead>
-			<tr>
-			<th>{trls('UserName')}</th>
-			<th>{trls('Email')}</th>
-			<th>{trls('Active')}</th>
-			<th>{trls('Action')}</th>
-			</tr>
-			</thead>
-			{optionarray && !this.state.loading &&(<tbody >
-				{
-					optionarray.map((data,i) =>(
-						<tr id={i} key={i}>
-						<td>{data.UserName}</td>
-						<td>{data.Email}</td>
-						<td><Form.Check inline name="Intrastat" type="checkbox" disabled defaultChecked={data.IsActive} id="Intrastat" /></td>
-						<td >
-						<div style={{width:"70px", height: "50px"}}>
-						<ArcGauge style={{width: "100%", height: "100%"}} transitions={false} value={30} arcCenterRender={arcCenterRenderer}/>
+				<div className="content__header content__header--with-line">
+				<h2 className="title">{trls('User')}</h2>
+				</div>
+				<div className="orders">
+				<div className="orders__filters justify-content-between">
+					<Form inline style={{width:"100%"}}>
+						<Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}>{trls('Add_User')}</Button> 
+						<Adduserform
+							show={this.state.modalShow}
+							mode={this.state.mode}
+							onHide={() => this.onAddformHide()}
+							onGetUser={() => this.getUserData()}
+							userUpdateData={this.state.userUpdateData}
+							userID={this.state.userID}
+							updateflag={this.state.updateflag}
+							removeDetail={this.removeDetail}
+						/>  
+					</Form>
+				</div>
+				<div className="table-responsive">
+					<table id="example" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+						<thead>
+							<tr>
+							<th>{trls('UserName')}</th>
+							<th>{trls('Email')}</th>
+							<th>{trls('Active')}</th>
+							<th>{trls('Action')}</th>
+						</tr>
+						</thead>
+						{optionarray && !this.state.loading &&(<tbody >
+							{
+								optionarray.map((data,i) =>(
+									<tr id={i} key={i}>
+										<td>{data.UserName}</td>
+										<td>{data.Email}</td>
+										<td><Form.Check inline name="Intrastat" type="checkbox" disabled defaultChecked={data.IsActive} id="Intrastat" /></td>
+									<td >
+										<Row style={{justifyContent:"center"}}>
+											<i id={data.id} className="fas fa-trash-alt statu-item" onClick={this.userDeleteConfirm}></i>
+											<i id={data.id} className="fas fa-edit statu-item" onClick={this.userUpdate}></i>
+											<i id={data.id} className="fas fa-eye statu-item" onClick={this.viewUserData}></i>
+										</Row>
+									</td>
+								</tr>
+								))
+							}
+							</tbody>)}
+							</table>
+							{ this.state.loading&& (
+								<div className="col-md-4 offset-md-4 col-xs-12 loading" style={{textAlign:"center"}}>
+								<BallBeat
+								color={'#222A42'}
+								loading={this.state.loading}
+								/>
+								</div>
+							)}
 						</div>
-						{/* <Row style={{justifyContent:"center"}}>
-						<i id={data.id} className="fas fa-trash-alt statu-item" onClick={this.userDeleteConfirm}></i>
-						<i id={data.id} className="fas fa-edit statu-item" onClick={this.userUpdate}></i>
-						<i id={data.id} className="fas fa-eye statu-item" onClick={this.viewUserData}></i>
-					</Row> */}
-
-					</td>
-					</tr>
-					))
-				}
-				</tbody>)}
-					</table>
-					{ this.state.loading&& (
-						<div className="col-md-4 offset-md-4 col-xs-12 loading" style={{textAlign:"center"}}>
-						<BallBeat
-						color={'#222A42'}
-						loading={this.state.loading}
-						/>
-						</div>
-						)}
-						</div>
-						</div>
-						</div>
-						)
-				};
-			}
-
-			export default connect(mapStateToProps, mapDispatchToProps)(Userregister);
+					</div>
+				</div>
+			)
+		};
+	}
+export default connect(mapStateToProps, mapDispatchToProps)(Userregister);

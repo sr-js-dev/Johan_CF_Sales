@@ -8,18 +8,21 @@ import $ from 'jquery';
 import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
-import { BallBeat } from 'react-pure-loaders';
 // import GaugeChart from 'react-gauge-chart'
 import 'datatables.net';
+// import * as Common from '../../components/common';
 import {ArcGauge} from '@progress/kendo-react-gauges';
+import { BallBeat } from 'react-pure-loaders';
+
 
 const mapStateToProps = state => ({ ...state.auth });
 
 const mapDispatchToProps = dispatch => ({
     
 });
+
 const arcCenterRenderer = (currentValue, color) => {
-    return (<h3 style={{fontSize: 13, marginTop: 25, color: color}}>{currentValue}%</h3>);
+    return;
 };
 
 class Modalpanel extends React.Component {
@@ -40,12 +43,17 @@ class Modalpanel extends React.Component {
 }
 
 class AccordionItem extends React.Component {
-  state = {
-    opened: false,
-  }
+
+    state = {
+        opened: false,
+    }
+    
     componentDidMount() {
         this._isMounted=true
+        
+        
     }
+
     getCustomerData (value) {
         
         this._isMounted = true;
@@ -123,12 +131,14 @@ class AccordionItem extends React.Component {
                       ]
                     }
                   );
+                  $("#example-modal_paginate").click(function(){window.dispatchEvent(new Event("resize"))});
             }
         });
     }
     componentDidUpdate(){
         if(this.props.customerId){
-            this.getCustomerData(this.props.customerId)
+            this.getCustomerData(this.props.customerId);
+            
         }
     }
     formatNumber = (num) => {
@@ -195,14 +205,14 @@ class AccordionItem extends React.Component {
                                         <td>{this.formatNumber(data.currentYear)}</td>
                                         <td>{this.formatNumber(data.lastYear)}</td>
                                         <td>
-                                                <div style={{width:70, height: 50}}>
-                                                    <ArcGauge style={{width: "100%", height: "100%"}} transitions={false} value={this.formatNumberPercent(data.gaugepercent)} arcCenterRender={arcCenterRenderer}/>
-                                                </div>
-                                                {/* </Col> */}
-                                                {/* <Col sm={3} style={{paddingLeft:"0px"}}>
-                                                    <p>{this.formatNumberPercent(data.progress)+"%"}</p>
-                                                </Col> */}
-                                            {/* </Row> */}
+                                            <Row >
+                                                <Col sm={6} style={{textAlign:"center", fontSize:"13px"}}>
+                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}}value={this.formatNumberPercent(data.gaugepercent)} arcCenterRender={arcCenterRenderer}/>
+                                                </Col>
+                                                <Col sm={3} style={{paddingLeft:"0px"}}>
+                                                    <div style={{paddingTop: 10}}>{this.formatNumberPercent(data.progress)+"%"}</div>
+                                                </Col>
+                                            </Row>
                                         </td>
                                     </tr>
                             ))

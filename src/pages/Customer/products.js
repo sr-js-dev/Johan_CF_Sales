@@ -9,12 +9,11 @@ import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
 import { BallBeat } from 'react-pure-loaders';
-// import GaugeChart from 'react-gauge-chart'
 import 'datatables.net';
 import {ArcGauge} from '@progress/kendo-react-gauges';
 
 const arcCenterRenderer = (currentValue, color) => {
-    return (<h3 style={{fontSize: 13, marginTop: 20, color: color}}>{currentValue}%</h3>);
+    return;
 };
 
 const mapStateToProps = state => ({ ...state.auth });
@@ -40,22 +39,26 @@ class Productpanel extends React.Component {
 }
 
 class AccordionItem extends React.Component {
-  state = {
-    opened: false,
-  }
-  constructor(props) {
-    var date = new Date();
-    var curyear = date.getFullYear(); 
-    super(props);
-    this.state = {  
-        lastYear2 : curyear-2,
-        lastYear3 : curyear-3
-    };
-  }
+
+    state = {
+        opened: false,
+    }
+
+    constructor(props) {
+        var date = new Date();
+        var curyear = date.getFullYear(); 
+        super(props);
+        this.state = {  
+            lastYear2 : curyear-2,
+            lastYear3 : curyear-3
+        };
+    }
+
     componentDidMount() {
         this._isMounted=true
-        this.setState({loading:true})
+        this.setState({loading:true});
     }
+
     getCustomerData (value) {
         this._isMounted = true;
         let params = {
@@ -148,6 +151,7 @@ class AccordionItem extends React.Component {
                       ]
                     }
                   );
+                  $("#example-product_paginate").click(function(){window.dispatchEvent(new Event("resize"))});
             }
         });
     }
@@ -229,21 +233,10 @@ class AccordionItem extends React.Component {
                                         <td>
                                             <Row >
                                                 <Col sm={6} style={{textAlign:"center", fontSize:"13px"}}>
-                                                    {/* <GaugeChart 
-                                                        id={"gauge-chart"+i+1}
-                                                        colors={["#FA0505","#6AAB5F"]} 
-                                                        hideText={true}
-                                                        needleColor={"red"}
-                                                        nrOfLevels={2} 
-                                                        arcPadding={0} 
-                                                        cornerRadius={0} 
-                                                        percent={data.gaugepercent}
-                                                        arcWidth={0.4} 
-                                                    /> */}
-                                                    <ArcGauge style={{width:70, height:50}} value={this.formatNumberPercent(data.gaugepercent)} arcCenterRender={arcCenterRenderer}/>
+                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}} value={this.formatNumberPercent(data.gaugepercent)} arcCenterRender={arcCenterRenderer}/>
                                                 </Col>
                                                 <Col sm={3} style={{paddingLeft:"0px"}}>
-                                                    <p>{this.formatNumberPercent(data.progress)+"%"}</p>
+                                                    <div style={{paddingTop: 10}}>{this.formatNumberPercent(data.progress)+"%"}</div>
                                                 </Col>
                                             </Row>
                                         </td>

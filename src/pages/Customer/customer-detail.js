@@ -21,6 +21,7 @@ import Quotation from './quotation';
 import Mold from './mold.js'
 import {ArcGauge} from '@progress/kendo-react-gauges';
 import '@progress/kendo-theme-default/dist/all.css';
+import * as Common from '../../components/common';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -28,11 +29,9 @@ const mapDispatchToProps = dispatch => ({
     
 });
 const arcCenterRenderer = (currentValue, color) => {
-    return (<h3 style={{ color: color }}>{currentValue}%</h3>);
+    return (<h3 style={{ color: color }}>{Common.formatPercent(currentValue)}</h3>);
 };
-const gaugeStyles = {
-    // display: 'block'
-};
+
 class Userregister extends Component {
     _isMounted = false
     constructor(props) {
@@ -277,10 +276,19 @@ class Userregister extends Component {
                                                 </div>
                                             </div>
                                         </Col>
-                                        <Col sm={3} style={{textAlign:"center", fontSize:"13px"}}>
+                                        <Col sm={4} style={{textAlign:"center", fontSize:"13px"}}>
                                             <div style={{color:"rgba(21, 132, 247, 1)", paddingBottom:"10px"}}>{trls("Progress")}</div>
                                                 <div>
-                                                    <ArcGauge style={gaugeStyles}  value={this.formatNumberPercent(this.state.percent)} arcCenterRender={arcCenterRenderer} />
+                                                    {/* <ArcGauge style={gaugeStyles}  value={this.state.percent} arcCenterRender={arcCenterRenderer} /> */}
+                                                
+                                                    <ArcGauge
+                                                        value={this.state.percent}
+                                                        transitions={false}
+                                                        scale={{
+                                                            rangeSize:25,
+                                                        }}
+                                                        arcCenterRender={arcCenterRenderer}
+                                                    />
                                                 </div>
                                             <div style={{color:"rgba(21, 132, 247, 1)"}}>{trls("Payment_term")}</div>
                                             {paymentterm?(
