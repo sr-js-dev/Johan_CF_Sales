@@ -11,6 +11,7 @@ import Axios from 'axios';
 import { BallBeat } from 'react-pure-loaders';
 import 'datatables.net';
 import {ArcGauge} from '@progress/kendo-react-gauges';
+import Productimageform from './productimage_form';
 
 const arcCenterRenderer = (currentValue, color) => {
     return;
@@ -50,7 +51,9 @@ class AccordionItem extends React.Component {
         super(props);
         this.state = {  
             lastYear2 : curyear-2,
-            lastYear3 : curyear-3
+            lastYear3 : curyear-3,
+            imagePath: '',
+            productNumber: ''
         };
     }
 
@@ -67,6 +70,7 @@ class AccordionItem extends React.Component {
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetCustomerProducts, params, headers)
         .then(result => {
+            console.log('5555', result);
             if(this._isMounted){
                 var date = new Date();
                 var curyear = date.getFullYear(); 
@@ -107,6 +111,7 @@ class AccordionItem extends React.Component {
                     tempArray.Itemtype=data.Itemtype;
                     tempArray.Color=data.Color;
                     tempArray.Length=data.Length;
+                    tempArray.PathDrawing=data.PathDrawing;
                     if(ItemNumber===data.ItemNumber&&curyear===data.Year){
                         currentYear=data.Revenue;
                         tempArray.currentYear=currentYear;
@@ -170,6 +175,7 @@ class AccordionItem extends React.Component {
         }
        
     }
+
     formatNumberPercent = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -179,6 +185,13 @@ class AccordionItem extends React.Component {
         }
         
     }
+
+    drawingImage = (path, productNumber) =>{
+        this.setState({imagePath: API.GetImage+path, productNumber: productNumber, modalShow: true})
+        // window.open( 
+        //     API.GetImage+path, "_blank"); 
+    }
+
     render () {
         let customerItems=this.state.customerItems;
         const {
@@ -222,7 +235,9 @@ class AccordionItem extends React.Component {
                             {
                                 customerItems.map((data,i) =>(
                                     <tr id={i} key={i}>
-                                        <td>{data.ItemNumber}</td>
+                                        <td>
+                                            <div style={{cursor: "pointer", color:'#004388', fontSize:"16px", fontWeight:'bold'}} onClick={()=>this.drawingImage(data.PathDrawing, data.ItemNumber)}>{data.ItemNumber}</div>
+                                        </td>
                                         <td>{data.Itemtype}</td>
                                         <td>{data.Color}</td>
                                         <td>{data.Length}</td>
@@ -253,7 +268,12 @@ class AccordionItem extends React.Component {
                             />
                         </div>
                     )}
-                    
+                    <Productimageform   
+                        show={this.state.modalShow}
+                        imagePath={this.state.imagePath}
+                        onHide={() => this.setState({modalShow: false})}
+                        productNumber={this.state.productNumber}
+                    />
                     </div>
                 </div>
             </div>

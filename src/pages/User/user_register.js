@@ -70,10 +70,9 @@ class Userregister extends Component {
 			}
 		});
 	}
-	userUpdate = (event) => {
-		let userID=event.currentTarget.id;
+	userUpdate = (id) => {
 		var settings = {
-			"url": API.GetUserDataById+event.currentTarget.id,
+			"url": API.GetUserDataById+id,
 			"method": "GET",
 			"headers": {
 				"Content-Type": "application/json",
@@ -84,16 +83,15 @@ class Userregister extends Component {
 		})
 		.then(response => {
 			this.setState({userUpdateData: response})
-			this.setState({modalShow:true, mode:"update", updateflag: true, userID:userID, flag:true})
+			this.setState({modalShow:true, mode:"update", updateflag: true, userID: id, flag:true})
 		});
 	}
-	viewUserData = (event) => {
+	viewUserData = (id) => {
 		this._isMounted = true;
 		var headers = SessionManager.shared().getAuthorizationHeader();
-		Axios.get(API.GetUserDataById+event.currentTarget.id, headers)
+		Axios.get(API.GetUserDataById+id, headers)
 		.then(result => {
 			if(this._isMounted){
-
 				this.setState({userUpdateData: result.data})
 				this.setState({modalShow:true, mode:"view", flag:true})
 			}
@@ -101,7 +99,7 @@ class Userregister extends Component {
 	}
 	userDelete = () => {
 		var headers = SessionManager.shared().getAuthorizationHeader();
-		Axios.delete("https://cors-anywhere.herokuapp.com/"+API.DeleteUserData+this.state.userId, headers)
+		Axios.delete(API.DeleteUserData+this.state.userId, headers)
 		.then(result => {
 			this.setState({loading:true})
 			this.getUserData();               
@@ -111,8 +109,8 @@ class Userregister extends Component {
 	removeDetail = () => {
 		this.setState({updateflag: false})
 	}
-	userDeleteConfirm = (event) => {
-		this.setState({userId:event.currentTarget.id})
+	userDeleteConfirm = (id) => {
+		this.setState({userId: id})
 		confirmAlert({
 			title: 'Confirm',
 			message: 'Are you sure to do this.',
@@ -185,9 +183,9 @@ class Userregister extends Component {
 										<td><Form.Check inline name="Intrastat" type="checkbox" disabled defaultChecked={data.IsActive} id="Intrastat" /></td>
 									<td >
 										<Row style={{justifyContent:"center"}}>
-											<i id={data.id} className="fas fa-trash-alt statu-item" onClick={this.userDeleteConfirm}></i>
-											<i id={data.id} className="fas fa-edit statu-item" onClick={this.userUpdate}></i>
-											<i id={data.id} className="fas fa-eye statu-item" onClick={this.viewUserData}></i>
+											<i id={data.id} className="fas fa-trash-alt statu-item" onClick={()=>this.userDeleteConfirm(data.Id)}></i>
+											<i id={data.id} className="fas fa-edit statu-item" onClick={()=>this.userUpdate(data.Id)}></i>
+											<i id={data.id} className="fas fa-eye statu-item" onClick={()=>this.viewUserData(data.Id)}></i>
 										</Row>
 									</td>
 								</tr>

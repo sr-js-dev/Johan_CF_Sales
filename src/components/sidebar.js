@@ -4,6 +4,8 @@ import '../assets/css/style.min.css';
 import '../assets/css/selectric.css';
 import  { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as Auth from '../components/auth'
+
 const mapStateToProps = state => ({ 
     ...state.auth,
 });
@@ -32,12 +34,14 @@ class Sidebar extends Component {
                             </Link>
                         </li>
                         <li className="menu__separator"></li>
-                        <li id="0" className="menu__item" onClick={this.changeItem}>
-                            <Link to={'/user'} className={window.location.pathname === "/user" || window.location.pathname === "/user-detail" ? 'menu__link menu__link--active' : 'menu__link menu__link'}>
-                                <i className="fas fa-user menu__link-img-wrap"></i>
-                                <span>{trls("User")}</span>
-                            </Link>
-                        </li>
+                        {Auth.getUserRole()==="Administrator" && (
+                            <li id="0" className="menu__item" onClick={this.changeItem}>
+                                <Link to={'/user'} className={window.location.pathname === "/user" || window.location.pathname === "/user-detail" ? 'menu__link menu__link--active' : 'menu__link menu__link'}>
+                                    <i className="fas fa-user menu__link-img-wrap"></i>
+                                    <span>{trls("User")}</span>
+                                </Link>
+                            </li>
+                        )}
                         <li id="0" className="menu__item" onClick={this.changeItem}>
                             <Link to={'/tasks'} className={window.location.pathname === "/tasks" ? 'menu__link menu__link--active' : 'menu__link menu__link'}>
                                 <i className="fas fa-envelope-open menu__link-img-wrap"></i>

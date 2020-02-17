@@ -13,3 +13,6 @@ export const getAuth = () => {
 export const getUserName = () => {
     return(window.localStorage.getItem('cf_sales_userName'))
 };
+export const getUserRole = () => {
+    return(window.localStorage.getItem('cf_sales_roles'))
+};

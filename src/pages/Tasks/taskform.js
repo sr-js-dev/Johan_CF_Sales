@@ -140,24 +140,28 @@ class Taskform extends Component {
                         this.setState({selectCustomerLabel:"", selectCustomerValue:"", orderdate: ''})
                     }
                 }
-                // this.sendToEmployeeEmail();
+                var item = this.state.employee.filter(item => item.key===employee.value)
+                if(item[0]){
+                    this.sendToEmployeeEmail(item[0].email);
+                }
+                
             });
             return tempArray;
         })
     }
 
-    // sendToEmployeeEmail = () =>{
-    //     let params = {
-    //         To:'johan@johanboerema.nl',
-    //         Subject: 'Er is een nieuwe taak toegewezen',
-    //         Body: 'Er is een nieuwe taak toegewezen in de CF Sales Portal'
-    //     }
-    //     var headers = SessionManager.shared().getAuthorizationHeader();
-    //     Axios.post(API.PostEmail, params, headers)
-    //     .then(result => {
-    //         console.log('111112222333', result)
-    //     });
-    // }
+    sendToEmployeeEmail = (email) => {
+        let params = {
+            To: [email],
+            Subject: 'Er is een nieuwe taak toegewezen',
+            Body: 'Er is een nieuwe taak toegewezen in de CF Sales Portal'
+        }
+        var headers = SessionManager.shared().getAuthorizationHeader();
+        Axios.post(API.PostEmail, params, headers)
+        .then(result => {
+            // console.log('111112222333', result)
+        });
+    }
 
     openUploadFile = () =>{
         $('#inputFile').show();

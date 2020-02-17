@@ -17,6 +17,13 @@ const formatNumber = (num) =>{
         return "0.00" 
     }
 }
+
+const showCustomerCard = (customerId) =>{
+    var getUrl = window.location;
+    window.open( 
+        getUrl.origin+"/customer/detail/"+customerId, "_blank"); 
+}
+
 const mapStateToProps = state => ({ 
     ...state.auth,
 });
@@ -54,8 +61,8 @@ class MapTest extends React.Component {
                         marker.showInfo && (
                             <InfoWindow onCloseClick={(e) => this.props.onMarkerClose(marker)}>
                                 <div>
-                                    <div className="markinfo-header-text">
-                                        {marker.Klantnaam}
+                                    <div className="markinfo-header-text" >
+                                        <div style={{cursor: "pointer"}} onClick={()=>showCustomerCard(marker.CustomerId)}>{marker.Klantnaam}</div>
                                     </div>
                                     <div className="markinfo-year-text">
                                         {trls("Turnover_current_year")}<span>: {formatNumber(marker.currentYear)}</span>

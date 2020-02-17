@@ -199,7 +199,8 @@ export const TRANSLATIONS = {
       DocumentId: 'DocumentId',
       Task: 'Task',
       Success: 'Success!',
-      Fail: 'Fail!'
+      Fail: 'Fail!',
+      Image: 'Image'
     },
 
 
@@ -403,6 +404,7 @@ export const TRANSLATIONS = {
       DocumentId: 'DocumentId',
       Task: 'Taak',
       Success: 'Succesvol!',
-      Fail: 'Mislukt!'
+      Fail: 'Mislukt!',
+      Image: 'Beeld'
     }
   };

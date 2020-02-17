@@ -10,8 +10,9 @@ import * as Auth from '../../components/auth'
 import  { Link } from 'react-router-dom';
 import * as authAction  from '../../actions/authAction';
 import Slider from 'react-bootstrap-slider';
-import "bootstrap-slider/dist/css/bootstrap-slider.css"
-import Map from './map.js'
+import "bootstrap-slider/dist/css/bootstrap-slider.css";
+import Map from './map.js';
+import * as Common from '../../components/common';
 // import iplocation from 'iplocation';
 // import publicIp  from 'public-ip';
 
@@ -53,9 +54,10 @@ class Dashboard extends Component {
         this.getCustomerData();
     }
     getLocationIpPosition = () =>{
+        // this.setState({center:{lat: 52.27730, lng: 4.74898 }})
         // (async () => {
         //     iplocation(await publicIp.v4(), [], (error, res) => {
-        //     this.setState({center:{lat: res.latitude, lng:res.longitude }})
+        //     // this.setState({center:{lat: res.latitude, lng:res.longitude }})
         // });
         // })();
         
@@ -355,7 +357,7 @@ class Dashboard extends Component {
                                             <tr id={i} key={i}>
                                                 <td>{i+1}</td>
                                                 <td>{data.Klantnaam}</td>
-                                                <td>{this.formatNumber(data.Revenue)}</td>
+                                                <td>{Common.formatMoney(data.Revenue)}</td>
                                             </tr>
                                         ))
                                         }
@@ -385,7 +387,7 @@ class Dashboard extends Component {
                                             <tr id={i} key={i}>
                                                 <td>{i+1}</td>
                                                 <td>{data.itemnr}</td>
-                                                <td>{this.formatNumber(data.revenue)}</td>
+                                                <td>{Common.formatMoney(data.revenue)}</td>
                                             </tr>
                                         ))
                                         }
@@ -415,7 +417,7 @@ class Dashboard extends Component {
                                             <tr id={i} key={i}>
                                                 <td>{i+1}</td>
                                                 <td>{data.Model}</td>
-                                                <td>{this.formatNumber(data.Revenue)}</td>
+                                                <td>{Common.formatMoney(data.Revenue)}</td>
                                             </tr>
                                         ))
                                         }

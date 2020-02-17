@@ -25,7 +25,7 @@ export const fetchLoginData = (params) => {
             window.localStorage.setItem('cf_sales_userName', response.userName);
             window.localStorage.setItem('cf_sales_roles', response.roles);
             dispatch(fetchLoginDataSuccess(response));
-            history.push('/user')
+            history.push('/dashboard')
         })
         .catch(err => {
             dispatch(fetchLoginDataFail(err.responseJSON.error_description));

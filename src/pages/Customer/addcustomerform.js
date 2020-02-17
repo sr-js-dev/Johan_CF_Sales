@@ -61,7 +61,13 @@ class Customerform extends Component {
                   {
                     label: 'OK',
                     onClick: () => {
-                       this.creteNewTask(result.data.NewId)
+                        Axios.get(API.GetNewestCustomer, headers)
+                        .then(result => {
+                            if(result.data.Items[0]){
+                                this.creteNewTask(result.data.Items[0].newid)
+                            }
+                        })
+                       
                     }
                   },
                   {

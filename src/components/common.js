@@ -17,12 +17,6 @@ export const formatDate = (startdate) => {
 };
 
 export const formatMoney = (num) => {
-    // var num = parseFloat(price);
-    // if(num){
-    //     var value = num.toFixed(2);
-    //     return  "€ " + value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-    // }else{
-    //     
     if(num){
         return (
             "€ "+num
@@ -33,8 +27,6 @@ export const formatMoney = (num) => {
     }else{
         return "€ 0,00" 
     }
-    
-   
 };
 
 export const formatPercent = (num) => {

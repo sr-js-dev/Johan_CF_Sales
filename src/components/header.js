@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import history from '../history';
 import { removeAuth } from '../components/auth';
 import $ from 'jquery';
+import * as Auth from '../components/auth'
+
 const mapStateToProps = state => ({ 
     ...state.auth,
 });
@@ -65,7 +67,7 @@ class Header extends Component {
                     /> */}
                     <Dropdown>
                         <Dropdown.Toggle variant="success" id="dropdown-basic" style={{color:"#000000"}}>
-                            Johan Boerema<img src={require("../assets/images/avatar.jpg")} alt="User avatar" className="header__user-dropdown-img"/> 
+                            {Auth.getUserName()} 
                         </Dropdown.Toggle>
                         <Dropdown.Menu style={{marginLeft:15}}>
                             <Dropdown.Item onClick={this.logOut}>Logout</Dropdown.Item>
