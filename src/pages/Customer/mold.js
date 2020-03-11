@@ -59,7 +59,7 @@ class AccordionItem extends React.Component {
         .then(result => {
             if(this._isMounted){
                 this.setState({customerMolds:result.data.Items})
-                this.props.detailmode();
+                this.props.detailmode('mold');
                 this.setState({loading:false})
                 $('#example-mold').dataTable().fnDestroy();
                 $('#example-mold').DataTable(

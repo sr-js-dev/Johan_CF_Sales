@@ -133,7 +133,7 @@ class AccordionItem extends React.Component {
                     return modelData;
                 })
                 this.setState({customerItems:itemArray})
-                this.props.detailmode();
+                this.props.detailmode('product');
                 this.setState({loading:false})
                 $('#example-product').dataTable().fnDestroy();
                 $('#example-product').DataTable(
@@ -251,7 +251,7 @@ class AccordionItem extends React.Component {
                                                     <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}} value={data.currentYear/data.lastYear/2 ? data.currentYear/data.lastYear/2 : 0} arcCenterRender={arcCenterRenderer}/>
                                                 </Col>
                                                 <Col sm={3} style={{paddingLeft:"0px"}}>
-                                                    <div style={{paddingTop: 10}}>{this.formatNumberPercent(data.currentYear/data.lastYear)+"%"}</div>
+                                                    <div style={{paddingTop: 10}}>{this.formatNumberPercent((data.currentYear/data.lastYear)*100)+"%"}</div>
                                                 </Col>
                                             </Row>
                                         </td>

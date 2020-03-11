@@ -61,7 +61,7 @@ class AccordionItem extends React.Component {
         .then(result => {
             if(this._isMounted){
                 this.setState({customerQuotes:result.data.Items})
-                this.props.detailmode();
+                this.props.detailmode('quotations');
                 this.setState({loading:false})
                 $('#example-quotation').dataTable().fnDestroy();
                 $('#example-quotation').DataTable(

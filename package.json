@@ -49,6 +49,7 @@
     "react-geolocated": "^3.0.1",
     "react-google-maps": "^9.4.5",
     "react-jquery-datatables": "^1.0.0",
+    "react-loader-spinner": "^3.1.5",
     "react-numeric-input": "^2.2.3",
     "react-phone-number-input": "^2.4.1",
     "react-pure-loaders": "^3.0.1",

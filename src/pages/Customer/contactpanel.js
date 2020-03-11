@@ -72,7 +72,7 @@ class AccordionItem extends React.Component {
                     return tempArray;
                 })
                 this.setState({customerContacts:contactArray})
-                this.props.detailmode();
+                this.props.detailmode('contact');
                 this.setState({loading:false})
                 $('#example-contacts').dataTable().fnDestroy();
                 $('#example-contacts').DataTable(

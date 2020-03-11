@@ -60,7 +60,7 @@ class AccordionItem extends React.Component {
         .then(result => {
             if(this._isMounted){
                 this.setState({customerCompetitors:result.data.Items})
-                this.props.detailmode();
+                this.props.detailmode('competitor');
                 this.setState({loading:false})
                 $('#example-competitor').dataTable().fnDestroy();
                 $('#example-competitor').DataTable(

@@ -20,6 +20,8 @@ import Mold from './mold.js'
 import {ArcGauge} from '@progress/kendo-react-gauges';
 import '@progress/kendo-theme-default/dist/all.css';
 import * as Common from '../../components/common';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { BallBeat } from 'react-pure-loaders';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -44,7 +46,9 @@ class Userregister extends Component {
             loading:true,
             gaugepercent: 0,
             percent: 0,
-            currentYear: curyear
+            currentYear: curyear,
+            detailIdData: {contact: false, product: false, modal: false, orders: false, competitor: false, price: false, quotations: false, mold: false},
+            detailShowFlag: false
         };
       }
     componentDidMount() {
@@ -141,7 +145,13 @@ class Userregister extends Component {
         var value = num.toFixed(2);
         return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     }
-    detailmode = () =>{
+    detailmode = (detailId) =>{
+        let detailIdData = this.state.detailIdData;
+        detailIdData[detailId] = true;
+        this.setState({detailIdData: detailIdData});
+        if(detailIdData.contact===true && detailIdData.product===true && detailIdData.modal===true && detailIdData.orders===true && detailIdData.competitor===true && detailIdData.price===true && detailIdData.quotations===true && detailIdData.mold===true){
+            this.setState({detailShowFlag: true})
+        }
         this.setState({customerId: ""})
     }
     render () {
@@ -295,11 +305,19 @@ class Userregister extends Component {
                         </Card>
                     </Col>
                 </Row>
+                {!this.state.detailShowFlag && (
+                    <div className="page-loading-spinner loading" style={{textAlign:"center"}}>
+                        <BallBeat
+                            color={'#000'}
+                            loading={this.state.loading}
+                        />
+                    </div>
+                )}
                 <div className="panel-collapse">
                     <Contactpanel
                         title={trls("Contacts")}
                         customerId={this.state.customerId}
-                        detailmode={this.detailmode}
+                        detailmode={(detail_Id)=>this.detailmode(detail_Id)}
                     />
                 </div>
                 <div className="panel-collapse">

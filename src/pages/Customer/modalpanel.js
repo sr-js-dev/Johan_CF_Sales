@@ -107,7 +107,7 @@ class AccordionItem extends React.Component {
                     return modelData;
                 })
                 this.setState({customerModels:modelArray})
-                this.props.detailmode();
+                this.props.detailmode('modal');
                 this.setState({loading:false})
                 $('#example-modal').dataTable().fnDestroy();
                 $('#example-modal').DataTable(
