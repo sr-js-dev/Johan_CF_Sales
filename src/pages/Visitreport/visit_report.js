@@ -11,8 +11,7 @@ import Axios from 'axios';
 import history from '../../history';
 import Visitanswer from './visit_answer.js'
 import Visitdocument from './visitdocument'
-import * as Auth from '../../components/auth'
-import SweetAlert from 'sweetalert';
+import FileUploadForm from '../../components/drag_drop_fileupload';
 
 const mapStateToProps = state => ({
      ...state.auth,
@@ -114,45 +113,6 @@ viewAnswer = (event) => {
     });
 }
 
-openUploadFile = (e) =>{
-    this.setState({attachvisitId:e.currentTarget.id});
-    $('#inputFile').show();
-    $('#inputFile').focus();
-    $('#inputFile').click();
-    $('#inputFile').hide();
-}
-
-onChangeFileUpload = (e) => {
-    let filename = [];
-    let arrayFilename = this.state.arrayFilename
-    filename.key = this.state.attachtaskId;
-    filename.name = "Open";
-    arrayFilename.push(filename)
-    this.setState({arrayFilename: arrayFilename})
-    this.setState({filename: e.target.files[0].name})
-    this.setState({file:e.target.files[0]})
-    this.fileUpload(e.target.files[0])
-    this.setState({uploadflag:1})
-}
-
-fileUpload(file){
-    var formData = new FormData();
-    formData.append('file', file);// file from input
-    var headers = {
-        "headers": {
-            "Authorization": "Bearer "+Auth.getUserToken(),
-        }
-    }
-    Axios.post(API.PostFileUpload, formData, headers)
-    .then(result => {
-        if(result.data.Id){
-            this.postVisitreportDocuments(result.data.Id);
-        }
-    })
-    .catch(err => {
-    });
-}
-
 postVisitreportDocuments = (docuId) => {
     this._isMounted = true;
     let params = {
@@ -163,19 +123,19 @@ postVisitreportDocuments = (docuId) => {
     Axios.post(API.PostVisitreportDocuments, params, headers)
     .then(result => {
         if(this._isMounted){    
-            SweetAlert({
-                title: trls('Success'),
-                icon: "success",
-                button: "OK",
-              });
+            // SweetAlert({
+            //     title: trls('Success'),
+            //     icon: "success",
+            //     button: "OK",
+            //   });
         }
     })
     .catch(err => {
-        SweetAlert({
-            title: trls('Fail'),
-            icon: "warning",
-            button: "OK",
-          });
+        // SweetAlert({
+        //     title: trls('Fail'),
+        //     icon: "warning",
+        //     button: "OK",
+        //   });
     });
 }
 
@@ -230,6 +190,11 @@ render () {
                         documentData = {this.state.documentData}
                         viewHeader = {this.state.viewHeader}
                     />
+                    <FileUploadForm
+                        show={this.state.fileUploadModalShow}
+                        onHide={() => this.setState({fileUploadModalShow: false})}
+                        onPostFileDataById={(fileid)=>this.postVisitreportDocuments(fileid)}
+                    />
                 </div>
                 <div className="table-responsive">
                     <table id="example-visitreport" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
@@ -253,9 +218,8 @@ render () {
                                     <td>{data.CreatedBy}</td>
                                     <td>
                                         <Row style={{justifyContent:"center"}}>
-                                            <i id={data.Id} className="fas fa-file-upload" style={{fontSize:20, cursor: "pointer", paddingLeft: 10, paddingRight:20}} onClick={this.openUploadFile}></i>
+                                            <i id={data.Id} className="fas fa-file-upload" style={{fontSize:20, cursor: "pointer", paddingLeft: 10, paddingRight:20}} onClick={()=>this.setState({fileUploadModalShow: true, attachvisitId: data.Id})}></i>
                                             <div id={data.Id} style={{color:"#069AF8", fontWeight:"bold", cursor: "pointer", textDecoration:"underline"}} onClick={this.GetVisitreportDocuments}>{trls('View')}</div>
-                                            <input id="inputFile" type="file"  required accept="*.*" onChange={this.onChangeFileUpload} style={{display: "none"}} />
                                         </Row>
                                     </td>
                                     <td >

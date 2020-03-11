@@ -2,10 +2,10 @@ import React, {Component} from 'react'
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import SessionManager from '../../components/session_manage';
-import API from '../../components/api'
+import API from '../../components/api';
+import * as Auth from '../../components/auth';
 import Axios from 'axios';
 import { trls } from '../../components/translate';
-import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const mapStateToProps = state => ({ 
@@ -48,34 +48,21 @@ class Customerform extends Component {
             name: data.customername,
             city: data.customercity,
             notes: data.note,
+            username: Auth.getUserName()
         }
 
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.PostCustomer, params, headers)
         .then(result => {
             this.props.onHide();
-            confirmAlert({
-                title: 'Confirm',
-                message: 'Do you want to create a new task?',
-                buttons: [
-                  {
-                    label: 'OK',
-                    onClick: () => {
-                        Axios.get(API.GetNewestCustomer, headers)
-                        .then(result => {
-                            if(result.data.Items[0]){
-                                this.creteNewTask(result.data.Items[0].newid)
-                            }
-                        })
-                       
+            if(result.data.Success){
+                Axios.get(API.GetNewestCustomer, headers)
+                .then(result => {
+                    if(result.data.Items[0]){
+                        this.creteNewTask(result.data.Items[0].newid)
                     }
-                  },
-                  {
-                    label: 'Cancel',
-                    onClick: () => {this.getCustomer()}
-                  }
-                ]
-              });
+                })
+            }
         });
     }
     render(){

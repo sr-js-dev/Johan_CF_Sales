@@ -26,7 +26,11 @@ class Updatetask  extends Component {
             val1: '',
             taskType: [],
             customer: [],
-            employee: []
+            employee: [],
+            updateTask: [],
+            taskRemarkComments: [],
+            remarkFlag: false,
+            remarkData: ''
         };
     }
     componentWillUnmount() {
@@ -99,6 +103,7 @@ class Updatetask  extends Component {
     }
 
     handleSubmit = (event) => {
+        let commentParams = [];
         event.preventDefault();
         const clientFormData = new FormData(event.target);
         const data = {};
@@ -117,15 +122,49 @@ class Updatetask  extends Component {
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.PutTask , params, headers)
         .then(result => {
-            this.props.onHide();
-            this.props.onGetTaskData();
+            commentParams = {
+                "taskid": parseInt(this.state.taskId),
+                "username": Auth.getUserName(),
+                "remark": data.remark
+            }
+            Axios.post(API.PostTaskComments, commentParams, headers)
+            .then(result => {
+                
+            })
         });
     }
+
+    createRemark = () =>{
+        const {remarkData} = this.state;
+        let commentParams = {
+            "taskid": this.state.taskId,
+            "username": Auth.getUserName(),
+            "remark": remarkData
+        }
+        let params = {
+            taskid: this.state.taskId
+        }
+        var headers = SessionManager.shared().getAuthorizationHeader();
+        Axios.post(API.PostTaskComments, commentParams, headers)
+        .then(result => {
+            Axios.post(API.GetTaskComments, params, headers)
+            .then(result => {
+                this.setState({taskRemarkComments: result.data.Items, remarkFlag: true})
+            })
+        })
+    }
+
+    onHide = () => {
+        this.props.onHide();
+        this.props.onGetTaskData();
+    }
+
     render(){
         let customer = [];
         let employee = [];
-        let selectCustomer=[];
-        let selectEmployee=[];
+        let selectCustomer = [];
+        let selectEmployee = [];
+        let remarkCommnets = [];
         selectCustomer.label="";
         selectCustomer.value="";
         selectEmployee.label="";
@@ -136,20 +175,22 @@ class Updatetask  extends Component {
         if(this.state.employee){
             employee = this.state.employee.map( s => ({value:s.key,label:s.value}) );
         }
+        const {updateTask} = this.state;
         if(this.state.selectCustomer){
             selectCustomer = this.state.selectCustomer;
         }
         if(this.state.selectEmployee){
             selectEmployee = this.state.selectEmployee;
         }
+        remarkCommnets = this.state.remarkFlag ? this.state.taskRemarkComments : updateTask.remark
         return (
             <Modal
-            show={this.props.show}
-            onHide={this.props.onHide}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            backdrop= "static"
-            centered
+                show={this.props.show}
+                onHide={()=>this.onHide()}
+                size="xl"
+                aria-labelledby="contained-modal-title-vcenter"
+                backdrop= "static"
+                centered
             >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -157,62 +198,86 @@ class Updatetask  extends Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form className="container product-form" onSubmit = { this.handleSubmit }>
-                    <Form.Group as={Row} controlId="formPlaintextSupplier">
-                        <Form.Label column sm="3">
-                            {trls('Customer')}
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
-                            {selectCustomer&&(
-                                <Select
-                                name="customer"
-                                placeholder={trls('Select')}
-                                value={{"label":selectCustomer.label,"value":selectCustomer.value}}
-                                options={customer}
-                                onChange={val => this.changeCustomer(val)}
-                            />
+                <Row>
+                    <Col sm={8}>
+                        <Form className="container product-form" onSubmit = { this.handleSubmit }>
+                            <Form.Group as={Row} controlId="formPlaintextSupplier">
+                                <Form.Label column sm="3">
+                                    {trls('Customer')}
+                                </Form.Label>
+                                <Col sm="9" className="product-text">
+                                    {selectCustomer&&(
+                                        <Select
+                                        name="customer"
+                                        placeholder={trls('Select')}
+                                        value={{"label":selectCustomer.label,"value":selectCustomer.value}}
+                                        options={customer}
+                                        onChange={val => this.changeCustomer(val)}
+                                    />
+                                    )}
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="formPlaintextSupplier">
+                                <Form.Label column sm="3">
+                                    {trls('Employee')}
+                                </Form.Label>
+                                <Col sm="9" className="product-text">
+                                    <Select
+                                        name="employee"
+                                        placeholder={trls('Select')}
+                                        options={employee}
+                                        value={{"label":selectEmployee.label,"value":selectEmployee.value}}
+                                        onChange={val => this.changeEmployee(val)}
+                                    />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="formPlaintextPassword">
+                                <Form.Label column sm="3">
+                                {trls('Deadline')}  
+                                </Form.Label>
+                                <Col sm="9" className="product-text">
+                                    {!this.state.orderdate ? (
+                                        <DatePicker name="deadline" className="myDatePicker" selected={new Date()} onChange={date =>this.setState({orderdate:date})} />
+                                    ) : <DatePicker name="deadline" className="myDatePicker" selected={this.state.orderdate} onChange={date =>this.setState({orderdate:date})} />
+                                    } 
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="formPlaintextPassword">
+                                <Form.Label column sm="3">
+                                {trls('Subject')}   
+                                </Form.Label>
+                                <Col sm="9" className="product-text">
+                                    <Form.Control type="text" name="subject" defaultValue={this.state.subject} required placeholder={trls('Subject')} />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group style={{textAlign:"center"}}>
+                                <Button type="submit" style={{width:"100px"}}>{trls('Save')}</Button>
+                            </Form.Group>
+                        </Form>
+                    </Col>
+                    <Col sm={4}>
+                        <div className="status-toggle">
+                            <h5 style={{float:'left'}}>{trls('Remarks')}</h5>
+                                <Form.Control name = "omschrijving" as="textarea" rows="3" style={{marginTop:20}} placeholder={trls('New_note')} onChange={(evt)=>this.setState({remarkData: evt.target.value})}/>
+                            <div style={{textAlign: 'right'}}>
+                                <Button style={{ marginTop: 10}} onClick={()=>this.createRemark()}>{trls('Create')}</Button>
+                            </div>
+                            {remarkCommnets &&(
+                                remarkCommnets.map((data,i) =>(
+                                    <div key={i} style={{backgroundColor: "lightgrey", marginTop: 10, padding: 10}}>
+                                        <b>{data.username}</b>
+                                        <div>
+                                            <p>{data.createdon}</p>
+                                            {data.remark}
+                                        </div>
+                                    </div>
+                                ))
                             )}
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextSupplier">
-                        <Form.Label column sm="3">
-                            {trls('Employee')}
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
-                            <Select
-                                name="employee"
-                                placeholder={trls('Select')}
-                                options={employee}
-                                value={{"label":selectEmployee.label,"value":selectEmployee.value}}
-                                onChange={val => this.changeEmployee(val)}
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('Deadline')}  
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
-                            {!this.state.orderdate ? (
-                                <DatePicker name="deadline" className="myDatePicker" selected={new Date()} onChange={date =>this.setState({orderdate:date})} />
-                            ) : <DatePicker name="deadline" className="myDatePicker" selected={this.state.orderdate} onChange={date =>this.setState({orderdate:date})} />
-                            } 
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('Subject')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
-                            <Form.Control type="text" name="subject" defaultValue={this.state.subject} required placeholder={trls('Subject')} />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group style={{textAlign:"center"}}>
-                        <Button type="submit" style={{width:"100px"}}>{trls('Save')}</Button>
-                    </Form.Group>
-                </Form>
+                        </div>
+                    </Col>
+                </Row>
             </Modal.Body>
-            </Modal>
+        </Modal>
         );
     }
 }

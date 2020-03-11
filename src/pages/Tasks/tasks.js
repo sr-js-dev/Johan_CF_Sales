@@ -12,8 +12,7 @@ import Axios from 'axios';
 import Updatetask from './updatetask.js'
 import Taskhistory from './taskhistory.js'
 import Taskdocument from './taskdocument'
-import * as Auth from '../../components/auth'
-import SweetAlert from 'sweetalert';
+import FileUploadForm from '../../components/drag_drop_fileupload';
 
 const mapStateToProps = state => ({
      ...state.auth,
@@ -46,33 +45,32 @@ getTasksData = () => {
     .then(result => {
         this.setState({tasksData:result.data.Items})
         this.setState({loading:false})
-            if(this.state.search_flag){
-                $('#example thead tr').clone(true).appendTo( '#example thead' );
-                $('#example thead tr:eq(1)').css("display","contents")
-                $('#example thead tr:eq(2)').css("display","none")
-                $('#example thead tr:eq(1) th').each( function (i) {
-                    var title = $(this).text();
-                    var id = $(this).attr('id')
-                    $(this).removeAttr('class');
-                    if(id==="Status" || id==="Employee" || id==="CreateBy" || id==="Task_Type"){
-                        $(this).html( '<input type="text" style="width:100%" placeholder="'+title+'" />' );
+        if(this.state.search_flag){
+            $('#example-task thead tr').clone(true).appendTo( '#example-task thead' );
+            $('#example-task thead tr:eq(1) th').each( function (i) {
+                var title = $(this).text();
+                var id = $(this).attr('id')
+                $(this).removeAttr('class');
+                if(id==="Status" || id==="Employee" || id==="CreateBy" || id==="Task_Type"){
+                    $(this).html( '<input type="text" style="width:100%" placeholder="'+title+'" />' );
+                }
+                else{
+                    $(this).html( '<div />' );
+                }
+                $(this).addClass("sort-style");
+                $( 'input', this ).on( 'keyup change', function () {
+                    if ( table.column(i).search() !== this.value ) {
+                        table
+                            .column(i)
+                            .search( this.value )
+                            .draw();
                     }
-                    else{
-                        $(this).html( '<div />' );
-                    }
-                    $( 'input', this ).on( 'keyup change', function () {
-                        if ( table.column(i).search() !== this.value ) {
-                            table
-                                .column(i)
-                                .search( this.value )
-                                .draw();
-                        }
-                    } );
                 } );
-            }
+            } );
+        }
         this.setState({search_flag: false})
-        $('#example').dataTable().fnDestroy();
-        var table = $('#example').DataTable(
+        $('#example-task').dataTable().fnDestroy();
+        var table = $('#example-task').DataTable(
             {
                 orderCellsTop: true,
                 fixedHeader: true,
@@ -121,13 +119,22 @@ taskUpdate = (event) => {
     let params = {
         taskid:taskid
     }
+    let updateData = [];
     var headers = SessionManager.shared().getAuthorizationHeader();
     Axios.post(API.GetTask, params, headers)
     .then(result => {
-        if(this._isMounted){    
-            this.setState({updateTask: result.data.Items})
-            this.setState({modalupdateShow:true, taskId: taskid})
+        if(this._isMounted){
+            updateData = result.data.Items
         }
+        Axios.post(API.GetTaskComments, params, headers)
+        .then(result => {
+            if(this._isMounted){    
+                if(result.data.Items[0]){
+                    updateData.remark = result.data.Items;
+                }
+                this.setState({updateTask: updateData, modalupdateShow:true, taskId: taskid})
+            }
+        })
     });
 }
 
@@ -152,44 +159,6 @@ detailmode = () =>{
     this.setState({taskflag: false})
 }
 
-openUploadFile = (e) =>{
-    this.setState({attachtaskId:e.currentTarget.id});
-    $('#inputFile').show();
-    $('#inputFile').focus();
-    $('#inputFile').click();
-    $('#inputFile').hide();
-}
-
-onChangeFileUpload = (e) => {
-    let filename = [];
-    let arrayFilename = this.state.arrayFilename
-    filename.key = this.state.attachtaskId;
-    filename.name = "Open";
-    arrayFilename.push(filename)
-    this.setState({arrayFilename: arrayFilename})
-    this.setState({filename: e.target.files[0].name})
-    this.setState({file:e.target.files[0]})
-    this.fileUpload(e.target.files[0])
-    this.setState({uploadflag:1})
-}
-
-fileUpload(file){
-    var formData = new FormData();
-    formData.append('file', file);// file from input
-    var headers = {
-        "headers": {
-            "Authorization": "Bearer "+Auth.getUserToken(),
-        }
-    }
-    Axios.post(API.PostFileUpload, formData, headers)
-    .then(result => {
-        if(result.data.Id){
-            this.postTaskDocuments(result.data.Id);
-        }
-    })
-    .catch(err => {
-    });
-}
 
 postTaskDocuments = (docuId) => {
     this._isMounted = true;
@@ -201,19 +170,19 @@ postTaskDocuments = (docuId) => {
     Axios.post(API.PostTaskDocuments, params, headers)
     .then(result => {
         if(this._isMounted){    
-            SweetAlert({
-                title: trls('Success'),
-                icon: "success",
-                button: "OK",
-              });
+            // SweetAlert({
+            //     title: trls('Success'),
+            //     icon: "success",
+            //     button: "OK",
+            //   });
         }
     })
     .catch(err => {
-        SweetAlert({
-            title: trls('Fail'),
-            icon: "warning",
-            button: "OK",
-          });
+        // SweetAlert({
+        //     title: trls('Fail'),
+        //     icon: "warning",
+        //     button: "OK",
+        //   });
     });
 }
 
@@ -292,26 +261,18 @@ render () {
                             documentData = {this.state.documentData}
                             documentHeader = {this.state.documentHeader}
                         />
+                        <FileUploadForm
+                            show={this.state.fileUploadModalShow}
+                            onHide={() => this.setState({fileUploadModalShow: false})}
+                            onPostFileDataById={(fileid)=>this.postTaskDocuments(fileid)}
+                        />
                     </Form>
                 </div>
                 <div className="table-responsive">
-                    <table id="example" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                    <table id="example-task" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
                         <thead>
                             <tr>
-                                <th>{trls('Id')}</th>
-                                <th>{trls('CustomerName')}</th>
-                                <th>{trls('DateCreated')}</th>
-                                <th>{trls('Deadline')}</th>
-                                <th>{trls('Employee')}</th>
-                                <th>{trls('Task_Type')}</th>
-                                <th>{trls('Subject')}</th>
-                                <th>{trls('CreateBy')}</th>
-                                <th>{trls('Status')}</th>
-                                <th>{trls('Attachment')}</th>
-                                <th style={{width:50}}>{trls('Action')}</th>
-                            </tr>
-                            <tr style={{display:'none'}}>
-                                <th id="Id">{trls('Id')}</th>
+                                {/* <th id="Id">{trls('Id')}</th> */}
                                 <th id="CustomerName">{trls('CustomerName')}</th>
                                 <th id="DateCreated">{trls('DateCreated')}</th>
                                 <th id="Deadline">{trls('Deadline')}</th>
@@ -328,7 +289,7 @@ render () {
                             {
                                 tasksData.map((data,i) =>(
                                 <tr className={new Date(currentDate) > new Date(this.formatDate(data.deadline)) ? 'task-table-tr-past' : 'task-table-tr'} id={data.Id} key={i}>
-                                    <td>{data.Id}</td>
+                                    {/* <td>{data.Id}</td> */}
                                     <td>{data.CustomerName}</td>
                                     <td>{this.formatDate(data.DateCreated)}</td>
                                     <td>{this.formatDate(data.deadline)}</td>
@@ -339,9 +300,8 @@ render () {
                                     <td>{data.taskStatus}</td>
                                     <td>
                                         <Row>
-                                            <i id={data.Id} className="fas fa-file-upload" style={{fontSize:20, cursor: "pointer", paddingLeft: 10, paddingRight:20}} onClick={this.openUploadFile}></i>
+                                            <i id={data.Id} className="fas fa-file-upload" style={{fontSize:20, cursor: "pointer", paddingLeft: 10, paddingRight:20}} onClick={()=>this.setState({fileUploadModalShow: true, attachtaskId: data.Id})}></i>
                                             <div id={data.Id+','+data.CustomerName+','+data.employee+','+data.Subject} style={{color:"#000", fontWeight:"bold", cursor: "pointer", textDecoration:"underline"}} onClick={this.getTaskDocuments}>{trls('View')}</div>
-                                            <input id="inputFile" type="file"  required accept="*.*" onChange={this.onChangeFileUpload} style={{display: "none"}} />
                                         </Row>
                                     </td>
                                     <td >

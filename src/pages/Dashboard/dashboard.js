@@ -154,7 +154,9 @@ class Dashboard extends Component {
         var header = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetNumberOpenTasks, params, header)
         .then(result => {
-            this.setState({tasksnumber:result.data.Items[0]})
+            if(result.data.Items){
+                this.setState({tasksnumber:result.data.Items[0]})
+            }
         }
         )
     }

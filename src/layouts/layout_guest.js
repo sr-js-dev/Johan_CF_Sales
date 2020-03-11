@@ -19,10 +19,10 @@ class Layout extends Component {
   
     render () {
       return (
-          <Row style={{height:"100%"}}>
+          <Row style={{height:"100%", display: "flex"}}>
             <Sidebar/>
-            <Col style={{paddingLeft:0, paddingRight:0}}>
-             <Header/>
+            <Col style={{paddingLeft:0, paddingRight:0, width: "75%"}}>
+                <Header/>
                 <Router history={history}>
                   <Switch>
                     <Route path="/dashboard" component={Dashboard}/>

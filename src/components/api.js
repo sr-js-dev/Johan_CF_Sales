@@ -1,6 +1,6 @@
 
 // const BASEURL = 'http://brandnewkey.sohosted-vps.nl:5380'
- const BASEURL = 'https://qflvs.cf-kunststoffen.nl/';
+ const BASEURL = 'https://qflvs.cf-kunststoffen.nl';
 export default {
     // GetToken: "http://brandnewkey.sohosted-vps.nl:5380/token",
     GetToken: "https://qflvs.cf-kunststoffen.nl/token",
@@ -64,6 +64,8 @@ export default {
     GetCustomerDocuments: `${BASEURL}/api/factory/execute/portallvs/getCustomerDocuments`,
     GetImage: `${BASEURL}/api/Images?path=`,
     GetNewestCustomer: `${BASEURL}/api/factory/execute/portallvs/getNewestCustomer`,
+    PostTaskComments: `${BASEURL}/api/factory/execute/portallvs/postTaskComments`,
+    GetTaskComments: `${BASEURL}/api/factory/execute/portallvs/getTaskComments`,
   };
   
    

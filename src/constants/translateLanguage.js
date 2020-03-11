@@ -89,7 +89,7 @@ export const TRANSLATIONS = {
       Employee: 'Employee',
       Deadline: 'Deadline',
       Subject: 'Subject',
-      CustomerName: 'CustomerName',
+      CustomerName: 'Customer Name',
       DateCreated: 'DateCreated',
       CreateBy: 'CreateBy',
       Address: 'Address',
@@ -200,7 +200,11 @@ export const TRANSLATIONS = {
       Task: 'Task',
       Success: 'Success!',
       Fail: 'Fail!',
-      Image: 'Image'
+      Image: 'Image',
+      Choose_a_file: 'Choose a file or drag it here',
+      Upload: 'Upload',
+      FileUpload: 'FileUpload',
+      Create: 'Create'
     },
 
 
@@ -290,11 +294,11 @@ export const TRANSLATIONS = {
       Tasks: 'Taken',
       Add_Tasks: 'Taak toevoegen',
       Creat_Task: 'Taak aanmaken',
-      Task_Type: 'Taaktype',
+      Task_Type: 'Taak type',
       Employee: 'Medewerker',
       Deadline: 'Deadline',
       Subject: 'Onderwerp',
-      CustomerName: 'Klantnaam',
+      CustomerName: 'Klant naam',
       DateCreated: 'Datum aangemaakt',
       CreateBy: 'Aangemaakt door',
       Address: 'Adres',
@@ -405,6 +409,10 @@ export const TRANSLATIONS = {
       Task: 'Taak',
       Success: 'Succesvol!',
       Fail: 'Mislukt!',
-      Image: 'Beeld'
+      Image: 'Beeld',
+      Choose_a_file: 'Kies een bestand of sleep het hierheen',
+      Upload: 'Uploaden',
+      FileUpload: 'Het dossier Uploaden',
+      Create: 'Creëer'
     }
   };

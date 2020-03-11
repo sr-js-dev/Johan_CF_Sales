@@ -12,6 +12,7 @@ import { BallBeat } from 'react-pure-loaders';
 import 'datatables.net';
 import {ArcGauge} from '@progress/kendo-react-gauges';
 import Productimageform from './productimage_form';
+import * as Common from '../../components/common';
 
 const arcCenterRenderer = (currentValue, color) => {
     return;
@@ -70,7 +71,6 @@ class AccordionItem extends React.Component {
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetCustomerProducts, params, headers)
         .then(result => {
-            console.log('5555', result);
             if(this._isMounted){
                 var date = new Date();
                 var curyear = date.getFullYear(); 
@@ -241,17 +241,17 @@ class AccordionItem extends React.Component {
                                         <td>{data.Itemtype}</td>
                                         <td>{data.Color}</td>
                                         <td>{data.Length}</td>
-                                        <td>{this.formatNumber(data.currentYear)}</td>
-                                        <td>{this.formatNumber(data.lastYear)}</td>
-                                        <td>{this.formatNumber(data.lastYear2)}</td>
-                                        <td>{this.formatNumber(data.lastYear3)}</td>
+                                        <td>{Common.formatMoney(data.currentYear)}</td>
+                                        <td>{Common.formatMoney(data.lastYear)}</td>
+                                        <td>{Common.formatMoney(data.lastYear2)}</td>
+                                        <td>{Common.formatMoney(data.lastYear3)}</td>
                                         <td>
                                             <Row >
                                                 <Col sm={6} style={{textAlign:"center", fontSize:"13px"}}>
-                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}} value={this.formatNumberPercent(data.gaugepercent)} arcCenterRender={arcCenterRenderer}/>
+                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}} value={data.currentYear/data.lastYear/2 ? data.currentYear/data.lastYear/2 : 0} arcCenterRender={arcCenterRenderer}/>
                                                 </Col>
                                                 <Col sm={3} style={{paddingLeft:"0px"}}>
-                                                    <div style={{paddingTop: 10}}>{this.formatNumberPercent(data.progress)+"%"}</div>
+                                                    <div style={{paddingTop: 10}}>{this.formatNumberPercent(data.currentYear/data.lastYear)+"%"}</div>
                                                 </Col>
                                             </Row>
                                         </td>

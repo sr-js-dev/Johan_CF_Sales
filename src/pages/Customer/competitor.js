@@ -9,6 +9,7 @@ import Axios from 'axios';
 import { BallBeat } from 'react-pure-loaders';
 import 'datatables.net';
 import Orderform from './order-detailform';
+import * as Common from '../../components/common';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -173,7 +174,7 @@ class AccordionItem extends React.Component {
                                 customerCompetitors.map((data,i) =>(
                                     <tr id={i} key={i}>
                                         <td>{data.ModelNummer}</td>
-                                        <td>{this.formatNumber(data.Revenue)}</td>
+                                        <td>{Common.formatMoney(data.Revenue)}</td>
                                     </tr>
                             ))
                             }

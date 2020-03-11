@@ -10,6 +10,7 @@ import Axios from 'axios';
 import { BallBeat } from 'react-pure-loaders';
 import 'datatables.net';
 import Orderform from './order-detailform';
+import * as Common from '../../components/common';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -198,9 +199,9 @@ class AccordionItem extends React.Component {
                                         <td>{data.Number}</td>
                                         <td>{data.PriceBy}</td>
                                         <td>{data.Discount}</td>
-                                        <td>{this.formatNumber(data.Price)}</td>
+                                        <td>{Common.formatMoney(data.Price)}</td>
                                         {this.state.checkflag && (
-                                            <td>{this.formatOrderNum(data.Rate)}</td>
+                                            <td>{Common.formatMoney(data.Rate)}</td>
                                         )}
                                     </tr>
                             ))

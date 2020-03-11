@@ -8,12 +8,10 @@ import $ from 'jquery';
 import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
-// import GaugeChart from 'react-gauge-chart'
 import 'datatables.net';
-// import * as Common from '../../components/common';
 import {ArcGauge} from '@progress/kendo-react-gauges';
 import { BallBeat } from 'react-pure-loaders';
-
+import * as Common from '../../components/common';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -202,12 +200,12 @@ class AccordionItem extends React.Component {
                                         <td>{data.Model}</td>
                                         <td>{data.Type}</td>
                                         <td>{data.Size}</td>
-                                        <td>{this.formatNumber(data.currentYear)}</td>
-                                        <td>{this.formatNumber(data.lastYear)}</td>
+                                        <td>{Common.formatMoney(data.currentYear)}</td>
+                                        <td>{Common.formatMoney(data.lastYear)}</td>
                                         <td>
                                             <Row >
                                                 <Col sm={6} style={{textAlign:"center", fontSize:"13px"}}>
-                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}}value={this.formatNumberPercent(data.gaugepercent)} arcCenterRender={arcCenterRenderer}/>
+                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}}value={data.progress/2} arcCenterRender={arcCenterRenderer}/>
                                                 </Col>
                                                 <Col sm={3} style={{paddingLeft:"0px"}}>
                                                     <div style={{paddingTop: 10}}>{this.formatNumberPercent(data.progress)+"%"}</div>

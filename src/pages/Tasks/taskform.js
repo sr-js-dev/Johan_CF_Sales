@@ -31,7 +31,10 @@ class Taskform extends Component {
             taskType: [],
             customer: [],
             employee: [],
-            employeeSelectData: []
+            employeeSelectData: [],
+            taskIds: [],
+            remarkData: '',
+            taskRemarkComments: [],
         };
     }
     componentWillUnmount() {
@@ -107,6 +110,7 @@ class Taskform extends Component {
     handleSubmit = (event) => {
         this._isMounted = true;
         event.preventDefault();
+        const taskIds = this.state.taskIds;
         const clientFormData = new FormData(event.target);
         const data = {};
         let employeeData=this.state.employeeSelectData;
@@ -130,12 +134,10 @@ class Taskform extends Component {
             var headers = SessionManager.shared().getAuthorizationHeader();
             Axios.post(API.PostTask, params, headers)
             .then(result => {
+                taskIds.push(result.data.NewId);
                 k++
                 if(k===employeelength){
-                    this.props.onHide();
-                    if(!this.props.customerNewCreate){
-                        this.props.onGetTask();
-                    }
+                    this.setState({taskIds: taskIds});
                     if(this._isMounted){
                         this.setState({selectCustomerLabel:"", selectCustomerValue:"", orderdate: ''})
                     }
@@ -144,9 +146,30 @@ class Taskform extends Component {
                 if(item[0]){
                     this.sendToEmployeeEmail(item[0].email);
                 }
-                
             });
             return tempArray;
+        })
+    }
+
+    onHide = () => {
+        this.props.onHide();
+        if(!this.props.customerNewCreate){
+            this.props.onGetTask();
+        }
+        this.setState({
+            orderdate: '', 
+            val1: '',
+            val2: '',
+            val3: '',
+            selectCustomerValue: '',
+            selectCustomerLabel: '',
+            taskType: [],
+            customer: [],
+            employee: [],
+            employeeSelectData: [],
+            taskIds: [],
+            remarkData: '',
+            taskRemarkComments: []
         })
     }
 
@@ -159,7 +182,6 @@ class Taskform extends Component {
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.PostEmail, params, headers)
         .then(result => {
-            // console.log('111112222333', result)
         });
     }
 
@@ -192,6 +214,31 @@ class Taskform extends Component {
         });
     }
 
+    createRemark = () =>{
+        const {taskIds, remarkData} =this.state;
+        let commentParams = [];
+        let params = {
+            taskid:taskIds[0]
+        }
+        var headers = SessionManager.shared().getAuthorizationHeader();
+        taskIds.map((newId, key)=>{
+            commentParams = {
+                "taskid": newId,
+                "username": Auth.getUserName(),
+                "remark": remarkData
+            }
+            Axios.post(API.PostTaskComments, commentParams, headers)
+            .then(result => {
+                Axios.post(API.GetTaskComments, params, headers)
+                .then(result => {
+                    this.setState({taskRemarkComments: result.data.Items})
+                })
+            })
+            return newId;
+        })
+        
+    }
+
     render(){
         let taskType = [];
         let customer = [];
@@ -207,12 +254,12 @@ class Taskform extends Component {
         }
         return (
             <Modal
-            show={this.props.show}
-            onHide={this.props.onHide}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            backdrop= "static"
-            centered
+                show={this.props.show}
+                onHide={()=>this.onHide()}
+                size="xl"
+                aria-labelledby="contained-modal-title-vcenter"
+                backdrop= "static"
+                centered
             >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -220,129 +267,135 @@ class Taskform extends Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form className="container product-form" onSubmit = { this.handleSubmit }>
-                <Form.Group as={Row} controlId="formPlaintextSupplier">
-                        <Form.Label column sm="3">
-                            {trls('Task_Type')}
-                        </Form.Label>
-                        <Col sm="9" className="product-text" style={{height:"auto"}}>
-                            <Select
-                                name="tasktype"
-                                options={taskType}
-                                placeholder={trls('Select')}
-                                onChange={val => this.setState({val1:val})}
-                            />
-                            {!this.props.disabled && (
-                                <input
-                                    onChange={val=>console.log()}
-                                    tabIndex={-1}
-                                    autoComplete="off"
-                                    style={{ opacity: 0, height: 0 }}
-                                    value={this.state.val1}
-                                    required
+                <Row>
+                    <Col sm={8}>
+                        <Form className="container product-form" onSubmit = { this.handleSubmit }>
+                            <Form.Group as={Row} controlId="formPlaintextSupplier">
+                                <Form.Label column sm="3">
+                                    {trls('Task_Type')}
+                                </Form.Label>
+                                <Col sm="9" className="product-text" style={{height:"auto"}}>
+                                    <Select
+                                        name="tasktype"
+                                        options={taskType}
+                                        placeholder={trls('Select')}
+                                        onChange={val => this.setState({val1:val})}
                                     />
-                                )}
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextSupplier">
-                        <Form.Label column sm="3">
-                            {trls('Customer')}
-                        </Form.Label>
-                        <Col sm="9" className="product-text" style={{height:"auto"}}>
-                            {this.state.selectCustomerValue?(
-                                <Select
-                                    name="customer"
-                                    placeholder={trls('Select')}
-                                    value={{"label":this.state.selectCustomerLabel,"value":this.state.selectCustomerValue}}
-                                    options={customer}
-                                    onChange={val => this.changeCustomer(val)}
-                                />
-                            ):<Select
-                                name="customer"
-                                placeholder={trls('Select')}
-                                options={customer}
-                                onChange={val => this.changeCustomer(val)}
-                            />}
-                            
-                            
-                            {!this.props.disabled && (
-                                <input
-                                    onChange={val=>console.log()}
-                                    tabIndex={-1}
-                                    autoComplete="off"
-                                    style={{ opacity: 0, height: 0 }}
-                                    value={this.state.val2}
-                                    required
+                                    {!this.props.disabled && (
+                                        <input
+                                            onChange={val=>console.log()}
+                                            tabIndex={-1}
+                                            autoComplete="off"
+                                            style={{ opacity: 0, height: 0 }}
+                                            value={this.state.val1}
+                                            required
+                                            />
+                                        )}
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="formPlaintextSupplier">
+                                <Form.Label column sm="3">
+                                    {trls('Customer')}
+                                </Form.Label>
+                                <Col sm="9" className="product-text" style={{height:"auto"}}>
+                                    {this.state.selectCustomerValue?(
+                                        <Select
+                                            name="customer"
+                                            placeholder={trls('Select')}
+                                            value={{"label":this.state.selectCustomerLabel,"value":this.state.selectCustomerValue}}
+                                            options={customer}
+                                            onChange={val => this.changeCustomer(val)}
+                                        />
+                                    ):<Select
+                                        name="customer"
+                                        placeholder={trls('Select')}
+                                        options={customer}
+                                        onChange={val => this.changeCustomer(val)}
+                                    />}
+                                    {!this.props.disabled && (
+                                        <input
+                                            onChange={val=>console.log()}
+                                            tabIndex={-1}
+                                            autoComplete="off"
+                                            style={{ opacity: 0, height: 0 }}
+                                            value={this.state.val2}
+                                            required
+                                            />
+                                        )}
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="formPlaintextSupplier">
+                                <Form.Label column sm="3">
+                                    {trls('Employee')}
+                                </Form.Label>
+                                <Col sm="9" className="product-text" style={{height:"auto"}}>
+                                    <Select
+                                        name="employee"
+                                        placeholder={trls('Select')}
+                                        options={employee}
+                                        onChange={val => this.changeEmployee(val)}
+                                        isMulti={true}
                                     />
-                                )}
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextSupplier">
-                        <Form.Label column sm="3">
-                            {trls('Employee')}
-                        </Form.Label>
-                        <Col sm="9" className="product-text" style={{height:"auto"}}>
-                            <Select
-                                name="employee"
-                                placeholder={trls('Select')}
-                                options={employee}
-                                onChange={val => this.changeEmployee(val)}
-                                isMulti={true}
-                            />
-                            {!this.props.disabled && (
-                                <input
-                                    onChange={val=>console.log()}
-                                    multiple
-                                    tabIndex={-1}
-                                    autoComplete="off"
-                                    style={{ opacity: 0, height: 0 }}
-                                    value={this.state.val3}
-                                    required
-                                    />
-                                )}
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('Deadline')}  
-                        </Form.Label>
-                        <Col sm="9" className="product-text" style={{height:"auto", paddingBottom:20}}>
-                        {/* <DateTimePicker
-                            onChange={this.onChange}
-                            value={this.state.date}
-                        /> */}
-                            {!this.state.orderdate ? (
-                                <DatePicker name="deadline" className="myDatePicker" selected={new Date()} onChange={date =>this.setState({orderdate:date})} />
-                            ) : <DatePicker name="deadline" className="myDatePicker" selected={this.state.orderdate} onChange={date =>this.setState({orderdate:date})} />
-                            } 
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('Subject')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text" style={{height:"auto"}}>
-                            <Form.Control type="text" name="subject" required placeholder={trls('Subject')} />
-                        </Col>
-                    </Form.Group>
-                    {/* <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('Attachments')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text" style={{height:"auto"}}>
-                            <Button type="button" style={{width:"auto", height:"35px", fontSize:"14px"}} onClick={this.openUploadFile}>{trls('Choose_File')}</Button>
-                            <Form.Label style={{color:"#0903FB", paddingLeft:"10px"}}>
-                                <u>{this.state.filename}</u>
-                            </Form.Label>
-                            <input id="inputFile" type="file"  required accept="*.*" onChange={this.onChangeFileUpload} style={{display: "none"}} />
-                        </Col>
-                    </Form.Group> */}
-                    <Form.Group style={{textAlign:"center"}}>
-                        <Button type="submit" style={{width:"100px"}}>{trls('Save')}</Button>
-                    </Form.Group>
-                </Form>
+                                    {!this.props.disabled && (
+                                        <input
+                                            onChange={val=>console.log()}
+                                            multiple
+                                            tabIndex={-1}
+                                            autoComplete="off"
+                                            style={{ opacity: 0, height: 0 }}
+                                            value={this.state.val3}
+                                            required
+                                            />
+                                        )}
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="formPlaintextPassword">
+                                <Form.Label column sm="3">
+                                {trls('Deadline')}  
+                                </Form.Label>
+                                <Col sm="9" className="product-text" style={{height:"auto", paddingBottom:20}}>
+                                    {!this.state.orderdate ? (
+                                        <DatePicker name="deadline" className="myDatePicker" selected={new Date()} onChange={date =>this.setState({orderdate:date})} />
+                                    ) : <DatePicker name="deadline" className="myDatePicker" selected={this.state.orderdate} onChange={date =>this.setState({orderdate:date})} />
+                                    } 
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="formPlaintextPassword">
+                                <Form.Label column sm="3">
+                                {trls('Subject')}   
+                                </Form.Label>
+                                <Col sm="9" className="product-text" style={{height:"auto"}}>
+                                    <Form.Control type="text" name="subject" required placeholder={trls('Subject')} />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group style={{textAlign:"center"}}>
+                                <Button type="submit" style={{width:"100px"}}>{trls('Save')}</Button>
+                            </Form.Group>
+                        </Form>
+                    </Col>
+                    <Col sm={4}>
+                        <div className="status-toggle">
+                            <h5 style={{float:'left'}}>{trls('Remarks')}</h5>
+                                <Form.Control name = "omschrijving" as="textarea" rows="3" style={{marginTop:20}} placeholder={trls('New_note')} onChange={(evt)=>this.setState({remarkData: evt.target.value})}/>
+                            <div style={{textAlign: 'right'}}>
+                                <Button style={{ marginTop: 10}} onClick={()=>this.createRemark()}>{trls('Create')}</Button>
+                            </div>
+                            {this.state.taskRemarkComments.length>0&&(
+                                this.state.taskRemarkComments.map((data,i) =>(
+                                    <div key={i} style={{backgroundColor: "lightgrey", marginTop: 10, padding: 10}}>
+                                        <b>{data.username}</b>
+                                        <div>
+                                            <p>{data.createdon}</p>
+                                            {data.remark}
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </Col>
+                </Row>
             </Modal.Body>
-            </Modal>
+        </Modal>
         );
     }
 }

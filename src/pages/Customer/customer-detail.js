@@ -1,11 +1,9 @@
 import React, {Component} from 'react'
 import { Container, Row, Col, Card } from 'react-bootstrap';
-// import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
-// import GaugeChart from 'react-gauge-chart'
 import 'font-awesome/css/font-awesome.min.css';
 import { trls } from '../../components/translate';
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -29,7 +27,7 @@ const mapDispatchToProps = dispatch => ({
     
 });
 const arcCenterRenderer = (currentValue, color) => {
-    return (<h3 style={{ color: color }}>{Common.formatPercent(currentValue)}</h3>);
+    return (<h3 style={{ color: color }}>{Common.formatPercent(currentValue*2)}</h3>);
 };
 
 class Userregister extends Component {
@@ -111,7 +109,7 @@ class Userregister extends Component {
                 }
                 if(currentRevenue&&lastRevenue){
                     this.setState({gaugepercent:(lastRevenue/currentRevenue)/2});
-                    this.setState({percent:(lastRevenue/currentRevenue)*100})
+                    this.setState({percent:(currentRevenue/lastRevenue)*100})
                 }
             }
         });
@@ -156,7 +154,6 @@ class Userregister extends Component {
         if(customerDetailData){
              paymentterm = customerDetailData.paymentterm;
         }
-            
         return (
             <Container className="card-container">
                 <Row className="customer-detail">
@@ -247,7 +244,7 @@ class Userregister extends Component {
                                                 <div className="codex-address">
                                                     <div style={{color:"rgba(21, 132, 247, 1)"}}>{trls("Turnover_current_year")}:</div>
                                                     {customerFinancialData4&&(
-                                                        <div>{this.formatNumber(customerFinancialData4.Revenue)}</div>
+                                                        <div>{Common.formatMoney(customerFinancialData4.Revenue)}</div>
                                                     )}
                                                 </div>
                                             </div>
@@ -255,7 +252,7 @@ class Userregister extends Component {
                                                 <div className="codex-address">
                                                     <div style={{color:"rgba(21, 132, 247, 1)"}}>{trls("Turnover_last_year")}:</div>
                                                     {customerFinancialData3&&(
-                                                        <div>{this.formatNumber(customerFinancialData3.Revenue)}</div>
+                                                        <div>{Common.formatMoney(customerFinancialData3.Revenue)}</div>
                                                     )}
                                                 </div>
                                             </div>
@@ -263,7 +260,7 @@ class Userregister extends Component {
                                                 <div className="codex-address">
                                                     <div style={{color:"rgba(21, 132, 247, 1)"}}>{trls("Revenue_for_the_year")} {this.state.currentYear-2}:</div>
                                                     {customerFinancialData2&&(
-                                                        <div>{this.formatNumber(customerFinancialData2.Revenue)}</div>
+                                                        <div>{Common.formatMoney(customerFinancialData2.Revenue)}</div>
                                                     )}
                                                 </div>
                                             </div>
@@ -271,7 +268,7 @@ class Userregister extends Component {
                                                 <div className="codex-address">
                                                     <div style={{color:"rgba(21, 132, 247, 1)"}}>{trls("Revenue_for_the_year")} {this.state.currentYear-3}:</div>
                                                     {customerFinancialData1&&(
-                                                        <div>{this.formatNumber(customerFinancialData1.Revenue)}</div>
+                                                        <div>{Common.formatMoney(customerFinancialData1.Revenue)}</div>
                                                     )}
                                                 </div>
                                             </div>
@@ -279,10 +276,8 @@ class Userregister extends Component {
                                         <Col sm={4} style={{textAlign:"center", fontSize:"13px"}}>
                                             <div style={{color:"rgba(21, 132, 247, 1)", paddingBottom:"10px"}}>{trls("Progress")}</div>
                                                 <div>
-                                                    {/* <ArcGauge style={gaugeStyles}  value={this.state.percent} arcCenterRender={arcCenterRenderer} /> */}
-                                                
                                                     <ArcGauge
-                                                        value={this.state.percent}
+                                                        value={this.state.percent/2}
                                                         transitions={false}
                                                         scale={{
                                                             rangeSize:25,

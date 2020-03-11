@@ -299,6 +299,7 @@ table {
 	z-index: 10;
 	top: 54px;
 	right: -100%;
+	height: 30px;
 	padding: 30px 20px;
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -528,12 +529,12 @@ table {
 		position: relative;
 		left: 0;
 		top: 0;
-		width: auto;
+		width: calc(15%);
 		height: auto;
 		padding: 0;
 		background-color: rgba(45, 175, 229, .05);
 		-ms-flex-preferred-size: 320px;
-		flex-basis: 320px;
+		/* flex-basis: 320px; */
 		-ms-flex-negative: 0;
 		flex-shrink: 0;
 		-webkit-box-shadow: none;

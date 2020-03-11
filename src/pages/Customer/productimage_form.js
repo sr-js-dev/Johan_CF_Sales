@@ -20,8 +20,6 @@ class Productimageform extends Component {
     }
 
     render(){
-        console.log('555555', this.props.imagePath);
-        console.log('6666', this.props.productNumber);
         return (
             <Modal
                 show={this.props.show}
