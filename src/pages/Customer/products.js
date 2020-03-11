@@ -248,7 +248,7 @@ class AccordionItem extends React.Component {
                                         <td>
                                             <Row >
                                                 <Col sm={6} style={{textAlign:"center", fontSize:"13px"}}>
-                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}} value={data.currentYear/data.lastYear/2 ? data.currentYear/data.lastYear/2 : 0} arcCenterRender={arcCenterRenderer}/>
+                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}} value={data.currentYear/data.lastYear/2 ? data.currentYear*100/data.lastYear/2 : 0} arcCenterRender={arcCenterRenderer}/>
                                                 </Col>
                                                 <Col sm={3} style={{paddingLeft:"0px"}}>
                                                     <div style={{paddingTop: 10}}>{this.formatNumberPercent((data.currentYear/data.lastYear)*100)+"%"}</div>
