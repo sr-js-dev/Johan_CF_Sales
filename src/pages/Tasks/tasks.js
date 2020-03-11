@@ -30,7 +30,8 @@ class Tasks extends Component {
             tasksData:[],
             currentDate: new Date(),
             search_flag: true,
-            arrayFilename: []
+            arrayFilename: [],
+            modalupdateShow: false
         };
       }
 componentDidMount() {
@@ -113,7 +114,6 @@ componentWillUnmount() {
 }
 
 taskUpdate = (event) => {
-        
     this._isMounted = true;
     let taskid=event.currentTarget.id;
     let params = {
@@ -242,14 +242,16 @@ render () {
                             onGetTask={()=> this.getTasksData()}
                             detailmode={this.detailmode}
                         />
-                        <Updatetask
+                        {this.state.modalupdateShow && (
+                            <Updatetask
                                 show={this.state.modalupdateShow}
                                 onHide={() => this.setState({modalupdateShow: false})}
                                 updateTask={this.state.updateTask}
                                 taskId={this.state.taskId}
                                 onGetTaskData={()=> this.getTasksData()}
                                 detailmode={this.detailmode}
-                        /> 
+                            /> 
+                        )}
                         <Taskhistory
                             show={this.state.modalViewShow}
                             onHide={() => this.setState({modalViewShow: false})}

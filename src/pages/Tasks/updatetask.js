@@ -30,17 +30,20 @@ class Updatetask  extends Component {
             updateTask: [],
             taskRemarkComments: [],
             remarkFlag: false,
-            remarkData: ''
+            remarkData: '',
+            selectCustomer: [], 
+            selectEmployee: []
         };
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
     componentDidMount() {
-       
+        this.setState({taskId: this.props.taskId})
+        this.getCustomer();
+        this.getEmployee();
     }
     getCustomer = () => {
-        let updateTask=this.props.updateTask;
         this.props.detailmode()
         var headers = SessionManager.shared().getAuthorizationHeader();
         let params = {
@@ -48,18 +51,7 @@ class Updatetask  extends Component {
         }
         Axios.post(API.GetCustomer, params, headers)
         .then(result => {
-            let tempArray = [];
-            let selectCustomer = [];
-            tempArray = result.data.Items;
-            tempArray.map((data, index) => {
-                if(data.key===updateTask[0].customerid){
-                    selectCustomer.value=data.key;
-                    selectCustomer.label=data.value;
-                }
-                return tempArray;
-            })
             this.setState({customer: result.data.Items});
-            this.setState({selectCustomer: selectCustomer});
         });
     }
 
@@ -69,29 +61,10 @@ class Updatetask  extends Component {
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.get(API.GetEmployee, headers)
         .then(result => {
-            let tempArray = [];
-            let selectEmployee = [];
-            tempArray = result.data.Items;
-            tempArray.map((data, index) => {
-                if(data.key===updateTask[0].employeeid){
-                    selectEmployee.value=data.key;
-                    selectEmployee.label=data.value;
-                }
-                return tempArray;
-            })
             this.setState({employee: result.data.Items});
-            this.setState({selectEmployee: selectEmployee});
         });
         this.setState({orderdate:new Date(updateTask[0].Deadline)})
         this.setState({subject:updateTask[0].subject})
-    }
-  
-    componentDidUpdate(){
-        if(this.props.taskId){
-            this.setState({updateTask: this.props.updateTask, taskId: this.props.taskId})
-            this.getCustomer();
-            this.getEmployee()
-        }
     }
 
     changeCustomer = (val) => {
@@ -103,14 +76,12 @@ class Updatetask  extends Component {
     }
 
     handleSubmit = (event) => {
-        let commentParams = [];
         event.preventDefault();
         const clientFormData = new FormData(event.target);
         const data = {};
         for (let key of clientFormData.keys()) {
             data[key] = clientFormData.get(key);
         }
-        
         let params = {
             taskid: parseInt(this.state.taskId),
             customerid: parseInt(data.customer),
@@ -122,15 +93,6 @@ class Updatetask  extends Component {
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.PutTask , params, headers)
         .then(result => {
-            commentParams = {
-                "taskid": parseInt(this.state.taskId),
-                "username": Auth.getUserName(),
-                "remark": data.remark
-            }
-            Axios.post(API.PostTaskComments, commentParams, headers)
-            .then(result => {
-                
-            })
         });
     }
 
@@ -162,26 +124,14 @@ class Updatetask  extends Component {
     render(){
         let customer = [];
         let employee = [];
-        let selectCustomer = [];
-        let selectEmployee = [];
         let remarkCommnets = [];
-        selectCustomer.label="";
-        selectCustomer.value="";
-        selectEmployee.label="";
-        selectEmployee.value="";
         if(this.state.customer){
-            customer = this.state.customer.map( s => ({value:s.key,label:s.value}) );
+            customer = this.state.customer.map( s => ({value:s.key,label:s.value}));
         }
         if(this.state.employee){
-            employee = this.state.employee.map( s => ({value:s.key,label:s.value}) );
+            employee = this.state.employee.map( s => ({value:s.key,label:s.value}));
         }
-        const {updateTask} = this.state;
-        if(this.state.selectCustomer){
-            selectCustomer = this.state.selectCustomer;
-        }
-        if(this.state.selectEmployee){
-            selectEmployee = this.state.selectEmployee;
-        }
+        const {updateTask} = this.props;
         remarkCommnets = this.state.remarkFlag ? this.state.taskRemarkComments : updateTask.remark
         return (
             <Modal
@@ -206,15 +156,13 @@ class Updatetask  extends Component {
                                     {trls('Customer')}
                                 </Form.Label>
                                 <Col sm="9" className="product-text">
-                                    {selectCustomer&&(
-                                        <Select
+                                    <Select
                                         name="customer"
-                                        placeholder={trls('Select')}
-                                        value={{"label":selectCustomer.label,"value":selectCustomer.value}}
                                         options={customer}
+                                        placeholder={trls('Select')}
+                                        defaultValue={{'label': updateTask[0] ? updateTask[0].customername: '', 'value': updateTask[0] ? updateTask[0].customerid: ''}}
                                         onChange={val => this.changeCustomer(val)}
                                     />
-                                    )}
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="formPlaintextSupplier">
@@ -226,7 +174,7 @@ class Updatetask  extends Component {
                                         name="employee"
                                         placeholder={trls('Select')}
                                         options={employee}
-                                        value={{"label":selectEmployee.label,"value":selectEmployee.value}}
+                                        defaultValue={{'label': updateTask[0] ? updateTask[0].employeename: '', 'value': updateTask[0] ? updateTask[0].employeeid: ''}}
                                         onChange={val => this.changeEmployee(val)}
                                     />
                                 </Col>
