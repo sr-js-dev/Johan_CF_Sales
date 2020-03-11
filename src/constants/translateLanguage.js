@@ -413,6 +413,6 @@ export const TRANSLATIONS = {
       Choose_a_file: 'Kies een bestand of sleep het hierheen',
       Upload: 'Uploaden',
       FileUpload: 'Het dossier Uploaden',
-      Create: 'Creëer'
+      Create: 'Aanmaken'
     }
   };
