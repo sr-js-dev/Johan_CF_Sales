@@ -204,7 +204,9 @@ export const TRANSLATIONS = {
       Choose_a_file: 'Choose a file or drag it here',
       Upload: 'Upload',
       FileUpload: 'FileUpload',
-      Create: 'Create'
+      Create: 'Create',
+      Delete: 'Delete',
+      Edit: 'Edit'
     },
 
 
@@ -413,6 +415,8 @@ export const TRANSLATIONS = {
       Choose_a_file: 'Kies een bestand of sleep het hierheen',
       Upload: 'Uploaden',
       FileUpload: 'Het dossier Uploaden',
-      Create: 'Aanmaken'
+      Create: 'Aanmaken',
+      Delete: 'Verwijderen',
+      Edit: 'Bewerk'
     }
   };

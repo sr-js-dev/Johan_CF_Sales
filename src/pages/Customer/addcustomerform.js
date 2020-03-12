@@ -83,27 +83,21 @@ class Customerform extends Component {
             <Modal.Body>
                 <Form className="container product-form" onSubmit = { this.handleSubmit }>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('CustomerName')}  
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
-                            <Form.Control type="text" name="customername" required placeholder={trls('CustomerName')} />
+                        <Col className="product-text">
+                            <Form.Control type="text" name="customername" required placeholder={trls('CustomerName')}/>
+                            <label className="placeholder-label">{trls('CustomerName')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('Customer_City')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
-                            <Form.Control type="text" name="customercity" required placeholder={trls('Customer_City')} />
+                        <Col className="product-text">
+                            <Form.Control type="text" name="customercity" required placeholder={trls('Customer_City')}/>
+                            <label className="placeholder-label">{trls('Customer_City')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('Note')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             <Form.Control name="note" as="textarea" rows="3" value={this.state.remarktext} onChange={this.changeremark} /> 
+                            <label className="placeholder-label">{trls('Note')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group style={{textAlign:"center", marginTop:"70px"}}>

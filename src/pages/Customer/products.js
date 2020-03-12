@@ -54,7 +54,9 @@ class AccordionItem extends React.Component {
             lastYear2 : curyear-2,
             lastYear3 : curyear-3,
             imagePath: '',
-            productNumber: ''
+            productNumber: '',
+            firstLoad: false,
+            customerId: this.props.customerId
         };
     }
 
@@ -63,15 +65,16 @@ class AccordionItem extends React.Component {
         this.setState({loading:true});
     }
 
-    getCustomerData (value) {
+    getCustomerData () {
         this._isMounted = true;
         let params = {
-            customerid : value
+            customerid : this.state.customerId
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetCustomerProducts, params, headers)
         .then(result => {
             if(this._isMounted){
+                this.setState({firstLoad: true})
                 var date = new Date();
                 var curyear = date.getFullYear(); 
                 let modelData=result.data.Items
@@ -133,7 +136,6 @@ class AccordionItem extends React.Component {
                     return modelData;
                 })
                 this.setState({customerItems:itemArray})
-                this.props.detailmode('product');
                 this.setState({loading:false})
                 $('#example-product').dataTable().fnDestroy();
                 $('#example-product').DataTable(
@@ -150,10 +152,12 @@ class AccordionItem extends React.Component {
                             "next": trls('Next')
                           }
                       },
-                      columnDefs: [
-                        { "width": "70px", "targets": [0,1,2,3]},
-                        { "width": "200px", "targets": [8] }
-                      ]
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>',
+                        columnDefs: [
+                            { "width": "70px", "targets": [0,1,2,3]},
+                            { "width": "200px", "targets": [8] }
+                        ]
                     }
                   );
                   $("#example-product_paginate").click(function(){window.dispatchEvent(new Event("resize"))});
@@ -162,8 +166,8 @@ class AccordionItem extends React.Component {
     }
 
     componentDidUpdate(){
-        if(this.props.customerId){
-            this.getCustomerData(this.props.customerId)
+        if(this.state.opened && !this.state.firstLoad){
+            this.getCustomerData();
         }
     }
     formatNumber = (num) => {
@@ -217,7 +221,7 @@ class AccordionItem extends React.Component {
             <div {...{ className: 'accordion-item__inner' }} style={{borderTop: "1px solid rgba(0,0,0,.125)"}}>
                 <div {...{ className: 'accordion-item__content' }}>
                     <div className="table-responsive credit-history">
-                        <table id="example-product" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                        <table id="example-product" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('Articles')}</th>

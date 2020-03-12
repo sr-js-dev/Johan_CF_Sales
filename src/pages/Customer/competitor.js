@@ -43,7 +43,9 @@ class AccordionItem extends React.Component {
     super(props);
     this.state = {  
         lastYear2 : curyear-2,
-        lastYear3 : curyear-3
+        lastYear3 : curyear-3,
+        firstLoad: false,
+        customerId: this.props.customerId
     };
   }
     componentDidMount() {
@@ -53,14 +55,13 @@ class AccordionItem extends React.Component {
     getCustomerData () {
         this._isMounted = true;
         let params = {
-            customerId : this.props.customerId
+            customerId : this.state.customerId
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetCustomerCompetitors, params, headers)
         .then(result => {
             if(this._isMounted){
-                this.setState({customerCompetitors:result.data.Items})
-                this.props.detailmode('competitor');
+                this.setState({customerCompetitors:result.data.Items, firstLoad: true})
                 this.setState({loading:false})
                 $('#example-competitor').dataTable().fnDestroy();
                 $('#example-competitor').DataTable(
@@ -77,16 +78,20 @@ class AccordionItem extends React.Component {
                             "next": trls('Next')
                           }
                       },
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>'
                     }
                   );
             }
         });
     }
+
     componentDidUpdate(){
-        if(this.props.customerId){
-            this.getCustomerData(this.props.customerId)
+        if(this.state.opened && !this.state.firstLoad){
+            this.getCustomerData();
         }
     }
+
     formatDate = (startdate) =>{
         
         var dd = new Date(startdate).getDate();
@@ -105,6 +110,7 @@ class AccordionItem extends React.Component {
         formatDate = dd+'-'+mm+'-'+yyyy;
         return formatDate;
     }
+
     formatNumber = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -114,6 +120,7 @@ class AccordionItem extends React.Component {
         }
        
     }
+
     formatOrderNum = (num) => {
         if(num){
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -122,6 +129,7 @@ class AccordionItem extends React.Component {
         }
        
     }
+
     formatNumberPercent = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -131,12 +139,15 @@ class AccordionItem extends React.Component {
         }
         
     }
+
     onHiden = () =>{
         this.setState({modalShow:false})
     }
+
     detailmode = () =>{
         this.setState({orderNum: ""})
     }
+
     render () {
         let customerCompetitors=this.state.customerCompetitors;
         const {
@@ -162,7 +173,7 @@ class AccordionItem extends React.Component {
             <div {...{ className: 'accordion-item__inner' }} style={{borderTop: "1px solid rgba(0,0,0,.125)"}}>
                 <div {...{ className: 'accordion-item__content' }}>
                     <div className="table-responsive credit-history">
-                        <table id="example-competitor" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                        <table id="example-competitor" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('Model')}</th>

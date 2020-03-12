@@ -42,26 +42,30 @@ class Modalpanel extends React.Component {
 
 class AccordionItem extends React.Component {
 
-    state = {
-        opened: false,
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            opened: false,
+            firstLoad: false,
+            customerId: this.props.customerId
+        }
     }
-    
     componentDidMount() {
         this._isMounted=true
-        
-        
+        this.setState({loading:true});
     }
 
-    getCustomerData (value) {
-        
+    getCustomerData () {
         this._isMounted = true;
         let params = {
-            customerid : value
+            customerid : this.state.customerId
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetCustomerModels, params, headers)
         .then(result => {
             if(this._isMounted){
+                this.setState({firstLoad: true});
                 var date = new Date();
                 var curyear = date.getFullYear(); 
                 let modelData=result.data.Items
@@ -107,7 +111,6 @@ class AccordionItem extends React.Component {
                     return modelData;
                 })
                 this.setState({customerModels:modelArray})
-                this.props.detailmode('modal');
                 this.setState({loading:false})
                 $('#example-modal').dataTable().fnDestroy();
                 $('#example-modal').DataTable(
@@ -124,9 +127,11 @@ class AccordionItem extends React.Component {
                             "next": trls('Next')
                           }
                       },
-                      columnDefs: [
-                        { "width": "250px", "targets": [5] }
-                      ]
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>',
+                        columnDefs: [
+                            { "width": "250px", "targets": [5] }
+                        ]
                     }
                   );
                   $("#example-modal_paginate").click(function(){window.dispatchEvent(new Event("resize"))});
@@ -134,9 +139,8 @@ class AccordionItem extends React.Component {
         });
     }
     componentDidUpdate(){
-        if(this.props.customerId){
-            this.getCustomerData(this.props.customerId);
-            
+        if(this.state.opened && !this.state.firstLoad){
+            this.getCustomerData();
         }
     }
     formatNumber = (num) => {
@@ -158,6 +162,7 @@ class AccordionItem extends React.Component {
         
     }
     render () {
+        
         let customerModels=this.state.customerModels;
         const {
         props: {
@@ -182,7 +187,7 @@ class AccordionItem extends React.Component {
             <div {...{ className: 'accordion-item__inner' }} style={{borderTop: "1px solid rgba(0,0,0,.125)"}}>
                 <div {...{ className: 'accordion-item__content' }}>
                     <div className="table-responsive credit-history">
-                        <table id="example-modal" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                        <table id="example-modal" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('Model')}</th>
@@ -205,7 +210,7 @@ class AccordionItem extends React.Component {
                                         <td>
                                             <Row >
                                                 <Col sm={6} style={{textAlign:"center", fontSize:"13px"}}>
-                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}} value={ data.lastYear!==0 ? data.currentYear*100/data.lastYear/2 : 0} arcCenterRender={arcCenterRenderer}/>
+                                                    <ArcGauge style={{width:70, height:50}} scale={{rangeSize:10}} value={ data.currentYear/data.lastYear ? data.currentYear*100/data.lastYear/2 : 0} arcCenterRender={arcCenterRenderer}/>
                                                 </Col>
                                                 <Col sm={3} style={{paddingLeft:"0px"}}>
                                                     <div style={{paddingTop: 10}}>{this.formatNumberPercent((data.currentYear/data.lastYear)*100)+"%"}</div>

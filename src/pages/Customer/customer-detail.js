@@ -37,9 +37,11 @@ class Userregister extends Component {
     constructor(props) {
         var date = new Date();
         var curyear = date.getFullYear(); 
+        let pathname = window.location.pathname;
+        let pathArray = pathname.split('/')
+        let customerId = pathArray.pop();
         super(props);
         this.state = {  
-            customerId:'',
             flag:'',
             customerDetailData:[],
             customerFinancialData: [],
@@ -48,21 +50,20 @@ class Userregister extends Component {
             percent: 0,
             currentYear: curyear,
             detailIdData: {contact: false, product: false, modal: false, orders: false, competitor: false, price: false, quotations: false, mold: false},
-            detailShowFlag: false
+            detailShowFlag: false,
+            customerId: customerId,
         };
       }
     componentDidMount() {
         this._isMounted=true
-        let pathname = window.location.pathname;
-        let pathArray = pathname.split('/')
-        let customerId = pathArray.pop();
-        this.setState({customerId: customerId})
-        this.getCustomerDetailData(customerId)
-        this.getCustomerFinancialDetails(customerId);
+        this.getCustomerDetailData(this.state.customerId)
+        this.getCustomerFinancialDetails(this.state.customerId);
     }
+
     componentWillUnmount() {
         this._isMounted = false
     }
+    
     getCustomerDetailData (value) {
         this._isMounted = true;
         let params = {
@@ -149,7 +150,7 @@ class Userregister extends Component {
         let detailIdData = this.state.detailIdData;
         detailIdData[detailId] = true;
         this.setState({detailIdData: detailIdData});
-        if(detailIdData.contact===true && detailIdData.product===true && detailIdData.modal===true && detailIdData.orders===true && detailIdData.competitor===true && detailIdData.price===true && detailIdData.quotations===true && detailIdData.mold===true){
+        if(detailIdData.contact===true  && detailIdData.price===true && detailIdData.quotations===true){
             this.setState({detailShowFlag: true})
         }
         this.setState({customerId: ""})
@@ -169,7 +170,7 @@ class Userregister extends Component {
                 <Row className="customer-detail">
                     <Col sm={3}className="card-container-col">
                         <Card>
-                            <Card.Header><i className="fa fa-user" style={{paddingRight:"5px", fontSize:"18px"}}></i>{trls("Codex_SAS")}</Card.Header>
+                            <Card.Header><i className="fa fa-user" style={{paddingRight:"5px", fontSize:"18px"}}></i>{customerDetailData ? customerDetailData.CustomerName : ''}</Card.Header>
                                 <Card.Body>
                                         <div className="codex-content">
                                             <i className="fas fa-address-card" style={{paddingRight:"5px", fontSize:"18px"}}></i>
@@ -318,6 +319,7 @@ class Userregister extends Component {
                         title={trls("Contacts")}
                         customerId={this.state.customerId}
                         detailmode={(detail_Id)=>this.detailmode(detail_Id)}
+                        contactFlag={this.state.detailIdData.contact}
                     />
                 </div>
                 <div className="panel-collapse">

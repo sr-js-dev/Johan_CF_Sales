@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Form,Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Addcustomerform from './addcustomerform';
@@ -64,7 +64,9 @@ class Userregister extends Component {
                             "previous": trls('Previous'),
                             "next": trls('Next')
                           }
-                      }
+                      },
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>'
                     }
                   );
             }
@@ -77,9 +79,9 @@ class Userregister extends Component {
           })
     }
 
-    customerUpdate = (event) => {
+    customerUpdate = (id) => {
         this._isMounted = true;
-        let customerId=event.currentTarget.id;
+        let customerId = id;
         let params = {
             customerid:customerId
         }
@@ -196,51 +198,17 @@ class Userregister extends Component {
                     <h2 className="title">{trls('Customer')}</h2>
                 </div>
                 <div className="orders">
-                    <div className="orders__filters justify-content-between">
-                        <Form inline style={{width:"100%"}}>
+                    <Row>
+                        <Col sm={6}>
                             {!this.state.loading?(
-                                // <Button variant="primary" onClick={this.customerUpdate}>{trls('Add_Customer')}</Button> 
-                                <Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}>{trls('Add_Customer')}</Button>
+                                <Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_Customer')}</Button>
                             ):
-                            // <Button variant="primary" disabled onClick={this.customerUpdate}>{trls('Add_Customer')}</Button>
-                                <Button variant="primary" disabled onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}>{trls('Add_Customer')}</Button>
+                                <Button variant="primary" disabled onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_Customer')}</Button>
                             }
-                            <Addcustomerform
-                                show={this.state.modalShow}
-                                onHide={() => this.setState({modalShow: false})}
-                                onGetCustomer={()=> this.getCustomerData()}
-                                createTask={(newId)=> this.createTask(newId)}
-                            />
-                            <Updatecustomerform
-                                show={this.state.modalupdateShow}
-                                onHide={() => this.setState({modalupdateShow: false})}
-                                customerData={this.state.customerUpdateData}
-                                customerId={this.state.customerId}
-                                onGetCustomer={()=> this.getCustomerData()}
-                            /> 
-                            <Createtask
-                                show={this.state.modalcreateTaskShow}
-                                detailmode={this.detailmode}
-                                taskflag={this.state.taskflag}
-                                customerId={this.state.customerId}
-                                onHide={() => this.onHide()}
-                                customerNewCreate={true}
-                            />  
-                            <Customerdocument
-                                show={this.state.modaldocumentShow}
-                                onHide={() => this.setState({modaldocumentShow: false})}
-                                documentData = {this.state.documentData}
-                                documentHeader = {this.state.documentHeader}
-                            />
-                            <FileUploadForm
-                                show={this.state.fileUploadModalShow}
-                                onHide={() => this.setState({fileUploadModalShow: false})}
-                                onPostFileDataById={(fileid)=>this.postDocuments(fileid)}
-                            />
-                        </Form>
-                    </div>
+                        </Col>
+                    </Row>
                     <div className="table-responsive">
-                        <table id="example" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                        <table id="example" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('CustomerName')}</th>
@@ -271,7 +239,7 @@ class Userregister extends Component {
                                         </td>
                                         <td >
                                             <Row style={{justifyContent:"center"}}>
-                                                <i id={data.id} className="fas fa-edit statu-item" onClick={this.customerUpdate}></i>
+                                                <Button variant="light" onClick={()=>this.customerUpdate(data.id)} className="action-button"><i className="fas fa-pen add-icon"></i>{trls('Edit')}</Button>
                                             </Row>
                                         </td>
                                     </tr>
@@ -289,6 +257,38 @@ class Userregister extends Component {
                         )}
                     </div>
                 </div>
+                <Addcustomerform
+                    show={this.state.modalShow}
+                    onHide={() => this.setState({modalShow: false})}
+                    onGetCustomer={()=> this.getCustomerData()}
+                    createTask={(newId)=> this.createTask(newId)}
+                />
+                <Updatecustomerform
+                    show={this.state.modalupdateShow}
+                    onHide={() => this.setState({modalupdateShow: false})}
+                    customerData={this.state.customerUpdateData}
+                    customerId={this.state.customerId}
+                    onGetCustomer={()=> this.getCustomerData()}
+                /> 
+                <Createtask
+                    show={this.state.modalcreateTaskShow}
+                    detailmode={this.detailmode}
+                    taskflag={this.state.taskflag}
+                    customerId={this.state.customerId}
+                    onHide={() => this.onHide()}
+                    customerNewCreate={true}
+                />  
+                <Customerdocument
+                    show={this.state.modaldocumentShow}
+                    onHide={() => this.setState({modaldocumentShow: false})}
+                    documentData = {this.state.documentData}
+                    documentHeader = {this.state.documentHeader}
+                />
+                <FileUploadForm
+                    show={this.state.fileUploadModalShow}
+                    onHide={() => this.setState({fileUploadModalShow: false})}
+                    onPostFileDataById={(fileid)=>this.postDocuments(fileid)}
+                />
             </div>
         )
         };

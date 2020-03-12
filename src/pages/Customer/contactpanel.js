@@ -39,6 +39,7 @@ class Contactspanel extends React.Component {
 class AccordionItem extends React.Component {
   state = {
     opened: false,
+    firstLoad: false
   }
     componentDidMount() {
         this._isMounted=true
@@ -57,6 +58,7 @@ class AccordionItem extends React.Component {
         Axios.post(API.GetCustomerContacts, params, headers)
         .then(result => {
             if(this._isMounted){
+                this.setState({firstLoad: true})
                 let tempArray = [];
                 let contactArray = [];
                 tempArray = result.data.Items;
@@ -71,7 +73,7 @@ class AccordionItem extends React.Component {
                     
                     return tempArray;
                 })
-                this.setState({customerContacts:contactArray})
+                this.setState({customerContacts:contactArray, firstLoad: true})
                 this.props.detailmode('contact');
                 this.setState({loading:false})
                 $('#example-contacts').dataTable().fnDestroy();
@@ -88,7 +90,9 @@ class AccordionItem extends React.Component {
                             "previous": trls('Previous'),
                             "next": trls('Next')
                           }
-                      }
+                      },
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>'
                     }
                   );
             }
@@ -158,7 +162,7 @@ class AccordionItem extends React.Component {
             <div {...{ className: 'accordion-item__inner' }} style={{borderTop: "1px solid rgba(0,0,0,.125)"}}>
                 <div {...{ className: 'accordion-item__content' }}>
                     <div className="contact-detail-header">
-                        <Form.Check type="checkbox" name="ncham" label={trls("All_contacts")} style={{fontSize:"16px",marginRight:"40px", marginTop:'10px'}} onChange={this.showActiveContacts}/>
+                        <Form.Check type="checkbox" name="ncham" label={trls("All_contacts")} style={{fontSize:"16px",marginRight:"40px", marginTop:'4px'}} onChange={this.showActiveContacts}/>
                         <Button type="button" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}>{trls('Add_contacts')}</Button>
                         <Addcontactform
                             show={this.state.modalShow}
@@ -175,7 +179,7 @@ class AccordionItem extends React.Component {
                         /> 
                     </div>
                     <div className="table-responsive credit-history">
-                        <table id="example-contacts" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                        <table id="example-contacts" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('FirstName')}</th>

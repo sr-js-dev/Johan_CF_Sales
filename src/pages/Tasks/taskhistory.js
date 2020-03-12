@@ -50,7 +50,7 @@ class Taskhistory extends Component {
             </Modal.Header>
             <Modal.Body>
                 <div className="table-responsive credit-history">
-                    <table id="example" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                    <table id="example" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('PreviousEmployee')}</th>

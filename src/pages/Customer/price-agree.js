@@ -79,6 +79,8 @@ class AccordionItem extends React.Component {
                             "next": trls('Next')
                           }
                       },
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>',
                     }
                   );
             }
@@ -176,7 +178,7 @@ class AccordionItem extends React.Component {
                         <Form.Check type="checkbox" name="ncham" label={trls("Show_rate")} style={{fontSize:"16px",marginRight:"40px", marginTop:'10px'}} checked={this.state.checkflag} onChange={this.chageViewRate}/>
                     </div>
                     <div className="table-responsive credit-history">
-                        <table id="example-price" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                        <table id="example-price" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('Articles')}</th>

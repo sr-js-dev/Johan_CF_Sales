@@ -76,8 +76,8 @@ class Taskdocument extends Component {
                         )}
                     </Col>
                 </Row> 
-                <div className="table-responsive credit-history">
-                    <table id="example" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                <div className="table-responsive">
+                    <table id="example" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('Id')}</th>

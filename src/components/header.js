@@ -21,9 +21,6 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {  
-            // roles:[{"value":"en_US","label":"En"},{"value":"nl_BE","label":"Nl"}],
-            // selectrolvalue:window.localStorage.getItem('cf_sales_lang'),
-            // selectrollabel:window.localStorage.getItem('cf_sales_label'),
         };
     }
     componentDidMount () {
@@ -58,13 +55,6 @@ class Header extends Component {
                     <img src={require("../assets/images/appmakerz.svg")} alt="logo"/>
                 </a>
                 <div className="header__controls">
-                    {/* <Select
-                        name="lan"
-                        options={this.state.roles}
-                        className="select-lang-class"
-                        value={{"label":this.state.selectrollabel,"value":this.state.selectrolvalue}}
-                        onChange={val => this.changeLangauge(val)}
-                    /> */}
                     <Dropdown>
                         <Dropdown.Toggle variant="success" id="dropdown-basic" style={{color:"#000000"}}>
                             {Auth.getUserName()} 

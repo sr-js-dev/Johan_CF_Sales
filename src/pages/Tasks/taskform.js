@@ -142,10 +142,10 @@ class Taskform extends Component {
                         this.setState({selectCustomerLabel:"", selectCustomerValue:"", orderdate: ''})
                     }
                 }
-                var item = this.state.employee.filter(item => item.key===employee.value)
-                if(item[0]){
-                    this.sendToEmployeeEmail(item[0].email);
-                }
+                // var item = this.state.employee.filter(item => item.key===employee.value)
+                // if(item[0]){
+                //     this.sendToEmployeeEmail(item[0].email);
+                // }
             });
             return tempArray;
         })
@@ -173,17 +173,17 @@ class Taskform extends Component {
         })
     }
 
-    sendToEmployeeEmail = (email) => {
-        let params = {
-            To: [email],
-            Subject: 'Er is een nieuwe taak toegewezen',
-            Body: 'Er is een nieuwe taak toegewezen in de CF Sales Portal'
-        }
-        var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.post(API.PostEmail, params, headers)
-        .then(result => {
-        });
-    }
+    // sendToEmployeeEmail = (email) => {
+    //     let params = {
+    //         To: [email],
+    //         Subject: 'Er is een nieuwe taak toegewezen',
+    //         Body: 'Er is een nieuwe taak toegewezen in de CF Sales Portal'
+    //     }
+    //     var headers = SessionManager.shared().getAuthorizationHeader();
+    //     Axios.post(API.PostEmail, params, headers)
+    //     .then(result => {
+    //     });
+    // }
 
     openUploadFile = () =>{
         $('#inputFile').show();
@@ -271,33 +271,19 @@ class Taskform extends Component {
                     <Col sm={8}>
                         <Form className="container product-form" onSubmit = { this.handleSubmit }>
                             <Form.Group as={Row} controlId="formPlaintextSupplier">
-                                <Form.Label column sm="3">
-                                    {trls('Task_Type')}
-                                </Form.Label>
-                                <Col sm="9" className="product-text" style={{height:"auto"}}>
+                                <Col className="product-text" style={{height:"auto"}}>
                                     <Select
                                         name="tasktype"
                                         options={taskType}
                                         placeholder={trls('Select')}
                                         onChange={val => this.setState({val1:val})}
+                                        defaultValue = {{'value':3, 'label': 'Nieuwe klant'}}
                                     />
-                                    {!this.props.disabled && (
-                                        <input
-                                            onChange={val=>console.log()}
-                                            tabIndex={-1}
-                                            autoComplete="off"
-                                            style={{ opacity: 0, height: 0 }}
-                                            value={this.state.val1}
-                                            required
-                                            />
-                                        )}
+                                    <label className="placeholder-label">{trls('Task_Type')}</label>
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="formPlaintextSupplier">
-                                <Form.Label column sm="3">
-                                    {trls('Customer')}
-                                </Form.Label>
-                                <Col sm="9" className="product-text" style={{height:"auto"}}>
+                                <Col className="product-text" style={{height:"auto"}}>
                                     {this.state.selectCustomerValue?(
                                         <Select
                                             name="customer"
@@ -312,60 +298,35 @@ class Taskform extends Component {
                                         options={customer}
                                         onChange={val => this.changeCustomer(val)}
                                     />}
-                                    {!this.props.disabled && (
-                                        <input
-                                            onChange={val=>console.log()}
-                                            tabIndex={-1}
-                                            autoComplete="off"
-                                            style={{ opacity: 0, height: 0 }}
-                                            value={this.state.val2}
-                                            required
-                                            />
-                                        )}
+                                    <label className="placeholder-label">{trls('Customer')}</label>
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="formPlaintextSupplier">
-                                <Form.Label column sm="3">
-                                    {trls('Employee')}
-                                </Form.Label>
-                                <Col sm="9" className="product-text" style={{height:"auto"}}>
+                                <Col className="product-text" style={{height:"auto"}}>
                                     <Select
                                         name="employee"
                                         placeholder={trls('Select')}
                                         options={employee}
                                         onChange={val => this.changeEmployee(val)}
+                                        defaultValue={{'value': 34, 'label': 'Esther Sauer'}}
                                         isMulti={true}
                                     />
-                                    {!this.props.disabled && (
-                                        <input
-                                            onChange={val=>console.log()}
-                                            multiple
-                                            tabIndex={-1}
-                                            autoComplete="off"
-                                            style={{ opacity: 0, height: 0 }}
-                                            value={this.state.val3}
-                                            required
-                                            />
-                                        )}
+                                    <label className="placeholder-label">{trls('Employee')}</label>
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="formPlaintextPassword">
-                                <Form.Label column sm="3">
-                                {trls('Deadline')}  
-                                </Form.Label>
-                                <Col sm="9" className="product-text" style={{height:"auto", paddingBottom:20}}>
+                                <Col className="product-text" style={{height:"auto"}}>
                                     {!this.state.orderdate ? (
                                         <DatePicker name="deadline" className="myDatePicker" selected={new Date()} onChange={date =>this.setState({orderdate:date})} />
                                     ) : <DatePicker name="deadline" className="myDatePicker" selected={this.state.orderdate} onChange={date =>this.setState({orderdate:date})} />
-                                    } 
+                                    }
+                                    <label className="placeholder-label">{trls('Deadline')}</label> 
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="formPlaintextPassword">
-                                <Form.Label column sm="3">
-                                {trls('Subject')}   
-                                </Form.Label>
-                                <Col sm="9" className="product-text" style={{height:"auto"}}>
-                                    <Form.Control type="text" name="subject" required placeholder={trls('Subject')} />
+                                <Col className="product-text" style={{height:"auto"}}>
+                                    <Form.Control type="text" name="subject" defaultValue="Nieuwe klant" required placeholder={trls('Subject')} />
+                                    <label className="placeholder-label">{trls('Subject')}</label> 
                                 </Col>
                             </Form.Group>
                             <Form.Group style={{textAlign:"center"}}>

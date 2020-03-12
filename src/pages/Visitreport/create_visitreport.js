@@ -98,7 +98,7 @@ render () {
                         ) : <DatePicker name="visitdate" className="myDatePicker" selected={this.state.orderdate} onChange={date =>this.setState({orderdate:date})} />
                         } 
                     </Form.Group>
-                    <Button variant="success" type="submit" style={{float:"right", width:100, marginTop:"20px"}}>
+                    <Button variant="primary" type="submit" style={{float:"right", width:100, marginTop:"20px"}}>
                         {trls('Further')}
                     </Button>
                 </Form>

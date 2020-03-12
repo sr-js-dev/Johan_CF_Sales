@@ -78,6 +78,8 @@ class AccordionItem extends React.Component {
                             "next": trls('Next')
                           }
                       },
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>',
                     }
                   );
             }
@@ -167,7 +169,7 @@ class AccordionItem extends React.Component {
             <div {...{ className: 'accordion-item__inner' }} style={{borderTop: "1px solid rgba(0,0,0,.125)"}}>
                 <div {...{ className: 'accordion-item__content' }}>
                     <div className="table-responsive credit-history">
-                        <table id="example-quotation" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                        <table id="example-quotation" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 <th>{trls('Quotation_Number')}</th>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Form,Row } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Adduserform from './adduserform';
@@ -64,7 +64,9 @@ class Userregister extends Component {
 							"previous": trls('Previous'),
 							"next": trls('Next')
 						}
-					}
+					},
+					"searching": false,
+					"dom": 't<"bottom-datatable" lip>'
 				}
 				);
 			}
@@ -146,48 +148,44 @@ class Userregister extends Component {
 		return (
 			<div className="order_div">
 				<div className="content__header content__header--with-line">
-				<h2 className="title">{trls('User')}</h2>
+					<h2 className="title">{trls('User')}</h2>
 				</div>
 				<div className="orders">
-				<div className="orders__filters justify-content-between">
-					<Form inline style={{width:"100%"}}>
-						<Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}>{trls('Add_User')}</Button> 
-						<Adduserform
-							show={this.state.modalShow}
-							mode={this.state.mode}
-							onHide={() => this.onAddformHide()}
-							onGetUser={() => this.getUserData()}
-							userUpdateData={this.state.userUpdateData}
-							userID={this.state.userID}
-							updateflag={this.state.updateflag}
-							removeDetail={this.removeDetail}
-						/>  
-					</Form>
-				</div>
-				<div className="table-responsive">
-					<table id="example" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
-						<thead>
-							<tr>
-							<th>{trls('UserName')}</th>
-							<th>{trls('Email')}</th>
-							<th>{trls('Active')}</th>
-							<th>{trls('Action')}</th>
-						</tr>
-						</thead>
-						{optionarray && !this.state.loading &&(<tbody >
-							{
+					<Row>
+						<Col sm={6}>
+							<Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_User')}</Button> 
+						</Col>
+					</Row>
+					<div className="table-responsive">
+						<table id="example" className="place-and-orders__table table" width="100%">
+							<thead>
+								<tr>
+								<th>{trls('UserName')}</th>
+								<th>{trls('Email')}</th>
+								<th>{trls('Active')}</th>
+								<th>{trls('Action')}</th>
+							</tr>
+							</thead>
+							{optionarray && !this.state.loading &&(<tbody >
+								{
 								optionarray.map((data,i) =>(
 									<tr id={i} key={i}>
 										<td>{data.UserName}</td>
 										<td>{data.Email}</td>
-										<td><Form.Check inline name="Intrastat" type="checkbox" disabled defaultChecked={data.IsActive} id="Intrastat" /></td>
-									<td >
-										<Row style={{justifyContent:"center"}}>
-											<i id={data.id} className="fas fa-trash-alt statu-item" onClick={()=>this.userDeleteConfirm(data.Id)}></i>
-											<i id={data.id} className="fas fa-edit statu-item" onClick={()=>this.userUpdate(data.Id)}></i>
-											<i id={data.id} className="fas fa-eye statu-item" onClick={()=>this.viewUserData(data.Id)}></i>
-										</Row>
-									</td>
+										<td>
+											{data.IsActive ? (
+                                                <i className ="fas fa-check-circle active-icon"></i>
+                                            ):
+                                                <i className ="fas fa-check-circle inactive-icon"></i>
+                                            }
+										</td>
+										<td style={{width: 300}}>
+											<Row style={{justifyContent:"space-around"}}>
+												<Button variant="light" onClick={()=>this.userDeleteConfirm(data.Id)} className="action-button"><i className="fas fa-trash-alt add-icon"></i>{trls('Delete')}</Button>
+												<Button variant="light" onClick={()=>this.userUpdate(data.Id)} className="action-button"><i className="fas fa-pen add-icon"></i>{trls('Edit')}</Button>
+												<Button variant="light" onClick={()=>this.viewUserData(data.Id)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>
+											</Row>
+										</td>
 								</tr>
 								))
 							}
@@ -203,6 +201,16 @@ class Userregister extends Component {
 							)}
 						</div>
 					</div>
+					<Adduserform
+						show={this.state.modalShow}
+						mode={this.state.mode}
+						onHide={() => this.onAddformHide()}
+						onGetUser={() => this.getUserData()}
+						userUpdateData={this.state.userUpdateData}
+						userID={this.state.userID}
+						updateflag={this.state.updateflag}
+						removeDetail={this.removeDetail}
+					/>  
 				</div>
 			)
 		};

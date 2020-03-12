@@ -73,26 +73,19 @@ class Addcontactform extends Component {
             <Modal.Body>
                 <Form className="container product-form" onSubmit = { this.handleSubmit }>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('FirstName')}  
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             <Form.Control type="text" name="firstname" required placeholder={trls('FirstName')} />
+                            <label className="placeholder-label">{trls('FirstName')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('LastName')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             <Form.Control type="text" name="lastname" required placeholder={trls('LastName')} />
+                            <label className="placeholder-label">{trls('LastName')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('Phone_Work')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             <PhoneInput
                                 placeholder="Enter phone number"
                                 value={ this.state.telvalue }
@@ -101,10 +94,7 @@ class Addcontactform extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('Mobile')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             <PhoneInput
                                 placeholder="Enter mobile number"
                                 value={ this.state.value }
@@ -123,11 +113,9 @@ class Addcontactform extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('Email')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             <Form.Control type="email" name="email" required placeholder={trls('Email')} /> 
+                            <label className="placeholder-label">{trls('Email')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group style={{textAlign:"center"}}>

@@ -80,71 +80,55 @@ class Updatecustomerform extends Component {
             <Modal.Body>
                 <Form className="container product-form" onSubmit = { this.handleSubmit }>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('Name')}  
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             {customerData&&(
                                 <Form.Control type="text" name="name" required defaultValue={customerData.Name} placeholder={trls('CustomerName')} />
                             )}
+                            <label className="placeholder-label">{trls('Name')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                        {trls('Website')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             {customerData&&(
                                 <Form.Control type="text" name="website" required defaultValue={customerData.Website} placeholder={trls('Website')} />
                             )}
+                            <label className="placeholder-label">{trls('Website')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('Email')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             {customerData&&(
                                 <Form.Control type="email" name="email" required defaultValue={customerData.Email} placeholder={trls('Email')} />
                             )}
+                            <label className="placeholder-label">{trls('Email')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('Address')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             {customerData&&(
                                 <Form.Control type="text" name="address" required defaultValue={customerData.Address} placeholder={trls('Address')} /> 
                             )}
+                            <label className="placeholder-label">{trls('Address')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('Zipcode')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             {customerData&&(
                                 <Form.Control type="text" name="zipcode" required defaultValue={customerData.Zipcode} placeholder={trls('Zipcode')} />
                             )}
-                             
+                            <label className="placeholder-label">{trls('Zipcode')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('City')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             {customerData&&(
                                 <Form.Control type="text" name="city" required defaultValue={customerData.City} placeholder={trls('City')} />
                             )}
+                            <label className="placeholder-label">{trls('City')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('Phone')}   
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             {customerData&&(
                                 <PhoneInput
                                 placeholder="Enter phone number"
@@ -152,6 +136,7 @@ class Updatecustomerform extends Component {
                                 name="phone"
                                 onChange={ value => this.setState({value: value }) } />
                             )}
+                            <label className="placeholder-label">{trls('Phone')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group style={{textAlign:"center"}}>

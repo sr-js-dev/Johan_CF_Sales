@@ -152,10 +152,7 @@ class Updatetask  extends Component {
                     <Col sm={8}>
                         <Form className="container product-form" onSubmit = { this.handleSubmit }>
                             <Form.Group as={Row} controlId="formPlaintextSupplier">
-                                <Form.Label column sm="3">
-                                    {trls('Customer')}
-                                </Form.Label>
-                                <Col sm="9" className="product-text">
+                                <Col className="product-text">
                                     <Select
                                         name="customer"
                                         options={customer}
@@ -163,13 +160,11 @@ class Updatetask  extends Component {
                                         defaultValue={{'label': updateTask[0] ? updateTask[0].customername: '', 'value': updateTask[0] ? updateTask[0].customerid: ''}}
                                         onChange={val => this.changeCustomer(val)}
                                     />
+                                    <label className="placeholder-label">{trls('Customer')}</label> 
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="formPlaintextSupplier">
-                                <Form.Label column sm="3">
-                                    {trls('Employee')}
-                                </Form.Label>
-                                <Col sm="9" className="product-text">
+                                <Col className="product-text">
                                     <Select
                                         name="employee"
                                         placeholder={trls('Select')}
@@ -177,25 +172,22 @@ class Updatetask  extends Component {
                                         defaultValue={{'label': updateTask[0] ? updateTask[0].employeename: '', 'value': updateTask[0] ? updateTask[0].employeeid: ''}}
                                         onChange={val => this.changeEmployee(val)}
                                     />
+                                    <label className="placeholder-label">{trls('Employee')}</label> 
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="formPlaintextPassword">
-                                <Form.Label column sm="3">
-                                {trls('Deadline')}  
-                                </Form.Label>
-                                <Col sm="9" className="product-text">
+                                <Col className="product-text">
                                     {!this.state.orderdate ? (
                                         <DatePicker name="deadline" className="myDatePicker" selected={new Date()} onChange={date =>this.setState({orderdate:date})} />
                                     ) : <DatePicker name="deadline" className="myDatePicker" selected={this.state.orderdate} onChange={date =>this.setState({orderdate:date})} />
                                     } 
+                                    <label className="placeholder-label">{trls('Deadline')}</label> 
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="formPlaintextPassword">
-                                <Form.Label column sm="3">
-                                {trls('Subject')}   
-                                </Form.Label>
-                                <Col sm="9" className="product-text">
+                                <Col className="product-text">
                                     <Form.Control type="text" name="subject" defaultValue={this.state.subject} required placeholder={trls('Subject')} />
+                                    <label className="placeholder-label">{trls('Subject')}</label>
                                 </Col>
                             </Form.Group>
                             <Form.Group style={{textAlign:"center"}}>

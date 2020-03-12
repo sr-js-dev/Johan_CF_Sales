@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import { BallBeat } from 'react-pure-loaders';
-import { Button, Form, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import  Taskform  from './taskform'
 import { trls } from '../../components/translate';
 import 'datatables.net';
@@ -46,32 +46,32 @@ getTasksData = () => {
     .then(result => {
         this.setState({tasksData:result.data.Items})
         this.setState({loading:false})
-        if(this.state.search_flag){
-            $('#example-task thead tr').clone(true).appendTo( '#example-task thead' );
-            $('#example-task thead tr:eq(1) th').each( function (i) {
-                var title = $(this).text();
-                var id = $(this).attr('id')
-                $(this).removeAttr('class');
-                if(id==="Status" || id==="Employee" || id==="CreateBy" || id==="Task_Type"){
-                    $(this).html( '<input type="text" style="width:100%" placeholder="'+title+'" />' );
-                }
-                else{
-                    $(this).html( '<div />' );
-                }
-                $(this).addClass("sort-style");
-                $( 'input', this ).on( 'keyup change', function () {
-                    if ( table.column(i).search() !== this.value ) {
-                        table
-                            .column(i)
-                            .search( this.value )
-                            .draw();
-                    }
-                } );
-            } );
-        }
+        // if(this.state.search_flag){
+        //     $('#example-task thead tr').clone(true).appendTo( '#example-task thead' );
+        //     $('#example-task thead tr:eq(1) th').each( function (i) {
+        //         var title = $(this).text();
+        //         var id = $(this).attr('id')
+        //         $(this).removeAttr('class');
+        //         if(id==="Status" || id==="Employee" || id==="CreateBy" || id==="Task_Type"){
+        //             $(this).html( '<input type="text" style="width:100%" placeholder="'+title+'" />' );
+        //         }
+        //         else{
+        //             $(this).html( '<div />' );
+        //         }
+        //         $(this).addClass("sort-style");
+        //         $( 'input', this ).on( 'keyup change', function () {
+        //             if ( table.column(i).search() !== this.value ) {
+        //                 table
+        //                     .column(i)
+        //                     .search( this.value )
+        //                     .draw();
+        //             }
+        //         } );
+        //     } );
+        // }
         this.setState({search_flag: false})
         $('#example-task').dataTable().fnDestroy();
-        var table = $('#example-task').DataTable(
+        $('#example-task').DataTable(
             {
                 orderCellsTop: true,
                 fixedHeader: true,
@@ -86,7 +86,9 @@ getTasksData = () => {
                         "previous": trls('Previous'),
                         "next": trls('Next')
                     },
-                }
+                },
+                "searching": false,
+                "dom": 't<"bottom-datatable" lip>'
                 }
           );
     });
@@ -113,9 +115,9 @@ formatDate = (startdate) =>{
 componentWillUnmount() {
 }
 
-taskUpdate = (event) => {
+taskUpdate = (id) => {
     this._isMounted = true;
-    let taskid=event.currentTarget.id;
+    let taskid=id;
     let params = {
         taskid:taskid
     }
@@ -138,9 +140,9 @@ taskUpdate = (event) => {
     });
 }
 
-viewHistory = (event) => {
+viewHistory = (id) => {
     this._isMounted = true;
-    let taskid=event.currentTarget.id;
+    let taskid = id;
     let params = {
         taskid:taskid
     }
@@ -232,46 +234,13 @@ render () {
                 <h2 className="title">{trls('Tasks')}</h2>
             </div>
             <div className="orders">
-                <div className="orders__filters justify-content-between">
-                    <Form inline style={{width:"100%"}}>
-                        <Button variant="primary" onClick={()=>this.setState({modalShow:true, taskflag:true})}>{trls('Add_Tasks')}</Button>   
-                        <Taskform
-                            show={this.state.modalShow}
-                            onHide={() => this.setState({modalShow: false})}
-                            taskflag={this.state.taskflag}
-                            onGetTask={()=> this.getTasksData()}
-                            detailmode={this.detailmode}
-                        />
-                        {this.state.modalupdateShow && (
-                            <Updatetask
-                                show={this.state.modalupdateShow}
-                                onHide={() => this.setState({modalupdateShow: false})}
-                                updateTask={this.state.updateTask}
-                                taskId={this.state.taskId}
-                                onGetTaskData={()=> this.getTasksData()}
-                                detailmode={this.detailmode}
-                            /> 
-                        )}
-                        <Taskhistory
-                            show={this.state.modalViewShow}
-                            onHide={() => this.setState({modalViewShow: false})}
-                            viewHistoryData = {this.state.viewHistoryData}
-                        />
-                        <Taskdocument
-                            show={this.state.modaldocumentShow}
-                            onHide={() => this.setState({modaldocumentShow: false})}
-                            documentData = {this.state.documentData}
-                            documentHeader = {this.state.documentHeader}
-                        />
-                        <FileUploadForm
-                            show={this.state.fileUploadModalShow}
-                            onHide={() => this.setState({fileUploadModalShow: false})}
-                            onPostFileDataById={(fileid)=>this.postTaskDocuments(fileid)}
-                        />
-                    </Form>
-                </div>
+                <Row>
+                    <Col sm={6}>
+                        <Button variant="primary" onClick={()=>this.setState({modalShow:true, taskflag:true})}><i className="fas fa-plus add-icon"></i>{trls('Add_Tasks')}</Button>   
+                    </Col>
+                </Row>
                 <div className="table-responsive">
-                    <table id="example-task" className="place-and-orders__table table table--striped prurprice-dataTable" width="100%">
+                    <table id="example-task" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
                                 {/* <th id="Id">{trls('Id')}</th> */}
@@ -307,9 +276,9 @@ render () {
                                         </Row>
                                     </td>
                                     <td >
-                                        <Row style={{justifyContent:"space-between"}}>
-                                            <i id={data.Id} className="fas fa-edit" style={{fontSize:20, cursor: "pointer", paddingLeft: 10}} onClick={this.taskUpdate}></i>
-                                            <i id={data.Id} className="fa fa-history" style={{fontSize:20, cursor: "pointer", paddingLeft: 10}} onClick={this.viewHistory}></i>
+                                        <Row style={{justifyContent:"space-around"}}>
+                                            <Button variant="light" onClick={()=>this.taskUpdate(data.Id)} className="action-button"><i className="fas fa-pen add-icon"></i>{trls('Edit')}</Button>
+                                            <Button variant="light" onClick={()=>this.viewHistory(data.Id)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>
                                         </Row>
                                     </td>
                                 </tr>
@@ -327,6 +296,39 @@ render () {
                     )}
                 </div>
             </div>
+            <Taskform
+                show={this.state.modalShow}
+                onHide={() => this.setState({modalShow: false})}
+                taskflag={this.state.taskflag}
+                onGetTask={()=> this.getTasksData()}
+                detailmode={this.detailmode}
+            />
+            {this.state.modalupdateShow && (
+                <Updatetask
+                    show={this.state.modalupdateShow}
+                    onHide={() => this.setState({modalupdateShow: false})}
+                    updateTask={this.state.updateTask}
+                    taskId={this.state.taskId}
+                    onGetTaskData={()=> this.getTasksData()}
+                    detailmode={this.detailmode}
+                /> 
+            )}
+            <Taskhistory
+                show={this.state.modalViewShow}
+                onHide={() => this.setState({modalViewShow: false})}
+                viewHistoryData = {this.state.viewHistoryData}
+            />
+            <Taskdocument
+                show={this.state.modaldocumentShow}
+                onHide={() => this.setState({modaldocumentShow: false})}
+                documentData = {this.state.documentData}
+                documentHeader = {this.state.documentHeader}
+            />
+            <FileUploadForm
+                show={this.state.fileUploadModalShow}
+                onHide={() => this.setState({fileUploadModalShow: false})}
+                onPostFileDataById={(fileid)=>this.postTaskDocuments(fileid)}
+            />
         </div>
     )
 };

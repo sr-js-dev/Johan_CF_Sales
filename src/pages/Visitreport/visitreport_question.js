@@ -297,19 +297,19 @@ render () {
                     )}
                    
                     {this.state.nextQuestionIdflag?(
-                        <Button variant="success" type="submit" style={{float:"right", width:100, marginTop:"20px",marginLeft:10}}>
+                        <Button variant="primary" type="submit" style={{float:"right", width:100, marginTop:"20px",marginLeft:10}}>
                         {trls('Next')}
                     </Button>
-                    ):<Button variant="success" type="submit" style={{float:"right", width:100, marginTop:"20px",marginLeft:10}}>
+                    ):<Button variant="primary" type="submit" style={{float:"right", width:100, marginTop:"20px",marginLeft:10}}>
                         {trls('Submit')}
                     </Button>}
                     {this.state.quesionId[this.state.questionNum]!==0 && !this.props.location.state.updateFlag&&(
-                         <Button variant="success" type="button" style={{float:"right", width:100, marginTop:"20px"}} onClick={this.previousVisitReport}>
+                         <Button variant="primary" type="button" style={{float:"right", width:100, marginTop:"20px"}} onClick={this.previousVisitReport}>
                             {trls('Previous')}
                         </Button>
                     )}
                     {this.state.quesionId[this.state.questionNum]===0 && !this.props.location.state.updateFlag&&(
-                        <Button variant="success" type="button" style={{float:"right", width:100, marginTop:"20px"}} onClick={this.previousVisitReport} disabled>
+                        <Button variant="primary" type="button" style={{float:"right", width:100, marginTop:"20px"}} onClick={this.previousVisitReport} disabled>
                         {trls('Previous')}
                         </Button>
                     )}

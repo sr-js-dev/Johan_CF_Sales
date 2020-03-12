@@ -173,47 +173,38 @@ class Adduserform extends Component {
             </Modal.Header>
             <Modal.Body>
                 { this.props.mode==="view" ? (
-                    <Form className="container product-form" onSubmit = { this.handleSubmit }>
+                    <Form className="container" onSubmit = { this.handleSubmit }>
                         <Form.Group as={Row} controlId="formPlaintextPassword">
-                            <Form.Label column sm="3">
-                                {trls('UserName')}     
-                            </Form.Label>
-                            <Col sm="9" className="product-text">
+                            <Col className="product-text">
                                 { updateData&&this.props.mode==="view" ? (
                                     <Form.Control type="text" name="username" readOnly defaultValue={updateData.UserName} required placeholder={trls('UserName')} />
                                 ) : <div/>
                                 }
+                                <label className="placeholder-label">{trls('UserName')}</label>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="formPlaintextPassword">
-                            <Form.Label column sm="3">
-                                {trls('Email')}     
-                            </Form.Label>
-                            <Col sm="9" className="product-text">
+                            <Col className="product-text">
                                 { updateData&&this.props.mode==="view" ? (
                                     <Form.Control type="email" name="email" readOnly defaultValue={updateData.Email} required placeholder={trls('Email')}/>
                                 ) : <Form.Control type="email" name="email" required placeholder={trls('Email')} />
                                 }
+                                <label className="placeholder-label">{trls('Email')}</label>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="formPlaintextPassword">
-                            <Form.Label column sm="3">
-                                {trls('PhoneNumber')}     
-                            </Form.Label>
-                            <Col sm="9" className="product-text">
+                            <Col className="product-text">
                                 { updateData&&this.props.mode==="view" ? (
                                     <Form.Control type="text" name="PhoneNumber" readOnly defaultValue={updateData.PhoneNumber} required placeholder={trls('PhoneNumber')}/>
                                 ) : <Form.Control type="text" name="PhoneNumber" required placeholder={trls('PhoneNumber')} />
                                 }
+                                <label className="placeholder-label">{trls('PhoneNumber')}</label>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="formPlaintextPassword">
-                            <Form.Label column sm="3">
-                                {trls('Active')}     
-                            </Form.Label>
-                            <Col sm="9" className="product-text">
+                            <Col className="product-text">
                                 { updateData&&this.props.mode==="view" ? (
-                                    <Form.Check inline name="active" type="checkbox" disabled defaultChecked={updateData.IsActive} style={{marginTop:15}} id="Intrastat" />
+                                    <Form.Check inline name="active" label={trls('Active')} type="checkbox" disabled defaultChecked={updateData.IsActive} style={{marginTop:15}} id="Intrastat" />
                                 ) : <div/>
                                 }
                             </Col>
@@ -238,23 +229,18 @@ class Adduserform extends Component {
                     } */}
                     {this.props.mode==="add" && (
                         <Form.Group as={Row} controlId="formPlaintextPassword">
-                            <Form.Label column sm="3">
-                                {trls('Email')}     
-                            </Form.Label>
-                            <Col sm="9" className="product-text">
+                            <Col className="product-text">
                                 { updateData&&this.props.mode==="update" ? (
                                     <Form.Control type="email" name="email" defaultValue={updateData.Email} required placeholder={trls('Email')}/>
                                 ) : <Form.Control type="email" name="email" required placeholder={trls('Email')}/>
                                 }
+                                <label className="placeholder-label">{trls('Email')}</label>
                             </Col>
                         </Form.Group>
                     )
                     }
                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                            {trls('PhoneNumber')}     
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             { updateData&&this.props.mode==="update" ? (
                                 <PhoneInput
                                     placeholder="Enter mobile number"
@@ -268,37 +254,28 @@ class Adduserform extends Component {
                                     name="PhoneNumber"
                                     onChange={ value => this.setState({phonevalue: value }) } />
                             }
-                            
                         </Col>
                     </Form.Group>
                     {this.props.mode==="add" && (
                         <Form.Group as={Row} controlId="formPlaintextPassword">
-                            <Form.Label column sm="3">
-                                {trls('Password')}     
-                            </Form.Label>
-                            <Col sm="9" className="product-text">
-                                
+                            <Col className="product-text">
                                 <Form.Control type="password" name="password1" required placeholder={trls('Password')} />
+                                <label className="placeholder-label">{trls('Password')}</label>
                             </Col>
                         </Form.Group>
                     )
                     }
                     {this.props.mode==="add" && (
                         <Form.Group as={Row} controlId="formPlaintextPassword">
-                            <Form.Label column sm="3">
-                                {trls('ConfirmPassword')}     
-                            </Form.Label>
-                            <Col sm="9" className="product-text">
+                            <Col className="product-text">
                                 <Form.Control type="password" name="confirmpassword1" required placeholder={trls('ConfirmPassword')}/>
+                                <label className="placeholder-label">{trls('ConfirmPassword')}</label>
                             </Col>
                         </Form.Group>
                     )
                     }
                     <Form.Group as={Row} controlId="formPlaintextSupplier">
-                        <Form.Label column sm="3">
-                            {trls('Roles')} 
-                        </Form.Label>
-                        <Col sm="9" className="product-text">
+                        <Col className="product-text">
                             { roledata&&this.state.selectflag&&this.props.mode==="update" ? (
                                 <Select
                                     name="roles"
@@ -323,8 +300,9 @@ class Adduserform extends Component {
                                     style={{ opacity: 0, height: 0 }}
                                     value={this.state.val1}
                                     required
-                                    />
-                                )}
+                                />
+                            )}
+                            <label className="placeholder-label">{trls('Roles')}</label>
                         </Col>
                     </Form.Group>
                     <Form.Group style={{textAlign:"center"}}>
