@@ -28,6 +28,7 @@ function Ellipsis(props) {
       className={!props.isActive ? "pagination-botton " : "pagination-botton active "}
       onClick={props.onClick}
       disabled={props.isActive}
+      style={{border: 0}}
     >
       ...
     </div>
@@ -123,17 +124,20 @@ class Pagination extends Component {
 
   render() {
     const { recordNum } = this.props;
-    const { pageSize } = this.state;
+    const { pageSize, page } = this.state;
     return (
       <div>
         <div className="pagination">
+            <span>{trls("Show")}</span>
             <select name="project_table_length" aria-controls="project_table" className="" onChange={(evt)=>this.changePageLength(evt)}>
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
-            <div style={{marginLeft: 'auto'}}>
+            <span>{trls("Result_on_page")}</span>
+            <div style={{marginLeft: 'auto', display: 'flex'}}>
+              <span style={{marginTop: 10, marginRight: 20}}>{trls("Show_page")} {page} of {pageSize}</span>
               <PaginatedPage
                 totalPages={parseInt(recordNum/pageSize) ? parseInt(recordNum/pageSize) : 1}
                 currentPage={this.state.page}

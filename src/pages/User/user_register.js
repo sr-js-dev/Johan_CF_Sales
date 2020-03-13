@@ -50,29 +50,29 @@ class Userregister extends Component {
 			if(this._isMounted){
 				this.setState({userData:result.data})
 				this.setState({loading:false})
-				// $('#example').dataTable().fnDestroy();
-				// $('#example').DataTable(
-				// {
-				// 	"language": {
-				// 		"lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
-				// 		"zeroRecords": "Nothing found - sorry",
-				// 		"info": trls("Show_page")+" _PAGE_ of _PAGES_",
-				// 		"infoEmpty": "No records available",
-				// 		"infoFiltered": "(filtered from _MAX_ total records)",
-				// 		"search": trls('Search'),
-				// 		"paginate": {
-				// 			"previous": trls('Previous'),
-				// 			"next": trls('Next')
-				// 		}
-				// 	},
-				// 	"searching": false,
-				// 	// "sPaginationType": "custom",
-				// 	"dom": 't<"bottom-datatable" lip>',
-				// 	// "Paginate": true,
-				// 	"PaginationType": "custom",
-				// 	"LengthChange": false,
-				// }
-				// );
+				$('#example').dataTable().fnDestroy();
+				$('#example').DataTable(
+				{
+					"language": {
+						"lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
+						"zeroRecords": "Nothing found - sorry",
+						"info": trls("Show_page")+" _PAGE_ of _PAGES_",
+						"infoEmpty": "No records available",
+						"infoFiltered": "(filtered from _MAX_ total records)",
+						"search": trls('Search'),
+						"paginate": {
+							"previous": trls('Previous'),
+							"next": trls('Next')
+						}
+					},
+					"searching": false,
+					// "sPaginationType": "custom",
+					"dom": 't<"bottom-datatable" lip>',
+					// "Paginate": true,
+					"PaginationType": "custom",
+					"LengthChange": false,
+				}
+				);
 			}
 		});
 	}

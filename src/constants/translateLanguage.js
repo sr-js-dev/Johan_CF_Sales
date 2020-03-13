@@ -207,7 +207,8 @@ export const TRANSLATIONS = {
       Create: 'Create',
       Delete: 'Delete',
       Edit: 'Edit',
-      Attach: 'Attach'
+      Attach: 'Attach',
+      Result_on_page: 'Result on page'
     },
 
 
@@ -419,6 +420,7 @@ export const TRANSLATIONS = {
       Create: 'Aanmaken',
       Delete: 'Verwijderen',
       Edit: 'Bewerk',
-      Attach: 'Vastmaken'
+      Attach: 'Vastmaken',
+      Result_on_page: 'Resultaten op pagine',
     }
   };

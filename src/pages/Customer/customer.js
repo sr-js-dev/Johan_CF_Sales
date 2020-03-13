@@ -57,7 +57,7 @@ class Userregister extends Component {
 
     getCustomerData (pageSize, page) {
         this._isMounted = true;
-        this.setState({loading:true});
+        // this.setState({loading:true});
         let params = {
             "page" :page,
 	        "pagesize": pageSize

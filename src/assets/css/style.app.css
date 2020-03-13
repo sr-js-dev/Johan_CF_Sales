@@ -41,6 +41,7 @@ overflow-x: auto;
 -webkit-overflow-scrolling: touch;
 }
 .pagination{
+padding-top: 10px;
 margin-left: auto;
 }
 dl, ol, ul {
