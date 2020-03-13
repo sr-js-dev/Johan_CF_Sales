@@ -201,9 +201,9 @@ getAttachFileName = (id) =>{
     return filemane;
 }
 
-getTaskDocuments = (event) =>{
+getTaskDocuments = (data) =>{
     this._isMounted = true;
-    let taskData=event.currentTarget.id;
+    let taskData=data;
     let arrayTaskData = [];
     arrayTaskData = taskData.split(',');
     let params = {
@@ -243,7 +243,6 @@ render () {
                     <table id="example-task" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
-                                {/* <th id="Id">{trls('Id')}</th> */}
                                 <th id="CustomerName">{trls('CustomerName')}</th>
                                 <th id="DateCreated">{trls('DateCreated')}</th>
                                 <th id="Deadline">{trls('Deadline')}</th>
@@ -260,7 +259,6 @@ render () {
                             {
                                 tasksData.map((data,i) =>(
                                 <tr className={new Date(currentDate) > new Date(this.formatDate(data.deadline)) ? 'task-table-tr-past' : 'task-table-tr'} id={data.Id} key={i}>
-                                    {/* <td>{data.Id}</td> */}
                                     <td>{data.CustomerName}</td>
                                     <td>{this.formatDate(data.DateCreated)}</td>
                                     <td>{this.formatDate(data.deadline)}</td>
@@ -269,13 +267,13 @@ render () {
                                     <td>{data.Subject}</td>
                                     <td>{data.createdby}</td>
                                     <td>{data.taskStatus}</td>
-                                    <td>
-                                        <Row>
-                                            <i id={data.Id} className="fas fa-file-upload" style={{fontSize:20, cursor: "pointer", paddingLeft: 10, paddingRight:20}} onClick={()=>this.setState({fileUploadModalShow: true, attachtaskId: data.Id})}></i>
-                                            <div id={data.Id+','+data.CustomerName+','+data.employee+','+data.Subject} style={{color:"#000", fontWeight:"bold", cursor: "pointer", textDecoration:"underline"}} onClick={this.getTaskDocuments}>{trls('View')}</div>
+                                    <td width={200}>
+                                        <Row style={{justifyContent:"space-around"}}>
+                                            <Button variant="light" onClick={()=>this.setState({fileUploadModalShow: true, attachtaskId: data.Id})} className="action-button"><i className="fas fa-file-upload add-icon"></i>{trls('Attach')}</Button>
+                                            <Button variant="light" onClick={()=>this.getTaskDocuments(data.Id+','+data.CustomerName+','+data.employee+','+data.Subject)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>
                                         </Row>
                                     </td>
-                                    <td >
+                                    <td width={200}>
                                         <Row style={{justifyContent:"space-around"}}>
                                             <Button variant="light" onClick={()=>this.taskUpdate(data.Id)} className="action-button"><i className="fas fa-pen add-icon"></i>{trls('Edit')}</Button>
                                             <Button variant="light" onClick={()=>this.viewHistory(data.Id)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>

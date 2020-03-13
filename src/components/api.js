@@ -66,6 +66,8 @@ export default {
     GetNewestCustomer: `${BASEURL}/api/factory/execute/portallvs/getNewestCustomer`,
     PostTaskComments: `${BASEURL}/api/factory/execute/portallvs/postTaskComments`,
     GetTaskComments: `${BASEURL}/api/factory/execute/portallvs/getTaskComments`,
+    GetTaskStatusses: `${BASEURL}/api/factory/execute/portallvs/getTaskStatusses`,
+    GetCustomerRecords: `${BASEURL}/api/factory/execute/portallvs/getCustomerRecords`,
   };
   
-   
+  

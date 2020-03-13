@@ -206,7 +206,8 @@ export const TRANSLATIONS = {
       FileUpload: 'FileUpload',
       Create: 'Create',
       Delete: 'Delete',
-      Edit: 'Edit'
+      Edit: 'Edit',
+      Attach: 'Attach'
     },
 
 
@@ -417,6 +418,7 @@ export const TRANSLATIONS = {
       FileUpload: 'Het dossier Uploaden',
       Create: 'Aanmaken',
       Delete: 'Verwijderen',
-      Edit: 'Bewerk'
+      Edit: 'Bewerk',
+      Attach: 'Vastmaken'
     }
   };

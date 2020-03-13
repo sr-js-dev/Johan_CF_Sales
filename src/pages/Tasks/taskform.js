@@ -329,6 +329,12 @@ class Taskform extends Component {
                                     <label className="placeholder-label">{trls('Subject')}</label> 
                                 </Col>
                             </Form.Group>
+                            {/* <Form.Group as={Row} controlId="formPlaintextPassword">
+                                <Col className="product-text" style={{height:"auto"}}>
+                                    <Form.Check inline name="active" label={trls('Status')} type="checkbox" style={{marginTop:15}} id="Intrastat" />
+                                </Col>
+                            </Form.Group> */}
+                            
                             <Form.Group style={{textAlign:"center"}}>
                                 <Button type="submit" style={{width:"100px"}}>{trls('Save')}</Button>
                             </Form.Group>

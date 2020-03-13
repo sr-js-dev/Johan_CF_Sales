@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Addcustomerform from './addcustomerform';
 import Customerdocument from './customerdocument';
 import Updatecustomerform from './updatecustomerform';
-import $ from 'jquery';
 import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
@@ -16,6 +15,7 @@ import 'datatables.net';
 import history from '../../history';
 import Createtask from '../Tasks/taskform'
 import FileUploadForm from '../../components/drag_drop_fileupload';
+import Pagination from '../../components/pagination';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -30,45 +30,45 @@ class Userregister extends Component {
             customerData:[],
             flag:'',
             userUpdateData:[],
-            loading:true,
-            arrayFilename: []
+            loading:false,
+            arrayFilename: [],
         };
       }
     componentDidMount() {
         this._isMounted=true
-        this.getCustomerData()
+        this.getRecordNum();
+        this.getCustomerData(10, 1)
     }
     componentWillUnmount() {
         this._isMounted = false
     }
-    getCustomerData () {
+
+    getRecordNum () {
         this._isMounted = true;
-        this.setState({loading:true})
+        this.setState({loading:true});
         var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.get(API.GetCustomerData, headers)
+        Axios.get(API.GetCustomerRecords, headers)
         .then(result => {
             if(this._isMounted){
+                this.setState({recordNum: result.data.Items[0].numCustomers});
+            }
+        });
+    }
+
+    getCustomerData (pageSize, page) {
+        this._isMounted = true;
+        this.setState({loading:true});
+        let params = {
+            "page" :page,
+	        "pagesize": pageSize
+        }
+        var headers = SessionManager.shared().getAuthorizationHeader();
+        Axios.post(API.GetCustomerData, params, headers)
+        .then(result => {
+            if(this._isMounted){
+                console.log('3333', result.data.Items[0]);
                 this.setState({customerData:result.data.Items})
                 this.setState({loading:false})
-                $('#example').dataTable().fnDestroy();
-                $('#example').DataTable(
-                    {
-                      "language": {
-                          "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
-                          "zeroRecords": "Nothing found - sorry",
-                          "info": trls("Show_page")+" _PAGE_ of _PAGES_",
-                          "infoEmpty": "No records available",
-                          "infoFiltered": "(filtered from _MAX_ total records)",
-                          "search": trls('Search'),
-                          "paginate": {
-                            "previous": trls('Previous'),
-                            "next": trls('Next')
-                          }
-                      },
-                        "searching": false,
-                        "dom": 't<"bottom-datatable" lip>'
-                    }
-                  );
             }
         });
     }
@@ -134,9 +134,9 @@ class Userregister extends Component {
         });
     }
 
-    getTaskDocuments = (event) =>{
+    getTaskDocuments = (data) =>{
         this._isMounted = true;
-        let taskData=event.currentTarget.id;
+        let taskData = data;
         let arrayData = [];
         arrayData = taskData.split(',');
         let params = {
@@ -231,13 +231,13 @@ class Userregister extends Component {
                                         <td>{data.Zipcode}</td>
                                         <td>{data.City}</td>
                                         <td>{data.Country}</td>
-                                        <td>
-                                            <Row style={{justifyContent:"center"}}>
-                                                <i id={data.id} className="fas fa-file-upload" style={{fontSize:20, cursor: "pointer", paddingLeft: 10, paddingRight:20}} onClick={()=>this.setState({fileUploadModalShow: true, attachtaskId: data.id})}></i>
-                                                <div id={data.id+','+data.CustomerName+','+data.Address+','+data.City+','+data.Country} style={{color:"#069AF8", fontWeight:"bold", cursor: "pointer", textDecoration:"underline"}} onClick={this.getTaskDocuments}>{trls('View')}</div>
+                                        <td width={200}>
+                                            <Row style={{justifyContent:"space-around"}}>
+                                                <Button variant="light" onClick={()=>this.setState({fileUploadModalShow: true, attachtaskId: data.id})} className="action-button"><i className="fas fa-file-upload add-icon"></i>{trls('Attach')}</Button>
+                                                <Button variant="light" onClick={()=>this.getTaskDocuments(data.id+','+data.CustomerName+','+data.Address+','+data.City+','+data.Country)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>
                                             </Row>
                                         </td>
-                                        <td >
+                                        <td>
                                             <Row style={{justifyContent:"center"}}>
                                                 <Button variant="light" onClick={()=>this.customerUpdate(data.id)} className="action-button"><i className="fas fa-pen add-icon"></i>{trls('Edit')}</Button>
                                             </Row>
@@ -247,14 +247,18 @@ class Userregister extends Component {
                             }
                         </tbody>)}
                     </table>
-                        { this.state.loading&& (
-                            <div className="col-md-4 offset-md-4 col-xs-12 loading" style={{textAlign:"center"}}>
-                                <BallBeat
-                                    color={'#222A42'}
-                                    loading={this.state.loading}
-                                />
-                            </div>
-                        )}
+                    <Pagination
+                        recordNum={this.state.recordNum}
+                        getData={(pageSize, page)=>this.getCustomerData(pageSize, page)}
+                    />
+                    { this.state.loading&& (
+                        <div className="col-md-4 offset-md-4 col-xs-12 loading" style={{textAlign:"center"}}>
+                            <BallBeat
+                                color={'#222A42'}
+                                loading={this.state.loading}
+                            />
+                        </div>
+                    )}
                     </div>
                 </div>
                 <Addcustomerform

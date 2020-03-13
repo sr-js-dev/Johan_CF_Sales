@@ -141,9 +141,9 @@ postVisitreportDocuments = (docuId) => {
     });
 }
 
-GetVisitreportDocuments = (event) => {
+GetVisitreportDocuments = (id) => {
     this._isMounted = true;
-    let visitreportid=event.currentTarget.id;
+    let visitreportid = id;
     let params = {
         visitreportid:visitreportid
     }
@@ -201,10 +201,10 @@ render () {
                                     <td>{data.Customer}</td>
                                     <td>{this.formatDate(data.VisitDate)}</td>
                                     <td>{data.CreatedBy}</td>
-                                    <td>
-                                        <Row style={{justifyContent:"center"}}>
-                                            <i id={data.Id} className="fas fa-file-upload" style={{fontSize:20, cursor: "pointer", paddingLeft: 10, paddingRight:20}} onClick={()=>this.setState({fileUploadModalShow: true, attachvisitId: data.Id})}></i>
-                                            <div id={data.Id} style={{color:"#069AF8", fontWeight:"bold", cursor: "pointer", textDecoration:"underline"}} onClick={this.GetVisitreportDocuments}>{trls('View')}</div>
+                                    <td width={200}>
+                                        <Row style={{justifyContent:"space-around"}}>
+                                            <Button variant="light" onClick={()=>this.setState({fileUploadModalShow: true, attachvisitId: data.Id})} className="action-button"><i className="fas fa-file-upload add-icon"></i>{trls('Attach')}</Button>
+                                            <Button variant="light" onClick={()=>this.GetVisitreportDocuments(data.Id)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>
                                         </Row>
                                     </td>
                                     <td style={{width: 200}}>

@@ -2,13 +2,11 @@ import React, {Component} from 'react'
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import { connect } from 'react-redux';
-// import * as salesAction  from '../../actions/salesAction';
 import * as Auth from '../../components/auth'
 import DatePicker from "react-datepicker";
 import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
-// import history from '../../history';
 import { trls } from '../../components/translate';
 
 const mapStateToProps = state => ({ 
@@ -32,7 +30,8 @@ class Updatetask  extends Component {
             remarkFlag: false,
             remarkData: '',
             selectCustomer: [], 
-            selectEmployee: []
+            selectEmployee: [],
+            status: []
         };
     }
     componentWillUnmount() {
@@ -42,6 +41,7 @@ class Updatetask  extends Component {
         this.setState({taskId: this.props.taskId})
         this.getCustomer();
         this.getEmployee();
+        this.getStatus();
     }
     getCustomer = () => {
         this.props.detailmode()
@@ -67,6 +67,19 @@ class Updatetask  extends Component {
         this.setState({subject:updateTask[0].subject})
     }
 
+    getStatus = () => {
+        var headers = SessionManager.shared().getAuthorizationHeader();
+        Axios.get(API.GetTaskStatusses, headers)
+        .then(result => {
+            let status = [];
+            if(result.data.Items.length){
+                status = result.data.Items.map( s => ({value:s.key,label:s.value}));
+            }
+            
+            this.setState({status: status});
+        });
+    }
+
     changeCustomer = (val) => {
         this.setState({selectCustomer:val});
     }
@@ -88,7 +101,7 @@ class Updatetask  extends Component {
             employeeid: parseInt(data.employee),
             deadline: data.deadline,
             subject: data.subject,
-            Gewijzig: ''
+            status: data.status
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.PutTask , params, headers)
@@ -132,6 +145,7 @@ class Updatetask  extends Component {
             employee = this.state.employee.map( s => ({value:s.key,label:s.value}));
         }
         const {updateTask} = this.props;
+        const {status} = this.state;
         remarkCommnets = this.state.remarkFlag ? this.state.taskRemarkComments : updateTask.remark
         return (
             <Modal
@@ -188,6 +202,18 @@ class Updatetask  extends Component {
                                 <Col className="product-text">
                                     <Form.Control type="text" name="subject" defaultValue={this.state.subject} required placeholder={trls('Subject')} />
                                     <label className="placeholder-label">{trls('Subject')}</label>
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="formPlaintextSupplier">
+                                <Col className="product-text">
+                                    <Select
+                                        name="status"
+                                        options={status}
+                                        placeholder={trls('Select')}
+                                        // defaultValue={{'label': updateTask[0] ? updateTask[0].customername: '', 'value': updateTask[0] ? updateTask[0].customerid: ''}}
+                                        onChange={val => this.changeCustomer(val)}
+                                    />
+                                    <label className="placeholder-label">{trls('Status')}</label> 
                                 </Col>
                             </Form.Group>
                             <Form.Group style={{textAlign:"center"}}>

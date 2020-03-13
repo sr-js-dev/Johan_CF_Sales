@@ -79,7 +79,7 @@ class Sidebar extends Component {
                             </Link>
                         </li>
                         <li id="4" className="menu__item" onClick={this.changeItem}>
-                            <Link to={'/visit-report'} className={window.location.pathname === "/custovisit-reportmer" ? 'menu__link menu__link--active' : 'menu__link menu__link'} >
+                            <Link to={'/visit-report'} className={window.location.pathname === "/visit-report" ? 'menu__link menu__link--active' : 'menu__link menu__link'} >
                                 <div className="menu__link-div menu__link-div--active"></div>
                                 <span className="menu__link-img-wrap">
                                 <i className="fas fa-file"></i>
