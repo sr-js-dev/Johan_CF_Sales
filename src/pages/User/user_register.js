@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Adduserform from './adduserform';
@@ -14,6 +14,8 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import 'datatables.net';
 import * as authAction  from '../../actions/authAction';
+import Filtercomponent from '../../components/filtercomponent';
+import * as Common from '../../components/common';
 // import {ArcGauge} from '@progress/kendo-react-gauges';
 
 const mapStateToProps = state => ({ ...state.auth });
@@ -31,24 +33,31 @@ class Userregister extends Component {
 			userData:[],
 			flag:'',
 			userUpdateData:[],
-			loading:true
+			loading:true,
+			originFilterData: [],
+            filterFlag: false,
+            filterData: [],
 		};
 	}
 
 	componentDidMount() {
 		this._isMounted = true;
-
 		this.getUserData();
+		this.setFilterData();
 	}
 
-	getUserData () {
+	getUserData (data) {
 		this._isMounted = true;
 		this.setState({loading:true})
 		var headers = SessionManager.shared().getAuthorizationHeader();
 		Axios.get(API.GetUserData, headers)
 		.then(result => {
 			if(this._isMounted){
-				this.setState({userData:result.data})
+				if(!data){
+                    this.setState({userData: result.data, originFilterData: result.data});
+                }else{
+                    this.setState({userData: data});
+                }
 				this.setState({loading:false})
 				$('#example').dataTable().fnDestroy();
 				$('#example').DataTable(
@@ -66,16 +75,39 @@ class Userregister extends Component {
 						}
 					},
 					"searching": false,
-					// "sPaginationType": "custom",
 					"dom": 't<"bottom-datatable" lip>',
-					// "Paginate": true,
-					"PaginationType": "custom",
-					"LengthChange": false,
 				}
 				);
 			}
 		});
 	}
+	// filter module
+	setFilterData = () => {
+		let filterData = [
+			{"label": trls('UserName'), "value": "UserName", "type": 'text'},
+			{"label": trls('Email'), "value": "Email", "type": 'text'}
+		]
+		this.setState({filterData: filterData});
+	}
+
+	filterOptionData = (filterOption) =>{
+		let dataA = []
+		dataA = Common.filterData(filterOption, this.state.originFilterData);
+		if(!filterOption.length){
+			dataA=null;
+		}
+		$('#example').dataTable().fnDestroy();
+		this.getUserData(dataA);
+	}
+
+	changeFilter = () => {
+		if(this.state.filterFlag){
+			this.setState({filterFlag: false})
+		}else{
+			this.setState({filterFlag: true})
+		}
+	}
+	// filter module
 	userUpdate = (id) => {
 		var settings = {
 			"url": API.GetUserDataById+id,
@@ -159,6 +191,23 @@ class Userregister extends Component {
 						<Col sm={6}>
 							<Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_User')}</Button> 
 						</Col>
+						<Col sm={6} className="has-search">
+							<div style={{display: 'flex', float: 'right'}}>
+								<Button variant="light" onClick={()=>this.changeFilter()}><i className="fas fa-filter add-icon"></i>{trls('Filter')}</Button>   
+								<div style={{marginLeft: 20}}>
+									<span className="fa fa-search form-control-feedback"></span>
+									<Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")}/>
+								</div>
+							</div>
+						</Col>
+						{this.state.filterData.length>0&&(
+							<Filtercomponent
+								onHide={()=>this.setState({filterFlag: false})}
+								filterData={this.state.filterData}
+								onFilterData={(filterOption)=>this.filterOptionData(filterOption)}
+								showFlag={this.state.filterFlag}
+							/>
+						)}
 					</Row>
 					<div className="table-responsive">
 						<table id="example" className="place-and-orders__table table" width="100%">
@@ -185,9 +234,9 @@ class Userregister extends Component {
 										</td>
 										<td style={{width: 300}}>
 											<Row style={{justifyContent:"space-around"}}>
-												<Button variant="light" onClick={()=>this.userDeleteConfirm(data.Id)} className="action-button"><i className="fas fa-trash-alt add-icon"></i>{trls('Delete')}</Button>
-												<Button variant="light" onClick={()=>this.userUpdate(data.Id)} className="action-button"><i className="fas fa-pen add-icon"></i>{trls('Edit')}</Button>
-												<Button variant="light" onClick={()=>this.viewUserData(data.Id)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>
+												<i className="fas fa-trash-alt add-icon" onClick={()=>this.userDeleteConfirm(data.Id)}><span className="action-title">{trls('Delete')}</span></i>
+												<i className="fas fa-pen add-icon" onClick={()=>this.userUpdate(data.Id)}><span className="action-title">{trls('Edit')}</span></i>
+												<i className="fas fa-eye add-icon" onClick={()=>this.viewUserData(data.Id)}><span className="action-title">{trls('View')}</span></i>
 											</Row>
 										</td>
 								</tr>

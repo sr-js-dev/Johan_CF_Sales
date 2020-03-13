@@ -125,6 +125,12 @@ class Pagination extends Component {
   render() {
     const { recordNum } = this.props;
     const { pageSize, page } = this.state;
+    let totalPage = 1;
+    if(recordNum%pageSize>0){
+      totalPage = parseInt(recordNum/pageSize) ? parseInt(recordNum/pageSize)+1 : 1
+    }else{
+      totalPage = parseInt(recordNum/pageSize) ? parseInt(recordNum/pageSize) : 1
+    }
     return (
       <div>
         <div className="pagination">
@@ -139,7 +145,7 @@ class Pagination extends Component {
             <div style={{marginLeft: 'auto', display: 'flex'}}>
               <span style={{marginTop: 10, marginRight: 20}}>{trls("Show_page")} {page} of {pageSize}</span>
               <PaginatedPage
-                totalPages={parseInt(recordNum/pageSize) ? parseInt(recordNum/pageSize) : 1}
+                totalPages={totalPage}
                 currentPage={this.state.page}
                 onChange={page => this.onPageChange(page)}
               />

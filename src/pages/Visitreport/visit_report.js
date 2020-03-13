@@ -203,14 +203,14 @@ render () {
                                     <td>{data.CreatedBy}</td>
                                     <td width={200}>
                                         <Row style={{justifyContent:"space-around"}}>
-                                            <Button variant="light" onClick={()=>this.setState({fileUploadModalShow: true, attachvisitId: data.Id})} className="action-button"><i className="fas fa-file-upload add-icon"></i>{trls('Attach')}</Button>
-                                            <Button variant="light" onClick={()=>this.GetVisitreportDocuments(data.Id)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>
+                                            <i className="fas fa-file-upload add-icon" onClick={()=>this.setState({fileUploadModalShow: true, attachvisitId: data.Id})}><span className="action-title">{trls('Attach')}</span></i>
+                                            <i className="fas fa-eye add-icon" onClick={()=>this.GetVisitreportDocuments(data.Id)}><span className="action-title">{trls('View')}</span></i>
                                         </Row>
                                     </td>
                                     <td style={{width: 200}}>
                                         <Row style={{justifyContent:"space-around"}}>
-                                            <Button variant="light" onClick={()=>this.updateVisit(data.Id)} className="action-button"><i className="fas fa-pen add-icon"></i>{trls('Edit')}</Button>
-                                            <Button variant="light" onClick={()=>this.viewAnswer(data.Id)} className="action-button"><i className="fas fa-eye add-icon"></i>{trls('View')}</Button>
+                                            <i className="fas fa-pen add-icon" onClick={()=>this.updateVisit(data.Id)}><span className="action-title">{trls('Edit')}</span></i>
+                                            <i className="fas fa-eye add-icon" onClick={()=>this.viewAnswer(data.Id)}><span className="action-title">{trls('View')}</span></i>
                                         </Row>
                                     </td>
                                 </tr>

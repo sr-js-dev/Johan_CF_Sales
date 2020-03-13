@@ -208,7 +208,8 @@ export const TRANSLATIONS = {
       Delete: 'Delete',
       Edit: 'Edit',
       Attach: 'Attach',
-      Result_on_page: 'Result on page'
+      Result_on_page: 'Result on page',
+      Filter: 'Filter'
     },
 
 
@@ -420,7 +421,8 @@ export const TRANSLATIONS = {
       Create: 'Aanmaken',
       Delete: 'Verwijderen',
       Edit: 'Bewerk',
-      Attach: 'Vastmaken',
+      Attach: 'Uploaden',
       Result_on_page: 'Resultaten op pagine',
+      Filter: 'Filter'
     }
   };

@@ -614,7 +614,9 @@ input:-internal-autofill-selected {
 	fill: #585858;
 }
 .add-icon{
-  margin-right: 10px;
+  font-style: normal;
+  cursor: pointer;
+  margin-right: 3px;
 }
 .btn-primary{
   height: 30px;
@@ -884,4 +886,66 @@ border: 1px solid #E2E3E4;
 }
 .hiden{
   display: none;
+}
+.has-search{
+  padding: 0px;
+  margin-left: auto;
+}
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2rem;
+  text-align: center;
+  pointer-events: none;
+  color: #000;
+  margin-top: 2px;
+}
+.has-search .form-control {
+  height: 30px;
+  padding-left: 2.375rem;
+}
+.multi-filter__div{
+  /* width: auto!important; */
+  margin-Left: auto;
+  padding-right: 20px;
+  min-height: 100px;
+  border: solid 1px #EAF0F2;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 10;
+  right: 48px;
+  margin-top: 40px;
+  /* width: 40%; */
+  background-color: #fff
+}
+.filter-header__option {
+  padding: 10;
+  width: 20%;
+  height: 30px !important;
+}
+.filter-header__option .css-1wy0on6{
+  min-height: 27px;
+  height: 10px;
+}
+.filter-header__option .css-bg1rzq-control{
+  min-height: 27px !important;
+}
+.filter-header__option .css-1szy77t-control{
+  min-height: 27px !important;
+}
+.filter-date__picker{
+  width: 99%;
+  height: 30px;
+}
+.filter-show__hide{
+  display: none;
+}
+.action-title{
+  margin-left: 5px;
+  font-weight: 500;
+  font-size: 13px;
+  font-family: Segoe UI;
 }
