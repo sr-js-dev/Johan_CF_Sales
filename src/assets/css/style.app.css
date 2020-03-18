@@ -80,7 +80,7 @@ font-weight: bold;
 width:100%
 }
 .myDatePicker {
-  height: 40px;
+  height: 40px !important;
   width:100%;
   height:calc(1.5em + .75rem + 2px);;
   border-radius: 4px;
@@ -643,6 +643,16 @@ input:-internal-autofill-selected {
     width: 280px;
 }
 }
+@media (max-width: 1300px){
+  .side-bar__div {
+    width: 230px;
+}
+}
+@media (max-width: 1300px){
+  .multi-filter__div{
+    max-width: 55%;
+  }
+}
 
 .table.dataTable thead .sorting{
   background-image: none;
@@ -956,4 +966,7 @@ border: 1px solid #E2E3E4;
 }
 .pagination-info{
   font-size: 13px;
+}
+.table.dataTable thead .sorting_asc{
+  background: none;
 }

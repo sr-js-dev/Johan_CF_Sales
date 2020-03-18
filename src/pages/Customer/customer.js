@@ -75,7 +75,7 @@ class Userregister extends Component {
         .then(result => {
             if(this._isMounted){
                 if(!data){
-                    this.setState({customerData: result.data.Items});
+                    this.setState({customerData: result.data.Items.length>0 ? result.data.Items : []});
                 }else{
                     this.setState({customerData: data});
                 }
@@ -96,10 +96,9 @@ class Userregister extends Component {
                                 "next": trls('Next')
                             }
                         },
-                        // "bInfo": data ? true : false,
-                        // "paging": data ? true : false,
                         "searching": false,
                         "dom": 't<"bottom-datatable" lip>',
+                        "ordering": false
                     }
                     );
                 }else{
@@ -119,8 +118,8 @@ class Userregister extends Component {
                         },
                         "bInfo": data ? true : false,
                         "paging": data ? true : false,
-                        "searching": false,
                         "dom": 't<"bottom-datatable" lip>',
+                        "ordering": false
                     }
                     );
                 }
@@ -134,8 +133,7 @@ class Userregister extends Component {
         Axios.get(API.GetAllCustomers, headers)
         .then(result => {
             if(this._isMounted){
-                this.setState({originFilterData: result.data.Items})
-                
+                this.setState({originFilterData: result.data.Items});
             }
         });
     }
@@ -162,6 +160,19 @@ class Userregister extends Component {
         }
         $('#example').dataTable().fnDestroy();
         this.getCustomerData(10,1,dataA);
+    }
+
+    quickSearch = (evt) => {
+        let dataB = []
+        dataB = Common.quickSearch(this.state.filterData, this.state.originFilterData, evt.target.value);
+        $('#example').dataTable().fnDestroy();
+        if(dataB.length===0 || evt.target.value===''){
+            this.setState({filterDataFlag: false});
+            dataB=null;
+        }else{
+            this.setState({filterDataFlag: true});
+        }
+        this.getCustomerData(10,1,dataB);
     }
 
     changeFilter = () => {
@@ -312,7 +323,7 @@ class Userregister extends Component {
                                 <Button variant="light" onClick={()=>this.changeFilter()}><i className="fas fa-filter add-icon"></i>{trls('Filter')}</Button>   
                                 <div style={{marginLeft: 20}}>
                                     <span className="fa fa-search form-control-feedback"></span>
-                                    <Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")}/>
+                                    <Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")} onChange={(evt)=>this.quickSearch(evt)}/>
                                 </div>
                             </div>
                         </Col>
@@ -338,7 +349,7 @@ class Userregister extends Component {
                                 <th>{trls('Action')}</th>
                             </tr>
                         </thead>
-                        {customerData && !this.state.loading &&(<tbody >
+                        {!this.state.loading &&(<tbody >
                             {
                                 customerData.map((data,i) =>(
                                     <tr id={i} key={i}>

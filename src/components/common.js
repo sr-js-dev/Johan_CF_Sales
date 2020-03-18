@@ -120,3 +120,15 @@ export const filterData = (filterOption, filterData) =>{
     })
     return resutDat;
 }
+
+export const quickSearch = (filterOption, filterData, value) =>{
+    let resutDat = [];
+    let resultArray = [];
+    filterOption.map((option,key)=>{
+        resutDat = filterData.filter(item => String(item[option.value]).toLowerCase().includes(value.toLowerCase()));
+        resultArray = resultArray.concat(resutDat) 
+        return option;
+    })
+    resultArray.splice(0, resultArray.length, ...(new Set(resultArray)))
+    return resultArray;
+}

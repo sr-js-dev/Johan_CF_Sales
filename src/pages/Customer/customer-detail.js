@@ -323,6 +323,20 @@ class Userregister extends Component {
                     />
                 </div>
                 <div className="panel-collapse">
+                    <Priceagree
+                        title={trls("Price_agreements")}
+                        customerId={this.state.customerId}
+                        detailmode={this.detailmode}
+                    />
+                </div>
+                <div className="panel-collapse">
+                    <Quotation
+                        title={trls("Quotations")}
+                        customerId={this.state.customerId}
+                        detailmode={this.detailmode}
+                    />
+                </div>
+                <div className="panel-collapse">
                     <Modalpanel
                         title={trls("Models")}
                         customerId={this.state.customerId}
@@ -337,13 +351,6 @@ class Userregister extends Component {
                     />
                 </div>
                 <div className="panel-collapse">
-                    <Orders
-                        title={trls("Orders")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
-                <div className="panel-collapse">
                     <Competitor
                         title={trls("Competitor_models")}
                         customerId={this.state.customerId}
@@ -351,15 +358,8 @@ class Userregister extends Component {
                     />
                 </div>
                 <div className="panel-collapse">
-                    <Priceagree
-                        title={trls("Price_agreements")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
-                <div className="panel-collapse">
-                    <Quotation
-                        title={trls("Quotations")}
+                    <Orders
+                        title={trls("Orders")}
                         customerId={this.state.customerId}
                         detailmode={this.detailmode}
                     />

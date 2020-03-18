@@ -167,7 +167,7 @@ class Filtercomponent extends React.Component {
     render() {
         const{filterData, filterOptionData, actions, dateaActions, datePickerFlag}=this.state;
         return (
-            <Col sm={4} className={!this.props.showFlag ? "multi-filter__div filter-show__hide" : "multi-filter__div" }>
+            <Col md={4} className={!this.props.showFlag ? "multi-filter__div filter-show__hide" : "multi-filter__div" }>
                 {this.state.filterOptionData.map((data, index) =>(
                     <div key={index} style={{display: 'flex', paddingTop: 10, justifyContent: "space-between"}}>
                         {data.condition==="where" ? (

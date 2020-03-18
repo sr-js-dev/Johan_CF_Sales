@@ -59,8 +59,11 @@ class Userregister extends Component {
                     this.setState({userData: data});
                 }
 				this.setState({loading:false})
+				$('.fitler').on( 'keyup', function () {
+					table.search( this.value ).draw();
+				} );
 				$('#example').dataTable().fnDestroy();
-				$('#example').DataTable(
+				var table = $('#example').DataTable(
 				{
 					"language": {
 						"lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
@@ -74,8 +77,8 @@ class Userregister extends Component {
 							"next": trls('Next')
 						}
 					},
-					"searching": false,
 					"dom": 't<"bottom-datatable" lip>',
+					"ordering": false
 				}
 				);
 			}

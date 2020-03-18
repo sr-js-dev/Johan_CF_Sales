@@ -57,8 +57,11 @@ getTasksData = (data) => {
         }
         this.setState({loading:false})
         this.setState({search_flag: false})
+        $('.fitler').on( 'keyup', function () {
+            table.search( this.value ).draw();
+        } );
         $('#example-task').dataTable().fnDestroy();
-        $('#example-task').DataTable(
+        var table = $('#example-task').DataTable(
             {
                 orderCellsTop: true,
                 fixedHeader: true,
@@ -74,8 +77,8 @@ getTasksData = (data) => {
                         "next": trls('Next')
                     },
                 },
-                "searching": false,
-                "dom": 't<"bottom-datatable" lip>'
+                "dom": 't<"bottom-datatable" lip>',
+                "ordering": false
                 }
           );
     });

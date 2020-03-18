@@ -92,7 +92,8 @@ class AccordionItem extends React.Component {
                           }
                       },
                         "searching": false,
-                        "dom": 't<"bottom-datatable" lip>'
+                        "dom": 't<"bottom-datatable" lip>',
+                        "ordering": false
                     }
                   );
             }

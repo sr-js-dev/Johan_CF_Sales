@@ -51,8 +51,11 @@ getTasksData = (data) => {
             this.setState({visitreports: data});
         }
         this.setState({loading:false})
+        $('.fitler').on( 'keyup', function () {
+            table.search( this.value ).draw();
+        } );
         $('#example-visitreport').dataTable().fnDestroy();
-        $('#example-visitreport').DataTable(
+        var table = $('#example-visitreport').DataTable(
             {
               "language": {
                   "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
@@ -66,8 +69,8 @@ getTasksData = (data) => {
                     "next": trls('Next')
                   },
               },
-                "searching": false,
-                "dom": 't<"bottom-datatable" lip>'
+                "dom": 't<"bottom-datatable" lip>',
+                "ordering": false
             }
           );
     });
@@ -254,7 +257,7 @@ render () {
                                 <tr id={data.Id} key={i} onClick={this.loadSalesDetail}>
                                     <td>{data.Id}</td>
                                     <td>{data.Customer}</td>
-                                    <td>{this.formatDate(data.VisitDate)}</td>
+                                    <td>{Common.formatDate(data.VisitDate)}</td>
                                     <td>{data.CreatedBy}</td>
                                     {/* <td width={200}>
                                         <Row style={{justifyContent:"space-around"}}>

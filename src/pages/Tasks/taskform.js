@@ -23,6 +23,7 @@ class Taskform extends Component {
         super(props);
         this.state = {  
             orderdate: '', 
+            val: '',
             val1: '',
             val2: '',
             val3: '',
@@ -31,7 +32,7 @@ class Taskform extends Component {
             taskType: [],
             customer: [],
             employee: [],
-            employeeSelectData: [],
+            employeeSelectData: [{'value': 34, 'label': 'Esther Sauer'}],
             taskIds: [],
             remarkData: '',
             taskRemarkComments: [],
@@ -108,6 +109,7 @@ class Taskform extends Component {
     }
 
     handleSubmit = (event) => {
+        console.log('123123');
         this._isMounted = true;
         event.preventDefault();
         const taskIds = this.state.taskIds;
@@ -298,6 +300,16 @@ class Taskform extends Component {
                                         options={customer}
                                         onChange={val => this.changeCustomer(val)}
                                     />}
+                                    {!this.props.disabled && (
+                                        <input
+                                            onChange={val=>console.log()}
+                                            tabIndex={-1}
+                                            autoComplete="off"
+                                            style={{ opacity: 0, height: 0, width: '100%' }}
+                                            value={this.state.val5}
+                                            required
+                                        />
+                                    )}
                                     <label className="placeholder-label">{trls('Customer')}</label>
                                 </Col>
                             </Form.Group>
@@ -329,12 +341,6 @@ class Taskform extends Component {
                                     <label className="placeholder-label">{trls('Subject')}</label> 
                                 </Col>
                             </Form.Group>
-                            {/* <Form.Group as={Row} controlId="formPlaintextPassword">
-                                <Col className="product-text" style={{height:"auto"}}>
-                                    <Form.Check inline name="active" label={trls('Status')} type="checkbox" style={{marginTop:15}} id="Intrastat" />
-                                </Col>
-                            </Form.Group> */}
-                            
                             <Form.Group style={{textAlign:"center"}}>
                                 <Button type="submit" style={{width:"100px"}}>{trls('Save')}</Button>
                             </Form.Group>

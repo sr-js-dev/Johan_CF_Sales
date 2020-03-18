@@ -154,6 +154,7 @@ class AccordionItem extends React.Component {
                       },
                         "searching": false,
                         "dom": 't<"bottom-datatable" lip>',
+                        "ordering": false,
                         columnDefs: [
                             { "width": "70px", "targets": [0,1,2,3]},
                             { "width": "200px", "targets": [8] }
