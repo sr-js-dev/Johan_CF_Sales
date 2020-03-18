@@ -39,7 +39,9 @@ class Userregister extends Component {
         var curyear = date.getFullYear(); 
         let pathname = window.location.pathname;
         let pathArray = pathname.split('/')
-        let customerId = pathArray.pop();
+        console.log('433333', pathArray);
+        let customerId = pathArray[3];
+        let fullRight = pathArray[4];
         super(props);
         this.state = {  
             flag:'',
@@ -52,6 +54,7 @@ class Userregister extends Component {
             detailIdData: {contact: false, product: false, modal: false, orders: false, competitor: false, price: false, quotations: false, mold: false},
             detailShowFlag: false,
             customerId: customerId,
+            fullRight: fullRight
         };
       }
     componentDidMount() {
@@ -150,7 +153,7 @@ class Userregister extends Component {
         let detailIdData = this.state.detailIdData;
         detailIdData[detailId] = true;
         this.setState({detailIdData: detailIdData});
-        if(detailIdData.contact===true  && detailIdData.price===true && detailIdData.quotations===true){
+        if(detailIdData.contact===true){
             this.setState({detailShowFlag: true})
         }
         this.setState({customerId: ""})
@@ -161,6 +164,7 @@ class Userregister extends Component {
         let customerFinancialData3=this.state.customerFinancialData3;
         let customerFinancialData2=this.state.customerFinancialData2;
         let customerFinancialData1=this.state.customerFinancialData1;
+        const {fullRight} = this.state;
         let paymentterm=''
         if(customerDetailData){
              paymentterm = customerDetailData.paymentterm;
@@ -245,7 +249,8 @@ class Userregister extends Component {
                                 </Card.Body>
                         </Card>
                     </Col>
-                    <Col sm={6} className="card-container-col-finance">
+                    {fullRight==="true"&&(
+                        <Col sm={6} className="card-container-col-finance">
                         <Card>
                             <Card.Header><i className="fas fa-money-check-alt" style={{paddingRight:"5px", fontSize:"18px"}}></i>{trls("Financial")}</Card.Header>
                                 <Card.Body>
@@ -305,15 +310,16 @@ class Userregister extends Component {
                                 </Card.Body>
                         </Card>
                     </Col>
+                    )}
                 </Row>
                 {!this.state.detailShowFlag && (
-                    <div className="page-loading-spinner loading" style={{textAlign:"center"}}>
-                        <BallBeat
-                            color={'#000'}
-                            loading={this.state.loading}
-                        />
-                    </div>
-                )}
+                            <div className="page-loading-spinner loading" style={{textAlign:"center"}}>
+                                <BallBeat
+                                    color={'#000'}
+                                    loading={this.state.loading}
+                                />
+                            </div>
+                        )}
                 <div className="panel-collapse">
                     <Contactpanel
                         title={trls("Contacts")}
@@ -322,55 +328,59 @@ class Userregister extends Component {
                         contactFlag={this.state.detailIdData.contact}
                     />
                 </div>
-                <div className="panel-collapse">
-                    <Priceagree
-                        title={trls("Price_agreements")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
-                <div className="panel-collapse">
-                    <Quotation
-                        title={trls("Quotations")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
-                <div className="panel-collapse">
-                    <Modalpanel
-                        title={trls("Models")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
-                <div className="panel-collapse">
-                    <Products
-                        title={trls("Articles")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
-                <div className="panel-collapse">
-                    <Competitor
-                        title={trls("Competitor_models")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
-                <div className="panel-collapse">
-                    <Orders
-                        title={trls("Orders")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
-                <div className="panel-collapse">
-                    <Mold
-                        title={trls("Mold")}
-                        customerId={this.state.customerId}
-                        detailmode={this.detailmode}
-                    />
-                </div>
+                {fullRight==="true"&&(
+                    <div>
+                        <div className="panel-collapse">
+                            <Priceagree
+                                title={trls("Price_agreements")}
+                                customerId={this.state.customerId}
+                                detailmode={this.detailmode}
+                            />
+                        </div>
+                        <div className="panel-collapse">
+                            <Quotation
+                                title={trls("Quotations")}
+                                customerId={this.state.customerId}
+                                detailmode={this.detailmode}
+                            />
+                        </div>
+                        <div className="panel-collapse">
+                            <Modalpanel
+                                title={trls("Models")}
+                                customerId={this.state.customerId}
+                                detailmode={this.detailmode}
+                            />
+                        </div>
+                        <div className="panel-collapse">
+                            <Products
+                                title={trls("Articles")}
+                                customerId={this.state.customerId}
+                                detailmode={this.detailmode}
+                            />
+                        </div>
+                        <div className="panel-collapse">
+                            <Competitor
+                                title={trls("Competitor_models")}
+                                customerId={this.state.customerId}
+                                detailmode={this.detailmode}
+                            />
+                        </div>
+                        <div className="panel-collapse">
+                            <Orders
+                                title={trls("Orders")}
+                                customerId={this.state.customerId}
+                                detailmode={this.detailmode}
+                            />
+                        </div>
+                        <div className="panel-collapse">
+                            <Mold
+                                title={trls("Mold")}
+                                customerId={this.state.customerId}
+                                detailmode={this.detailmode}
+                            />
+                        </div>
+                    </div>
+                )}
             </Container>
         )
         };

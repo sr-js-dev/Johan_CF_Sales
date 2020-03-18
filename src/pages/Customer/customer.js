@@ -184,10 +184,10 @@ class Userregister extends Component {
     }
     // filter module
 
-    viewCustomerDetail = (event) => {
-        let customerId = event.currentTarget.id;
+    viewCustomerDetail = (data) => {
+        let customerId = data.id;
         history.push({
-            pathname: '/customer/detail/'+customerId,
+            pathname: '/customer/detail/'+customerId+'/'+data.fullrights,
           })
     }
 
@@ -354,7 +354,7 @@ class Userregister extends Component {
                                 customerData.map((data,i) =>(
                                     <tr id={i} key={i}>
                                         <td>
-                                            <div id={data.id} style={{cursor: "pointer", color:'#004388', fontSize:"15px", fontWeight:'bold'}} onClick={this.viewCustomerDetail}>{data.CustomerName}</div>
+                                            <div id={data.id} style={{cursor: "pointer", color:'#004388', fontSize:"15px", fontWeight:'bold'}} onClick={()=>this.viewCustomerDetail(data)}>{data.CustomerName}</div>
                                         </td>
                                         <td>{data.Address}</td>
                                         <td>{data.Zipcode}</td>
