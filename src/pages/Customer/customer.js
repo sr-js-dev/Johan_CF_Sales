@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Form } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Addcustomerform from './addcustomerform';
@@ -16,6 +16,9 @@ import history from '../../history';
 import Createtask from '../Tasks/taskform'
 import FileUploadForm from '../../components/drag_drop_fileupload';
 import Pagination from '../../components/pagination';
+import * as Common from '../../components/common';
+import Filtercomponent from '../../components/filtercomponent';
+import $ from 'jquery';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -32,12 +35,18 @@ class Userregister extends Component {
             userUpdateData:[],
             loading:false,
             arrayFilename: [],
+            originFilterData: [],
+            filterFlag: false,
+            filterData: [],
+            filterDataFlag: false
         };
       }
     componentDidMount() {
         this._isMounted=true
         this.getRecordNum();
-        this.getCustomerData(10, 1)
+        this.getCustomerData(10, 1);
+        this.getAllCustomerData();
+        this.setFilterData();
     }
     componentWillUnmount() {
         this._isMounted = false
@@ -55,9 +64,8 @@ class Userregister extends Component {
         });
     }
 
-    getCustomerData (pageSize, page) {
+    getCustomerData (pageSize, page, data) {
         this._isMounted = true;
-        // this.setState({loading:true});
         let params = {
             "page" :page,
 	        "pagesize": pageSize
@@ -66,12 +74,105 @@ class Userregister extends Component {
         Axios.post(API.GetCustomerData, params, headers)
         .then(result => {
             if(this._isMounted){
-                console.log('3333', result.data.Items[0]);
-                this.setState({customerData:result.data.Items})
+                if(!data){
+                    this.setState({customerData: result.data.Items});
+                }else{
+                    this.setState({customerData: data});
+                }
                 this.setState({loading:false})
+                $('#example').dataTable().fnDestroy();
+                if(this.state.filterDataFlag){
+                    $('#example').DataTable(
+                        {
+                        "language": {
+                            "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
+                            "zeroRecords": "Nothing found - sorry",
+                            "info": trls("Show_page")+" _PAGE_ of _PAGES_",
+                            "infoEmpty": "No records available",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "search": trls('Search'),
+                            "paginate": {
+                                "previous": trls('Previous'),
+                                "next": trls('Next')
+                            }
+                        },
+                        // "bInfo": data ? true : false,
+                        // "paging": data ? true : false,
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>',
+                    }
+                    );
+                }else{
+                    $('#example').DataTable(
+                        {
+                        "language": {
+                            "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
+                            "zeroRecords": "Nothing found - sorry",
+                            "info": trls("Show_page")+" _PAGE_ of _PAGES_",
+                            "infoEmpty": "No records available",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "search": trls('Search'),
+                            "paginate": {
+                                "previous": trls('Previous'),
+                                "next": trls('Next')
+                            }
+                        },
+                        "bInfo": data ? true : false,
+                        "paging": data ? true : false,
+                        "searching": false,
+                        "dom": 't<"bottom-datatable" lip>',
+                    }
+                    );
+                }
+				
             }
         });
     }
+
+    getAllCustomerData () {
+        var headers = SessionManager.shared().getAuthorizationHeader();
+        Axios.get(API.GetAllCustomers, headers)
+        .then(result => {
+            if(this._isMounted){
+                this.setState({originFilterData: result.data.Items})
+                
+            }
+        });
+    }
+    // filter module
+    setFilterData = () => {
+        let filterData = [
+            {"label": trls('CustomerName'), "value": "CustomerName", "type": 'text'},
+            {"label": trls('Address'), "value": "Address", "type": 'text'},
+            {"label": trls('Postcode'), "value": "Zipcode", "type": 'text'},
+            {"label": trls('City'), "value": "City", "type": 'text'},
+            {"label": trls('Country'), "value": "Country", "type": 'text'}
+        ]
+        this.setState({filterData: filterData});
+    }
+
+    filterOptionData = (filterOption) =>{
+        let dataA = []
+        dataA = Common.filterData(filterOption, this.state.originFilterData);
+        if(!filterOption.length){
+            this.setState({filterDataFlag: false});
+            dataA=null;
+        }else{
+            this.setState({filterDataFlag: true});
+        }
+        $('#example').dataTable().fnDestroy();
+        this.getCustomerData(10,1,dataA);
+    }
+
+    changeFilter = () => {
+        if(this.state.filterFlag){
+            this.setState({filterFlag: false})
+        }else{
+            this.setState({filterFlag: true})
+        }
+    }
+    // filter module
+
     viewCustomerDetail = (event) => {
         let customerId = event.currentTarget.id;
         history.push({
@@ -206,6 +307,23 @@ class Userregister extends Component {
                                 <Button variant="primary" disabled onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_Customer')}</Button>
                             }
                         </Col>
+                        <Col sm={6} className="has-search">
+                            <div style={{display: 'flex', float: 'right'}}>
+                                <Button variant="light" onClick={()=>this.changeFilter()}><i className="fas fa-filter add-icon"></i>{trls('Filter')}</Button>   
+                                <div style={{marginLeft: 20}}>
+                                    <span className="fa fa-search form-control-feedback"></span>
+                                    <Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")}/>
+                                </div>
+                            </div>
+                        </Col>
+                        {this.state.filterData.length>0&&(
+                            <Filtercomponent
+                                onHide={()=>this.setState({filterFlag: false})}
+                                filterData={this.state.filterData}
+                                onFilterData={(filterOption)=>this.filterOptionData(filterOption)}
+                                showFlag={this.state.filterFlag}
+                            />
+                        )}
                     </Row>
                     <div className="table-responsive">
                         <table id="example" className="place-and-orders__table table" width="100%">
@@ -216,7 +334,7 @@ class Userregister extends Component {
                                 <th>{trls('Postcode')}</th>
                                 <th>{trls('City')}</th>
                                 <th>{trls('Country')}</th>
-                                <th>{trls('Attachment')}</th>
+                                {/* <th>{trls('Attachment')}</th> */}
                                 <th>{trls('Action')}</th>
                             </tr>
                         </thead>
@@ -231,12 +349,12 @@ class Userregister extends Component {
                                         <td>{data.Zipcode}</td>
                                         <td>{data.City}</td>
                                         <td>{data.Country}</td>
-                                        <td width={200}>
+                                        {/* <td width={200}>
                                             <Row style={{justifyContent:"space-around"}}>
                                                 <i className="fas fa-file-upload add-icon" onClick={()=>this.setState({fileUploadModalShow: true, attachtaskId: data.id})}><span className="action-title">{trls('Attach')}</span></i>
                                                 <i className="fas fa-eye add-icon" onClick={()=>this.getTaskDocuments(data.id+','+data.CustomerName+','+data.Address+','+data.City+','+data.Country)}><span className="action-title">{trls('View')}</span></i>
                                             </Row>
-                                        </td>
+                                        </td> */}
                                         <td>    
                                             <Row style={{justifyContent:"space-around"}}>
                                                 <i className="fas fa-pen add-icon" onClick={()=>this.customerUpdate(data.id)}><span className="action-title">{trls('Edit')}</span></i>
@@ -247,10 +365,12 @@ class Userregister extends Component {
                             }
                         </tbody>)}
                     </table>
-                    <Pagination
-                        recordNum={this.state.recordNum}
-                        getData={(pageSize, page)=>this.getCustomerData(pageSize, page)}
-                    />
+                    {!this.state.filterDataFlag&&(
+                        <Pagination
+                            recordNum={this.state.recordNum}
+                            getData={(pageSize, page)=>this.getCustomerData(pageSize, page)}
+                        />
+                    )}
                     { this.state.loading&& (
                         <div className="col-md-4 offset-md-4 col-xs-12 loading" style={{textAlign:"center"}}>
                             <BallBeat

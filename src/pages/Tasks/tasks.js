@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import { BallBeat } from 'react-pure-loaders';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Form } from 'react-bootstrap';
 import  Taskform  from './taskform'
 import { trls } from '../../components/translate';
 import 'datatables.net';
@@ -13,6 +13,8 @@ import Updatetask from './updatetask.js'
 import Taskhistory from './taskhistory.js'
 import Taskdocument from './taskdocument'
 import FileUploadForm from '../../components/drag_drop_fileupload';
+import * as Common from '../../components/common';
+import Filtercomponent from '../../components/filtercomponent';
 
 const mapStateToProps = state => ({
      ...state.auth,
@@ -31,44 +33,29 @@ class Tasks extends Component {
             currentDate: new Date(),
             search_flag: true,
             arrayFilename: [],
-            modalupdateShow: false
+            modalupdateShow: false,
+            originFilterData: [],
+            filterFlag: false,
+            filterData: [],
         };
       }
 componentDidMount() {
     this.setState({search_flag: true})
     this.getTasksData();
+    this.setFilterData();
 }
 
-getTasksData = () => {
+getTasksData = (data) => {
     this.setState({loading:true})
     var header = SessionManager.shared().getAuthorizationHeader();
     Axios.get(API.GetTasksData, header)
     .then(result => {
-        this.setState({tasksData:result.data.Items})
+        if(!data){
+            this.setState({tasksData: result.data.Items, originFilterData: result.data.Items});
+        }else{
+            this.setState({userData: data});
+        }
         this.setState({loading:false})
-        // if(this.state.search_flag){
-        //     $('#example-task thead tr').clone(true).appendTo( '#example-task thead' );
-        //     $('#example-task thead tr:eq(1) th').each( function (i) {
-        //         var title = $(this).text();
-        //         var id = $(this).attr('id')
-        //         $(this).removeAttr('class');
-        //         if(id==="Status" || id==="Employee" || id==="CreateBy" || id==="Task_Type"){
-        //             $(this).html( '<input type="text" style="width:100%" placeholder="'+title+'" />' );
-        //         }
-        //         else{
-        //             $(this).html( '<div />' );
-        //         }
-        //         $(this).addClass("sort-style");
-        //         $( 'input', this ).on( 'keyup change', function () {
-        //             if ( table.column(i).search() !== this.value ) {
-        //                 table
-        //                     .column(i)
-        //                     .search( this.value )
-        //                     .draw();
-        //             }
-        //         } );
-        //     } );
-        // }
         this.setState({search_flag: false})
         $('#example-task').dataTable().fnDestroy();
         $('#example-task').DataTable(
@@ -93,6 +80,40 @@ getTasksData = () => {
           );
     });
 }
+
+// filter module
+setFilterData = () => {
+    let filterData = [
+        {"label": trls('CustomerName'), "value": "CustomerName", "type": 'text'},
+        {"label": trls('DateCreated'), "value": "DateCreated", "type": 'date'},
+        {"label": trls('Deadline'), "value": "deadline", "type": 'date'},
+        {"label": trls('Employee'), "value": "employee", "type": 'text'},
+        {"label": trls('Task_Type'), "value": "taskType", "type": 'text'},
+        {"label": trls('Subject'), "value": "Subject", "type": 'text'},
+        {"label": trls('CreateBy'), "value": "createdby", "type": 'text'},
+        {"label": trls('Status'), "value": "taskStatus", "type": 'text'},
+    ]
+    this.setState({filterData: filterData});
+}
+
+filterOptionData = (filterOption) =>{
+    let dataA = []
+    dataA = Common.filterData(filterOption, this.state.originFilterData);
+    if(!filterOption.length){
+        dataA=null;
+    }
+    $('#example').dataTable().fnDestroy();
+    this.getUserData(dataA);
+}
+
+changeFilter = () => {
+    if(this.state.filterFlag){
+        this.setState({filterFlag: false})
+    }else{
+        this.setState({filterFlag: true})
+    }
+}
+// filter module
 
 formatDate = (startdate) =>{
         
@@ -238,6 +259,23 @@ render () {
                     <Col sm={6}>
                         <Button variant="primary" onClick={()=>this.setState({modalShow:true, taskflag:true})}><i className="fas fa-plus add-icon"></i>{trls('Add_Tasks')}</Button>   
                     </Col>
+                    <Col sm={6} className="has-search">
+                        <div style={{display: 'flex', float: 'right'}}>
+                            <Button variant="light" onClick={()=>this.changeFilter()}><i className="fas fa-filter add-icon"></i>{trls('Filter')}</Button>   
+                            <div style={{marginLeft: 20}}>
+                                <span className="fa fa-search form-control-feedback"></span>
+                                <Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")}/>
+                            </div>
+                        </div>
+                    </Col>
+                    {this.state.filterData.length>0&&(
+                        <Filtercomponent
+                            onHide={()=>this.setState({filterFlag: false})}
+                            filterData={this.state.filterData}
+                            onFilterData={(filterOption)=>this.filterOptionData(filterOption)}
+                            showFlag={this.state.filterFlag}
+                        />
+                    )}
                 </Row>
                 <div className="table-responsive">
                     <table id="example-task" className="place-and-orders__table table" width="100%">
@@ -251,7 +289,7 @@ render () {
                                 <th id="Subject">{trls('Subject')}</th>
                                 <th id="CreateBy">{trls('CreateBy')}</th>
                                 <th id="Status">{trls('Status')}</th>
-                                <th id="Attachment">{trls('Attachment')}</th>
+                                {/* <th id="Attachment">{trls('Attachment')}</th> */}
                                 <th id="Action">{trls('Action')}</th>
                             </tr>
                         </thead>
@@ -267,12 +305,12 @@ render () {
                                     <td>{data.Subject}</td>
                                     <td>{data.createdby}</td>
                                     <td>{data.taskStatus}</td>
-                                    <td width={200}>
+                                    {/* <td width={200}>
                                         <Row style={{justifyContent:"space-around"}}>
                                             <i className="fas fa-file-upload add-icon" onClick={()=>this.setState({fileUploadModalShow: true, attachtaskId: data.Id})}><span className="action-title">{trls('Attach')}</span></i>
                                             <i className="fas fa-eye add-icon" onClick={()=>this.getTaskDocuments(data.Id+','+data.CustomerName+','+data.employee+','+data.Subject)}><span className="action-title">{trls('View')}</span></i>
                                         </Row>
-                                    </td>
+                                    </td> */}
                                     <td width={200}>
                                         <Row style={{justifyContent:"space-around"}}>
                                             <i className="fas fa-pen add-icon" onClick={()=>this.taskUpdate(data.Id)}><span className="action-title">{trls('Edit')}</span></i>

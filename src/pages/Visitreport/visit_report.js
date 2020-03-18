@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import { BallBeat } from 'react-pure-loaders';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Form } from 'react-bootstrap';
 import { trls } from '../../components/translate';
 import 'datatables.net';
 import SessionManager from '../../components/session_manage';
@@ -12,6 +12,8 @@ import history from '../../history';
 import Visitanswer from './visit_answer.js'
 import Visitdocument from './visitdocument'
 import FileUploadForm from '../../components/drag_drop_fileupload';
+import * as Common from '../../components/common';
+import Filtercomponent from '../../components/filtercomponent';
 
 const mapStateToProps = state => ({
      ...state.auth,
@@ -27,19 +29,27 @@ class Visitreport extends Component {
         this.state = {  
             loading:true,
             visitreports:[],
-            arrayFilename: []
+            arrayFilename: [],
+            originFilterData: [],
+            filterFlag: false,
+            filterData: [],
         };
       }
 componentDidMount() {
     this.getTasksData();
+    this.setFilterData();
 }
 
-getTasksData = () => {
+getTasksData = (data) => {
     this.setState({loading:true})
     var header = SessionManager.shared().getAuthorizationHeader();
     Axios.get(API.GetVisitReports, header)
     .then(result => {
-        this.setState({visitreports:result.data.Items})
+        if(!data){
+            this.setState({visitreports: result.data.Items, originFilterData: result.data.Items});
+        }else{
+            this.setState({visitreports: data});
+        }
         this.setState({loading:false})
         $('#example-visitreport').dataTable().fnDestroy();
         $('#example-visitreport').DataTable(
@@ -62,6 +72,34 @@ getTasksData = () => {
           );
     });
 }
+// filter module
+setFilterData = () => {
+    let filterData = [
+        {"label": trls('Customer'), "value": "Customer", "type": 'text'},
+        {"label": trls('Visit_Date'), "value": "VisitDate", "type": 'date'},
+        {"label": trls('CreatedBy'), "value": "CreatedBy", "type": 'text'},
+    ]
+    this.setState({filterData: filterData});
+}
+
+filterOptionData = (filterOption) =>{
+    let dataA = []
+    dataA = Common.filterData(filterOption, this.state.originFilterData);
+    if(!filterOption.length){
+        dataA=null;
+    }
+    $('#example-visitreport').dataTable().fnDestroy();
+    this.getTasksData(dataA);
+}
+
+changeFilter = () => {
+    if(this.state.filterFlag){
+        this.setState({filterFlag: false})
+    }else{
+        this.setState({filterFlag: true})
+    }
+}
+// filter module
 componentWillUnmount() {
 }
 
@@ -178,8 +216,25 @@ render () {
             <div className="orders">
                 <Row>
                     <Col sm={6}>
-                        <Button variant="primary" onClick={()=>this.createVisitReport()}><i className="fas fa-plus add-icon"></i>{trls('Add_User')}</Button> 
+                        <Button variant="primary" onClick={()=>this.createVisitReport()}><i className="fas fa-plus add-icon"></i>{trls('Add_VisitReport')}</Button> 
                     </Col>
+                    <Col sm={6} className="has-search">
+                        <div style={{display: 'flex', float: 'right'}}>
+                            <Button variant="light" onClick={()=>this.changeFilter()}><i className="fas fa-filter add-icon"></i>{trls('Filter')}</Button>   
+                            <div style={{marginLeft: 20}}>
+                                <span className="fa fa-search form-control-feedback"></span>
+                                <Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")}/>
+                            </div>
+                        </div>
+                    </Col>
+                    {this.state.filterData.length>0&&(
+                        <Filtercomponent
+                            onHide={()=>this.setState({filterFlag: false})}
+                            filterData={this.state.filterData}
+                            onFilterData={(filterOption)=>this.filterOptionData(filterOption)}
+                            showFlag={this.state.filterFlag}
+                        />
+                    )}
                 </Row>
                 <div className="table-responsive">
                     <table id="example-visitreport" className="place-and-orders__table table" width="100%">
@@ -189,7 +244,7 @@ render () {
                                 <th>{trls('Customer')}</th>
                                 <th>{trls('Visit_Date')}</th>
                                 <th>{trls('CreatedBy')}</th>
-                                <th style={{width:100}}>{trls('Attachment')}</th>
+                                {/* <th style={{width:100}}>{trls('Attachment')}</th> */}
                                 <th>{trls('Action')}</th>
                             </tr>
                         </thead>
@@ -201,12 +256,12 @@ render () {
                                     <td>{data.Customer}</td>
                                     <td>{this.formatDate(data.VisitDate)}</td>
                                     <td>{data.CreatedBy}</td>
-                                    <td width={200}>
+                                    {/* <td width={200}>
                                         <Row style={{justifyContent:"space-around"}}>
                                             <i className="fas fa-file-upload add-icon" onClick={()=>this.setState({fileUploadModalShow: true, attachvisitId: data.Id})}><span className="action-title">{trls('Attach')}</span></i>
                                             <i className="fas fa-eye add-icon" onClick={()=>this.GetVisitreportDocuments(data.Id)}><span className="action-title">{trls('View')}</span></i>
                                         </Row>
-                                    </td>
+                                    </td> */}
                                     <td style={{width: 200}}>
                                         <Row style={{justifyContent:"space-around"}}>
                                             <i className="fas fa-pen add-icon" onClick={()=>this.updateVisit(data.Id)}><span className="action-title">{trls('Edit')}</span></i>

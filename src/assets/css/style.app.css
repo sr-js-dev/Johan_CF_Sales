@@ -41,7 +41,7 @@ overflow-x: auto;
 -webkit-overflow-scrolling: touch;
 }
 .pagination{
-padding-top: 10px;
+padding-top: 15px;
 margin-left: auto;
 }
 dl, ol, ul {
@@ -80,7 +80,7 @@ font-weight: bold;
 width:100%
 }
 .myDatePicker {
-  height: 40px !important;
+  height: 40px;
   width:100%;
   height:calc(1.5em + .75rem + 2px);;
   border-radius: 4px;
@@ -948,4 +948,12 @@ border: 1px solid #E2E3E4;
   font-weight: 500;
   font-size: 13px;
   font-family: Segoe UI;
+  line-height: 25px;
+}
+.filter-date__picker {
+  width: 99%;
+  height: 30px;
+}
+.pagination-info{
+  font-size: 13px;
 }

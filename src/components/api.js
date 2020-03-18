@@ -68,6 +68,7 @@ export default {
     GetTaskComments: `${BASEURL}/api/factory/execute/portallvs/getTaskComments`,
     GetTaskStatusses: `${BASEURL}/api/factory/execute/portallvs/getTaskStatusses`,
     GetCustomerRecords: `${BASEURL}/api/factory/execute/portallvs/getCustomerRecords`,
+    GetAllCustomers: `${BASEURL}/api/factory/execute/portallvs/getAllCustomers`,
   };
   
   

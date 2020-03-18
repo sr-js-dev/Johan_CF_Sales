@@ -134,16 +134,16 @@ class Pagination extends Component {
     return (
       <div>
         <div className="pagination">
-            <span>{trls("Show")}</span>
+            <span className="pagination-info">{trls("Show")}</span>
             <select name="project_table_length" aria-controls="project_table" className="" onChange={(evt)=>this.changePageLength(evt)}>
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
-            <span>{trls("Result_on_page")}</span>
+            <span className="pagination-info">{trls("Entries")}</span>
             <div style={{marginLeft: 'auto', display: 'flex'}}>
-              <span style={{marginTop: 10, marginRight: 20}}>{trls("Show_page")} {page} of {pageSize}</span>
+              <span className="pagination-info" style={{marginTop: 10, marginRight: 20}}>{trls("Show_page")} {page} of {totalPage}</span>
               <PaginatedPage
                 totalPages={totalPage}
                 currentPage={this.state.page}
