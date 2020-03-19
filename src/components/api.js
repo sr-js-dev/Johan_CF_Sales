@@ -7,7 +7,7 @@ export default {
     GetUserData:  `${BASEURL}/api/users/GetUsers?excludeActiveUsers=false`,
     GetUserDataById: `${BASEURL}/api/Users/`,
     PostUserData: `${BASEURL}/api/Users`,
-    PostUserUpdate: `${BASEURL}/api/Users`,
+    PostUserUpdate: `${BASEURL}/api/users/Update`,
     DeleteUserData: `${BASEURL}/api/users/Delete?id=`,
     GetTasksData: `${BASEURL}/api/factory/execute/portallvs/getTasks`,
     GetTaskType:  `${BASEURL}/api/factory/execute/portallvs/getTasktypesDropdown`,

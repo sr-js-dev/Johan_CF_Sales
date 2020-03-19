@@ -106,10 +106,10 @@ class Adduserform extends Component {
             params = {
                 "Id": this.props.userID,
                 "PhoneNumber": data.PhoneNumber,
-                "RoleName": data.RoleName,
+                "RoleName": data.roles,
             }
             headers = SessionManager.shared().getAuthorizationHeader();
-            Axios.put(API.PostUserUpdate, params, headers)
+            Axios.post(API.PostUserUpdate, params, headers)
             .then(result => {
                 this.props.onGetUser()
                 this.props.onHide();

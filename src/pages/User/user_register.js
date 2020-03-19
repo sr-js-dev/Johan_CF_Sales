@@ -139,11 +139,19 @@ class Userregister extends Component {
 		});
 	}
 	userDelete = (id) => {
-		var headers = SessionManager.shared().getAuthorizationHeader();
-		Axios.post(API.DeleteUserData+id, headers)
-		.then(result => {
+		var settings = {
+			"url": API.DeleteUserData+id,
+			"method": "post",
+			"headers": {
+				"Content-Type": "application/json",
+				"Authorization": "Bearer "+getUserToken(),
+			}
+		}
+		$.ajax(settings).done(function (response) {
+		})
+		.then(response => {
 			this.setState({loading:true})
-			this.getUserData();               
+			this.getUserData(); 
 		});
 	}
 

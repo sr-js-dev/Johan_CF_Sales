@@ -43,8 +43,8 @@ class Userregister extends Component {
       }
     componentDidMount() {
         this._isMounted=true
-        this.getRecordNum();
-        this.getCustomerData(10, 1);
+        this.getRecordNum(null);
+        this.getCustomerData(10, 1, null, null);
         this.getAllCustomerData();
         this.setFilterData();
     }
@@ -52,11 +52,14 @@ class Userregister extends Component {
         this._isMounted = false
     }
 
-    getRecordNum () {
+    getRecordNum (search) {
         this._isMounted = true;
         this.setState({loading:true});
+        let params = {
+            search: search ? search : ''
+        }
         var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.get(API.GetCustomerRecords, headers)
+        Axios.post(API.GetCustomerRecords, params, headers)
         .then(result => {
             if(this._isMounted){
                 this.setState({recordNum: result.data.Items[0].numCustomers});
@@ -85,7 +88,7 @@ class Userregister extends Component {
                 $('#example-task').dataTable().fnDestroy();
                 if(this.state.filterDataFlag){
                     $('#example').dataTable().fnDestroy();
-                    var table = $('#example').DataTable(
+                    $('#example').DataTable(
                         {
                         "language": {
                             "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
@@ -115,31 +118,15 @@ class Userregister extends Component {
         .then(result => {
             if(this._isMounted){
                 this.setState({originFilterData: result.data.Items});
-                // $('.fitler').on( 'keyup', function () {
-                //     table.search( this.value ).draw();
-                // } );
-                // $('#example').dataTable().fnDestroy();
-                // var table = $('#example').DataTable(
-                //     {
-                //     "language": {
-                //         "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
-                //         "zeroRecords": "Nothing found - sorry",
-                //         "info": trls("Show_page")+" _PAGE_ of _PAGES_",
-                //         "infoEmpty": "No records available",
-                //         "infoFiltered": "(filtered from _MAX_ total records)",
-                //         "search": trls('Search'),
-                //         "paginate": {
-                //             "previous": trls('Previous'),
-                //             "next": trls('Next')
-                //         }
-                //     },
-                //     "dom": 't<"bottom-datatable" lip>',
-                //     "ordering": false
-                // }
-                // );
             }
         });
     }
+    
+    quickSeach = (evt) => {
+        this.getCustomerData(10, 1, null, evt.target.value);
+        this.getRecordNum(evt.target.value);
+    }
+
     // filter module
     setFilterData = () => {
         let filterData = [
@@ -163,12 +150,7 @@ class Userregister extends Component {
         }
        
         $('#example').dataTable().fnDestroy();
-        this.getCustomerData(10,1,dataA);
-        // this.getAllCustomerData(1dataA);
-    }
-
-    quickSeach = (evt) => {
-        this.getCustomerData(10, 1, null, evt.target.value)
+        this.getCustomerData(10, 1, dataA, null);
     }
 
     changeFilter = () => {
