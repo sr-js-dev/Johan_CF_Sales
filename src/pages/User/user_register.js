@@ -138,9 +138,9 @@ class Userregister extends Component {
 			}
 		});
 	}
-	userDelete = () => {
+	userDelete = (id) => {
 		var headers = SessionManager.shared().getAuthorizationHeader();
-		Axios.delete(API.DeleteUserData+this.state.userId, headers)
+		Axios.post(API.DeleteUserData+id, headers)
 		.then(result => {
 			this.setState({loading:true})
 			this.getUserData();               
@@ -159,7 +159,7 @@ class Userregister extends Component {
 			{
 				label: 'Delete',
 				onClick: () => {
-					this.userDelete()
+					this.userDelete(id)
 				}
 			},
 			{

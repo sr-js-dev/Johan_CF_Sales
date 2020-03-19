@@ -39,9 +39,10 @@ class Userregister extends Component {
         var curyear = date.getFullYear(); 
         let pathname = window.location.pathname;
         let pathArray = pathname.split('/')
-        console.log('433333', pathArray);
-        let customerId = pathArray[3];
-        let fullRight = pathArray[4];
+        var str = decodeURIComponent(escape(window.atob(pathArray.pop())));
+        let styArray = str.split(',');
+        let customerId = styArray[0];
+        let fullRight = styArray[1];
         super(props);
         this.state = {  
             flag:'',

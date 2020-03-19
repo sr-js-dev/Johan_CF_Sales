@@ -60,15 +60,17 @@ class Userregister extends Component {
         .then(result => {
             if(this._isMounted){
                 this.setState({recordNum: result.data.Items[0].numCustomers});
+                
             }
         });
     }
 
-    getCustomerData (pageSize, page, data) {
+    getCustomerData (pageSize, page, data, search) {
         this._isMounted = true;
         let params = {
             "page" :page,
-	        "pagesize": pageSize
+            "pagesize": pageSize,
+            "search": search ? search : ''
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetCustomerData, params, headers)
@@ -80,9 +82,10 @@ class Userregister extends Component {
                     this.setState({customerData: data});
                 }
                 this.setState({loading:false})
-                $('#example').dataTable().fnDestroy();
+                $('#example-task').dataTable().fnDestroy();
                 if(this.state.filterDataFlag){
-                    $('#example').DataTable(
+                    $('#example').dataTable().fnDestroy();
+                    var table = $('#example').DataTable(
                         {
                         "language": {
                             "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
@@ -101,39 +104,39 @@ class Userregister extends Component {
                         "ordering": false
                     }
                     );
-                }else{
-                    $('#example').DataTable(
-                        {
-                        "language": {
-                            "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
-                            "zeroRecords": "Nothing found - sorry",
-                            "info": trls("Show_page")+" _PAGE_ of _PAGES_",
-                            "infoEmpty": "No records available",
-                            "infoFiltered": "(filtered from _MAX_ total records)",
-                            "search": trls('Search'),
-                            "paginate": {
-                                "previous": trls('Previous'),
-                                "next": trls('Next')
-                            }
-                        },
-                        "bInfo": data ? true : false,
-                        "paging": data ? true : false,
-                        "dom": 't<"bottom-datatable" lip>',
-                        "ordering": false
-                    }
-                    );
                 }
-				
             }
         });
     }
 
-    getAllCustomerData () {
+    getAllCustomerData (data) {
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.get(API.GetAllCustomers, headers)
         .then(result => {
             if(this._isMounted){
                 this.setState({originFilterData: result.data.Items});
+                // $('.fitler').on( 'keyup', function () {
+                //     table.search( this.value ).draw();
+                // } );
+                // $('#example').dataTable().fnDestroy();
+                // var table = $('#example').DataTable(
+                //     {
+                //     "language": {
+                //         "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
+                //         "zeroRecords": "Nothing found - sorry",
+                //         "info": trls("Show_page")+" _PAGE_ of _PAGES_",
+                //         "infoEmpty": "No records available",
+                //         "infoFiltered": "(filtered from _MAX_ total records)",
+                //         "search": trls('Search'),
+                //         "paginate": {
+                //             "previous": trls('Previous'),
+                //             "next": trls('Next')
+                //         }
+                //     },
+                //     "dom": 't<"bottom-datatable" lip>',
+                //     "ordering": false
+                // }
+                // );
             }
         });
     }
@@ -158,21 +161,14 @@ class Userregister extends Component {
         }else{
             this.setState({filterDataFlag: true});
         }
+       
         $('#example').dataTable().fnDestroy();
         this.getCustomerData(10,1,dataA);
+        // this.getAllCustomerData(1dataA);
     }
 
-    quickSearch = (evt) => {
-        let dataB = []
-        dataB = Common.quickSearch(this.state.filterData, this.state.originFilterData, evt.target.value);
-        $('#example').dataTable().fnDestroy();
-        if(dataB.length===0 || evt.target.value===''){
-            this.setState({filterDataFlag: false});
-            dataB=null;
-        }else{
-            this.setState({filterDataFlag: true});
-        }
-        this.getCustomerData(10,1,dataB);
+    quickSeach = (evt) => {
+        this.getCustomerData(10, 1, null, evt.target.value)
     }
 
     changeFilter = () => {
@@ -183,12 +179,12 @@ class Userregister extends Component {
         }
     }
     // filter module
-
     viewCustomerDetail = (data) => {
-        let customerId = data.id;
+        var string = data.id+","+data.fullrights;
+        var b64 = btoa(unescape(encodeURIComponent(string)));
         history.push({
-            pathname: '/customer/detail/'+customerId+'/'+data.fullrights,
-          })
+            pathname: '/customer/detail/'+b64,
+        })
     }
 
     customerUpdate = (id) => {
@@ -323,7 +319,7 @@ class Userregister extends Component {
                                 <Button variant="light" onClick={()=>this.changeFilter()}><i className="fas fa-filter add-icon"></i>{trls('Filter')}</Button>   
                                 <div style={{marginLeft: 20}}>
                                     <span className="fa fa-search form-control-feedback"></span>
-                                    <Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")} onChange={(evt)=>this.quickSearch(evt)}/>
+                                    <Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")} onChange={(evt)=>this.quickSeach(evt)}/>
                                 </div>
                             </div>
                         </Col>
