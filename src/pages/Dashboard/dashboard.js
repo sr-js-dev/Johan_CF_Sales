@@ -105,8 +105,12 @@ class Dashboard extends Component {
     }
 
     getCustomerCoordinates = () => {
+        let params = {};
         var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.get(API.GetCustomerCoordinates, headers)
+        params = {
+            username: Auth.getUserName()
+        }
+        Axios.post(API.GetCustomerCoordinates, params, headers)
         .then(result => {
             var date = new Date();
                 var curyear = date.getFullYear(); 
@@ -130,6 +134,7 @@ class Dashboard extends Component {
                     }
                     tempArray.CustomerId=data.CustomerId;
                     tempArray.Klantnaam=data.Klantnaam;
+                    tempArray.fullRights=data.fullrights;
                     tempArray.LAT=parseFloat(data.LAT);
                     tempArray.LONG=parseFloat(data.LONG);
                     if(CustomerId===data.CustomerId&&curyear===data.Year){
@@ -274,6 +279,13 @@ class Dashboard extends Component {
        
     }
 
+    viewCustomerDetail = (data) => {
+        var string = data.customerId+","+data.fullRights;
+        var b64 = btoa(unescape(encodeURIComponent(string)));
+        var getUrl = window.location;
+        window.open( 
+            getUrl.origin+"/customer/detail/"+b64, "_blank"); 
+    }
     
     render(){   
         let number = 0;
@@ -358,7 +370,9 @@ class Dashboard extends Component {
                                             topCustmer.map((data,i) =>(
                                             <tr id={i} key={i}>
                                                 <td>{i+1}</td>
-                                                <td>{data.Klantnaam}</td>
+                                                <td>
+                                                    <div id={data.id} style={{cursor: "pointer", color:'#004388', fontWeight:'bold'}} onClick={()=>this.viewCustomerDetail(data)}>{data.Klantnaam}</div>
+                                                </td>
                                                 <td>{Common.formatMoney(data.Revenue)}</td>
                                             </tr>
                                         ))

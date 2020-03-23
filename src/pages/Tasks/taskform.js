@@ -27,6 +27,7 @@ class Taskform extends Component {
             val1: '',
             val2: '',
             val3: '',
+            val5: '',
             selectCustomerValue: '',
             selectCustomerLabel: '',
             taskType: [],
@@ -100,7 +101,7 @@ class Taskform extends Component {
     changeCustomer = (val) => {
         this.setState({selectCustomerLabel: val.label})
         this.setState({selectCustomerValue: val.value})
-        this.setState({val2:val.value});
+        this.setState({val5:val.value});
     }
 
     changeEmployee = (val) =>{
@@ -109,7 +110,6 @@ class Taskform extends Component {
     }
 
     handleSubmit = (event) => {
-        console.log('123123');
         this._isMounted = true;
         event.preventDefault();
         const taskIds = this.state.taskIds;
@@ -351,7 +351,12 @@ class Taskform extends Component {
                             <h5 style={{float:'left'}}>{trls('Remarks')}</h5>
                                 <Form.Control name = "omschrijving" as="textarea" rows="3" style={{marginTop:20}} placeholder={trls('New_note')} onChange={(evt)=>this.setState({remarkData: evt.target.value})}/>
                             <div style={{textAlign: 'right'}}>
-                                <Button style={{ marginTop: 10}} onClick={()=>this.createRemark()}>{trls('Create')}</Button>
+                                {this.state.taskIds.length ? (
+                                    <Button style={{ marginTop: 10}} onClick={()=>this.createRemark()}>{trls('Create')}</Button>
+                                ):
+                                    <Button style={{ marginTop: 10}} disabled onClick={()=>this.createRemark()}>{trls('Create')}</Button>
+                                }
+                                
                             </div>
                             {this.state.taskRemarkComments.length>0&&(
                                 this.state.taskRemarkComments.map((data,i) =>(

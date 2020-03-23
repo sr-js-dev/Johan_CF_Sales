@@ -61,6 +61,7 @@ class Userregister extends Component {
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetCustomerRecords, params, headers)
         .then(result => {
+            console.log('22222', result.data.Items[0].numCustomers);
             if(this._isMounted){
                 this.setState({recordNum: result.data.Items[0].numCustomers});
                 

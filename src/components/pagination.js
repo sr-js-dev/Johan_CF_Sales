@@ -146,7 +146,7 @@ class Pagination extends Component {
               <span className="pagination-info" style={{marginTop: 10, marginRight: 20}}>{trls("Show_page")} {page} of {totalPage}</span>
               <PaginatedPage
                 totalPages={totalPage}
-                currentPage={this.state.page}
+                currentPage={this.state.page>totalPage ? 1: this.state.page}
                 onChange={page => this.onPageChange(page)}
               />
             </div>

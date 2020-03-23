@@ -29,7 +29,7 @@ class Sidebar extends Component {
                 <nav className="menu">
                     <ul className="menu__list">
                         <li id="0" className="menu__item" onClick={this.changeItem}>
-                            <Link to="./dashboard" className={window.location.pathname === "/dashboard" ? 'menu__link menu__link--active' : 'menu__link menu__link'}>
+                            <Link to="/dashboard" className={window.location.pathname === "/dashboard" ? 'menu__link menu__link--active' : 'menu__link menu__link'}>
                                 <div className="menu__link-div menu__link-div--active"></div>
                                 <span className="menu__link-img-wrap">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
