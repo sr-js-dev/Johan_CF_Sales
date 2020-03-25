@@ -7,7 +7,6 @@ import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
 import CKEditor from "react-ckeditor-component"
-// import CKEditor from 'ckeditor4-react';
 import history from '../../history';
 import * as authAction  from '../../actions/authAction';
 import Createtask from '../Tasks/taskform'

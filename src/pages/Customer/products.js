@@ -171,6 +171,7 @@ class AccordionItem extends React.Component {
             this.getCustomerData();
         }
     }
+    
     formatNumber = (num) => {
         if(num){
             var value = num.toFixed(2);

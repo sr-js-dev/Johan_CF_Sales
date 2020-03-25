@@ -33,6 +33,7 @@ const arcCenterRenderer = (currentValue, color) => {
 };
 
 class Userregister extends Component {
+
     _isMounted = false
     constructor(props) {
         var date = new Date();
@@ -57,7 +58,8 @@ class Userregister extends Component {
             customerId: customerId,
             fullRight: fullRight
         };
-      }
+    }
+
     componentDidMount() {
         this._isMounted=true
         this.getCustomerDetailData(this.state.customerId)
@@ -123,6 +125,7 @@ class Userregister extends Component {
             }
         });
     }
+
     userDeleteConfirm = (event) => {
         this.setState({userId:event.currentTarget.id})
         confirmAlert({
@@ -142,14 +145,17 @@ class Userregister extends Component {
             ]
           });
     }
+
     formatNumber = (num) => {
         var value = num.toFixed(2);
         return  "€" + value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     }
+
     formatNumberPercent = (num) => {
         var value = num.toFixed(2);
         return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     }
+
     detailmode = (detailId) =>{
         let detailIdData = this.state.detailIdData;
         detailIdData[detailId] = true;
@@ -159,6 +165,7 @@ class Userregister extends Component {
         }
         this.setState({customerId: ""})
     }
+    
     render () {
         let customerDetailData=this.state.customerDetailData[0];
         let customerFinancialData4=this.state.customerFinancialData4;

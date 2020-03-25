@@ -15,6 +15,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
 });
+
 class Updatecustomerform extends Component {
     _isMounted = false;
     constructor(props) {
@@ -24,15 +25,18 @@ class Updatecustomerform extends Component {
             status:[{"value":"0","label":"Inactive"},{"value":"1","label":"Active"}],
         };
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
     componentDidMount() {
         let pathname = window.location.pathname;
         let pathArray = pathname.split('/')
         let customerId = pathArray.pop();
         this.setState({customerId: customerId})
     }
+
     componentWillReceiveProps() {
         if(this.props.contactUpdateData){
             this.setState({phonevalue:this.props.contactUpdateData[0].phone})
@@ -72,6 +76,7 @@ class Updatecustomerform extends Component {
             this.props.onGetContact(this.state.customerId);
         });
     }
+    
     render(){
         let contactData = [];
         if(this.props.contactUpdateData){

@@ -26,6 +26,7 @@ const mapDispatchToProps = dispatch => ({
     
 });
 class Userregister extends Component {
+
     _isMounted = false
     constructor(props) {
         super(props);
@@ -40,7 +41,8 @@ class Userregister extends Component {
             filterData: [],
             filterDataFlag: false
         };
-      }
+    }
+
     componentDidMount() {
         this._isMounted=true
         this.getRecordNum(null);
@@ -48,6 +50,7 @@ class Userregister extends Component {
         this.getAllCustomerData();
         this.setFilterData();
     }
+
     componentWillUnmount() {
         this._isMounted = false
     }
@@ -185,6 +188,7 @@ class Userregister extends Component {
             }
         });
     }
+    
     createTask = (newId) => {
         this.setState({modalcreateTaskShow: true, taskflag: true, customerId: newId})
 

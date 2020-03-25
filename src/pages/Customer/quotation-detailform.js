@@ -27,6 +27,7 @@ class Qutatedetailform extends Component {
     }
     getCurtomerQuoteDetails = (value) => {
         this._isMounted = true;
+        let quoteDetailArray = [];
         let params = {
             number : value
         }
@@ -35,7 +36,11 @@ class Qutatedetailform extends Component {
         .then(result => {
             if(this._isMounted){
                 this.props.detailmode();
-                this.setState({quoteDetails: result.data.Items})
+                if(result.data.Items.length){
+                    quoteDetailArray.push(result.data.Items[0]);
+                    quoteDetailArray[0].Number = value;
+                }
+                this.setState({quoteDetails: quoteDetailArray})
             }
         });
     }
@@ -45,7 +50,7 @@ class Qutatedetailform extends Component {
         }
     }
     render(){   
-        let quoteDetails=this.state.quoteDetails;
+        const {quoteDetails} = this.state;
         return (
             <Modal
                 show={this.props.show}
@@ -78,7 +83,7 @@ class Qutatedetailform extends Component {
                             {
                                 quoteDetails.map((data,i) =>(
                                 <tr id={i} key={i}>
-                                    <td>{data.Id}</td>
+                                    <td>{data.Number}</td>
                                     <td>{data.Item}</td>
                                     <td>{data.Color}</td>
                                     <td>{data.Price}</td>

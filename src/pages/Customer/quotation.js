@@ -34,22 +34,25 @@ class Quotation extends React.Component {
 }
 
 class AccordionItem extends React.Component {
-  state = {
-    opened: false,
-  }
-  constructor(props) {
-    var date = new Date();
-    var curyear = date.getFullYear(); 
-    super(props);
-    this.state = {  
-        lastYear2 : curyear-2,
-        lastYear3 : curyear-3
-    };
-  }
+    state = {
+        opened: false,
+    }
+    
+    constructor(props) {
+        var date = new Date();
+        var curyear = date.getFullYear(); 
+        super(props);
+        this.state = {  
+            lastYear2 : curyear-2,
+            lastYear3 : curyear-3
+        };
+    }
+
     componentDidMount() {
         this._isMounted=true
         this.setState({loading:true})
     }
+
     getCustomerData (value) {
         
         this._isMounted = true;
@@ -86,15 +89,18 @@ class AccordionItem extends React.Component {
             }
         });
     }
+
     componentDidUpdate(){
         if(this.props.customerId){
             this.getCustomerData(this.props.customerId)
         }
     }
+
     viewDetail = (event) => {
         this.setState({Number: event.currentTarget.id})
         this.setState({modalShow: true})
     }
+
     formatDate = (startdate) =>{
         
         var dd = new Date(startdate).getDate();
@@ -113,6 +119,7 @@ class AccordionItem extends React.Component {
         formatDate = dd+'-'+mm+'-'+yyyy;
         return formatDate;
     }
+
     formatNumber = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -122,6 +129,7 @@ class AccordionItem extends React.Component {
         }
        
     }
+
     formatOrderNum = (num) => {
         if(num){
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -130,6 +138,7 @@ class AccordionItem extends React.Component {
         }
        
     }
+
     formatNumberPercent = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -139,12 +148,15 @@ class AccordionItem extends React.Component {
         }
         
     }
+
     onHiden = () =>{
         this.setState({modalShow:false})
     }
+
     detailmode = () =>{
         this.setState({Number: ""})
     }
+
     render () {
         let customerQuotes=this.state.customerQuotes;
         const {

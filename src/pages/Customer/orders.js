@@ -35,24 +35,28 @@ class Orders extends React.Component {
 }
 
 class AccordionItem extends React.Component {
-  state = {
-    opened: false,
-  }
-  constructor(props) {
-    var date = new Date();
-    var curyear = date.getFullYear(); 
-    super(props);
-    this.state = {  
-        lastYear2 : curyear-2,
-        lastYear3 : curyear-3,
-        customerId: this.props.customerId,
-        firstLoad: false
-    };
-  }
+
+    state = {
+        opened: false,
+    }
+
+    constructor(props) {
+        var date = new Date();
+        var curyear = date.getFullYear(); 
+        super(props);
+        this.state = {  
+            lastYear2 : curyear-2,
+            lastYear3 : curyear-3,
+            customerId: this.props.customerId,
+            firstLoad: false
+        };
+    }
+    
     componentDidMount() {
         this._isMounted=true
         this.setState({loading:true})
     }
+
     getCustomerData (value) {
         
         this._isMounted = true;

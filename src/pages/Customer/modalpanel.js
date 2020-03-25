@@ -139,11 +139,13 @@ class AccordionItem extends React.Component {
             }
         });
     }
+
     componentDidUpdate(){
         if(this.state.opened && !this.state.firstLoad){
             this.getCustomerData();
         }
     }
+
     formatNumber = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -153,6 +155,7 @@ class AccordionItem extends React.Component {
         }
        
     }
+
     formatNumberPercent = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -162,6 +165,7 @@ class AccordionItem extends React.Component {
         }
         
     }
+    
     render () {
         
         let customerModels=this.state.customerModels;

@@ -45,7 +45,9 @@ class AccordionItem extends React.Component {
         this._isMounted=true
         let pathname = window.location.pathname;
         let pathArray = pathname.split('/')
-        let customerId = pathArray.pop();
+        var str = decodeURIComponent(escape(window.atob(pathArray.pop())));
+        let styArray = str.split(',');
+        let customerId = styArray[0];
         this.setState({customerId: customerId})
         this.setState({loading: true})
     }

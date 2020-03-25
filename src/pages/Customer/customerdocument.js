@@ -18,6 +18,7 @@ class Customerdocument extends Component {
         this.state = {  
         };
     }
+    
     componentWillUnmount() {
         this._isMounted = false;
     }
@@ -28,9 +29,11 @@ class Customerdocument extends Component {
     componentDidUpdate(){
 
     }
+
     downlaodDocumant = (event) => {
         window.open(API.DownLoadTaskFile+event.currentTarget.id, '_blank');
     }
+
     render(){
         let documentData = [];
         let documentHeader = [];

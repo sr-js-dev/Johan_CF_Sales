@@ -15,12 +15,14 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => ({
 });
 class Customerform extends Component {
+
     _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {  
         };
     }
+    
     componentWillUnmount() {
         this._isMounted = false;
     }
@@ -65,6 +67,7 @@ class Customerform extends Component {
             }
         });
     }
+
     render(){
         return (
             <Modal

@@ -15,15 +15,18 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => ({
 });
 class Addcontactform extends Component {
+    
     _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {  
         };
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
     componentDidMount() {
         let pathname = window.location.pathname;
         let pathArray = pathname.split('/')
@@ -55,6 +58,7 @@ class Addcontactform extends Component {
             this.props.onGetContact(this.state.customerId);
         });
     }
+
     render(){
         return (
             <Modal

@@ -970,3 +970,9 @@ border: 1px solid #E2E3E4;
 .table.dataTable thead .sorting_asc{
   background: none;
 }
+.accordion-item__title{
+  cursor: pointer;
+}
+.accordion-item__line{
+  cursor: pointer;
+}

@@ -35,23 +35,27 @@ class Priceagree extends React.Component {
 }
 
 class AccordionItem extends React.Component {
-  state = {
-    opened: false,
-  }
-  constructor(props) {
-    var date = new Date();
-    var curyear = date.getFullYear(); 
-    super(props);
-    this.state = {  
-        lastYear2 : curyear-2,
-        lastYear3 : curyear-3,
-        checkflag: false
-    };
-  }
+
+    state = {
+        opened: false,
+    }
+
+    constructor(props) {
+        var date = new Date();
+        var curyear = date.getFullYear(); 
+        super(props);
+        this.state = {  
+            lastYear2 : curyear-2,
+            lastYear3 : curyear-3,
+            checkflag: false
+        };
+    }
+
     componentDidMount() {
         this._isMounted=true
         this.setState({loading:true})
     }
+
     getCustomerData () {
         this._isMounted = true;
         let params = {
@@ -87,11 +91,13 @@ class AccordionItem extends React.Component {
             }
         });
     }
+
     componentDidUpdate(){
         if(this.props.customerId){
             this.getCustomerData(this.props.customerId)
         }
     }
+
     formatDate = (startdate) =>{
         
         var dd = new Date(startdate).getDate();
@@ -110,6 +116,7 @@ class AccordionItem extends React.Component {
         formatDate = dd+'-'+mm+'-'+yyyy;
         return formatDate;
     }
+
     formatNumber = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -119,6 +126,7 @@ class AccordionItem extends React.Component {
         }
        
     }
+
     formatOrderNum = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -128,6 +136,7 @@ class AccordionItem extends React.Component {
         }
        
     }
+
     formatNumberPercent = (num) => {
         if(num){
             var value = num.toFixed(2);
@@ -137,6 +146,7 @@ class AccordionItem extends React.Component {
         }
         
     }
+
     chageViewRate = () => {
         if(!this.state.checkflag){
             this.setState({checkflag: true})
@@ -145,12 +155,15 @@ class AccordionItem extends React.Component {
             this.setState({checkflag: false})
         }
     }
+
     onHiden = () =>{
         this.setState({modalShow:false})
     }
+
     detailmode = () =>{
         this.setState({orderNum: ""})
     }
+    
     render () {
         let customerPricingData=this.state.customerPricingData;
         const {

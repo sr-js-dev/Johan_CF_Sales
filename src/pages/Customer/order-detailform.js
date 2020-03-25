@@ -9,9 +9,11 @@ import { trls } from '../../components/translate';
 const mapStateToProps = state => ({ 
     ...state.auth,
 });
+
 const mapDispatchToProps = (dispatch) => ({
 
 });
+
 class Adduserform extends Component {
     _isMounted = false;
     constructor(props) {
@@ -20,11 +22,14 @@ class Adduserform extends Component {
             orderDetails:[]
         };
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
     componentDidMount() {
     }
+
     getCurtomerOrderDetails = (value) => {
         this._isMounted = true;
         let params = {
@@ -39,11 +44,13 @@ class Adduserform extends Component {
             }
         });
     }
+
     componentDidUpdate(){
         if(this.props.orderNum){
             this.getCurtomerOrderDetails(this.props.orderNum)
         }
     }
+    
     render(){   
         let orderDetails=this.state.orderDetails;
         return (
