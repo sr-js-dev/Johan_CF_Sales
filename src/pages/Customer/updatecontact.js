@@ -42,7 +42,7 @@ class Updatecustomerform extends Component {
             this.setState({phonevalue:this.props.contactUpdateData[0].phone})
             this.setState({mobilevalue:this.props.contactUpdateData[0].mobile})
             if(this.props.contactUpdateData[0].status){
-                this.setState({selectrollabel: 'Avtive', selectrolvalue: '1'})
+                this.setState({selectrollabel: 'Active', selectrolvalue: '1'})
             }else{
                 this.setState({selectrollabel: 'InActive', selectrolvalue: '0'})
             }

@@ -106,16 +106,6 @@ class Addcontactform extends Component {
                                 value={ this.state.value }
                                 name="mobile"
                                 onChange={ value => this.setState({value: value }) } />
-                            {!this.props.disabled && (
-                            <input
-                                onChange={val=>console.log()}
-                                tabIndex={-1}
-                                autoComplete="off"
-                                style={{ opacity: 0, height: 0 }}
-                                value={this.state.value}
-                                required
-                                />
-                            )}
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextPassword">
