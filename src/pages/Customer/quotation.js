@@ -44,7 +44,8 @@ class AccordionItem extends React.Component {
         super(props);
         this.state = {  
             lastYear2 : curyear-2,
-            lastYear3 : curyear-3
+            lastYear3 : curyear-3,
+            customerId: this.props.customerId
         };
     }
 
@@ -57,7 +58,7 @@ class AccordionItem extends React.Component {
         
         this._isMounted = true;
         let params = {
-            customerid : 0
+            customerid : this.state.customerId
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetCustomerQuotes, params, headers)
