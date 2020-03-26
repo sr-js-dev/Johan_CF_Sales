@@ -40,6 +40,7 @@ export default {
     PostCustomer: `${BASEURL}/api/factory/execute/portallvs/postCustomer`,
     GetCustomerById: `${BASEURL}/api/factory/execute/portallvs/getCustomer`,
     PostContact: `${BASEURL}/api/factory/execute/portallvs/postContact`,
+    PutContact: `${BASEURL}/api/factory/execute/portallvs/putContact`,
     PutCustomer: `${BASEURL}/api/factory/execute/portallvs/putCustomer`,
     GetContact: `${BASEURL}/api/factory/execute/portallvs/getContact`,
     GetTask: `${BASEURL}/api/factory/execute/portallvs/getTask`, 
