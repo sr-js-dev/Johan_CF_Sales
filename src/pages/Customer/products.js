@@ -114,7 +114,7 @@ class AccordionItem extends React.Component {
                     tempArray.Itemtype=data.Itemtype;
                     tempArray.Color=data.Color;
                     tempArray.Length=data.Length;
-                    tempArray.PathDrawing=data.PathDrawing;
+                    tempArray.pathDrawing=data.pathDrawing;
                     if(ItemNumber===data.ItemNumber&&curyear===data.Year){
                         currentYear=data.Revenue;
                         tempArray.currentYear=currentYear;
@@ -194,8 +194,6 @@ class AccordionItem extends React.Component {
 
     drawingImage = (path, productNumber) =>{
         this.setState({imagePath: API.GetImage+path, productNumber: productNumber, modalShow: true})
-        // window.open( 
-        //     API.GetImage+path, "_blank"); 
     }
 
     render () {
@@ -242,7 +240,7 @@ class AccordionItem extends React.Component {
                                 customerItems.map((data,i) =>(
                                     <tr id={i} key={i}>
                                         <td>
-                                            <div style={{cursor: "pointer", color:'#004388', fontSize:"16px", fontWeight:'bold'}} onClick={()=>this.drawingImage(data.PathDrawing, data.ItemNumber)}>{data.ItemNumber}</div>
+                                            <div style={{cursor: "pointer", color:'#004388', fontSize:"16px", fontWeight:'bold'}} onClick={()=>this.drawingImage(data.pathDrawing, data.ItemNumber)}>{data.ItemNumber}</div>
                                         </td>
                                         <td>{data.Itemtype}</td>
                                         <td>{data.Color}</td>
