@@ -4,6 +4,7 @@
 export default {
     // GetToken: "http://brandnewkey.sohosted-vps.nl:5380/token",
     GetToken: "https://qflvs.cf-kunststoffen.nl/token",
+    ChangePassword:  `${BASEURL}/api/Account/ChangePassword`,
     GetUserData:  `${BASEURL}/api/users/GetUsers?excludeActiveUsers=false`,
     GetUserDataById: `${BASEURL}/api/Users/`,
     PostUserData: `${BASEURL}/api/Users`,

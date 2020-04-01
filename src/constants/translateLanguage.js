@@ -209,7 +209,10 @@ export const TRANSLATIONS = {
       Edit: 'Edit',
       Attach: 'Attach',
       Result_on_page: 'Result on page',
-      Filter: 'Filter'
+      Filter: 'Filter',
+      Change_password: 'ChangePassword',
+      Old_password: 'OldPassword',
+      New_password: 'NewPassword'
     },
 
 
@@ -423,6 +426,9 @@ export const TRANSLATIONS = {
       Edit: 'Bewerk',
       Attach: 'Uploaden',
       Result_on_page: 'Resultaten op pagine',
-      Filter: 'Filter'
+      Filter: 'Filter',
+      Change_password: 'VeranderingWachtwoord',
+      Old_password: 'OudWachtwoord',
+      New_password: 'NieuwWachtwoord  '
     }
   };

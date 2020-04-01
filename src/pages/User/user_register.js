@@ -16,7 +16,8 @@ import 'datatables.net';
 import * as authAction  from '../../actions/authAction';
 import Filtercomponent from '../../components/filtercomponent';
 import * as Common from '../../components/common';
-// import {ArcGauge} from '@progress/kendo-react-gauges';
+import * as Auth from '../../components/auth';
+import Changepasswordform from './changepassword_form'
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -36,7 +37,9 @@ class Userregister extends Component {
 			loading:true,
 			originFilterData: [],
             filterFlag: false,
-            filterData: [],
+			filterData: [],
+			userName: Auth.getUserName(),
+			showModalChangePassword: false
 		};
 	}
 
@@ -177,12 +180,14 @@ class Userregister extends Component {
 			]
 		});
 	}
+
 	onAddformHide = () => {
-		this.setState({modalShow: false})
+		this.setState({modalShow: false, showModalChangePassword: false})
 		this.props.blankdispatch()
 	}
+
 	render () {
-		let userData=this.state.userData;
+		const {userData, userName} =this.state;
 		let optionarray = [];
 		if(userData){
 			userData.map((data, index) => {
@@ -228,6 +233,7 @@ class Userregister extends Component {
 								<th>{trls('Email')}</th>
 								<th>{trls('Active')}</th>
 								<th>{trls('Action')}</th>
+								<th>{trls('Change_password')}</th>
 							</tr>
 							</thead>
 							{optionarray && !this.state.loading &&(<tbody >
@@ -250,7 +256,16 @@ class Userregister extends Component {
 												<i className="fas fa-eye add-icon" onClick={()=>this.viewUserData(data.Id)}><span className="action-title">{trls('View')}</span></i>
 											</Row>
 										</td>
-								</tr>
+										<td style={{width: 100}}>
+											<Row style={{justifyContent:"space-around"}}>
+												{data.UserName===userName ? (
+													<i className="fas fa-key add-icon" onClick={()=>this.setState({showModalChangePassword: true})}><span className="action-title">{trls('Change_password')}</span></i>
+												):
+													<i className="fas fa-key disable-icon"><span className="action-title action-disable">{trls('Change_password')}</span></i>
+												}
+											</Row>
+										</td>
+									</tr>
 								))
 							}
 							</tbody>)}
@@ -275,6 +290,11 @@ class Userregister extends Component {
 						userID={this.state.userID}
 						updateflag={this.state.updateflag}
 						removeDetail={this.removeDetail}
+					/>
+					<Changepasswordform
+						show={this.state.showModalChangePassword}
+						onHide={() => this.onAddformHide()}
+						onGetUser={() => this.getUserData()}
 					/>  
 				</div>
 			)

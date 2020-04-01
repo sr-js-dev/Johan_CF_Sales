@@ -45,6 +45,7 @@
     "react-datetime-picker": "^2.8.0",
     "react-dom": "^16.8.6",
     "react-file-drop": "^0.2.8",
+    "react-flash-message": "^1.0.2",
     "react-gauge-chart": "^0.2.3",
     "react-geolocated": "^3.0.1",
     "react-google-maps": "^9.4.5",

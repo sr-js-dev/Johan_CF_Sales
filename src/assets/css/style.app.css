@@ -618,6 +618,12 @@ input:-internal-autofill-selected {
   cursor: pointer;
   margin-right: 3px;
 }
+.disable-icon{
+  font-style: normal;
+  margin-right: 3px;
+  cursor: pointer;
+  color:#cac4c4;
+}
 .btn-primary{
   height: 30px;
   background-color: #4697D1;
@@ -959,6 +965,10 @@ border: 1px solid #E2E3E4;
   font-size: 13px;
   font-family: Segoe UI;
   line-height: 25px;
+}
+.action-disable{
+  color: #cac4c4;
+  cursor: pointer;
 }
 .filter-date__picker {
   width: 99%;

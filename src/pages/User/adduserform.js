@@ -6,7 +6,7 @@ import * as authAction  from '../../actions/authAction';
 import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
-import ListErrors from '../../components/listerrors';
+import Message from '../../components/message';
 import { trls } from '../../components/translate';
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-phone-number-input/style.css'
@@ -21,6 +21,7 @@ const mapDispatchToProps = (dispatch) => ({
     removeState: () =>
         dispatch(authAction.blankdispatch()),
 });
+
 class Adduserform extends Component {
     _isMounted = false;
     constructor(props) {
@@ -212,7 +213,7 @@ class Adduserform extends Component {
                     </Form>
                 ) : 
                 <Form className="container product-form" onSubmit = { this.handleSubmit }>
-                    <ListErrors errors={this.props.error} />
+                    <Message message={this.props.error} type={"error"}/>
                     {/* {this.props.mode==="add" && (
                         <Form.Group as={Row} controlId="formPlaintextPassword">
                             <Form.Label column sm="3">

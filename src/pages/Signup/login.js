@@ -3,7 +3,7 @@ import React from 'react';
 import * as authAction  from '../../actions/authAction';
 import { connect } from 'react-redux';
 import { Row, Col, Form } from 'react-bootstrap';
-import ListErrors from '../../components/listerrors';
+import Message from '../../components/message';
 import { trls } from '../../components/translate';
 import Select from 'react-select';
 
@@ -54,7 +54,7 @@ class Login extends React.Component {
                   <Col  className="login-form-div">
                     <img src={require('../../assets/images/imgpsh_fullsize_anim.png')} alt="appzmakerz" style={{marginTop:"40px", height:"125px"}}></img>
                     <Form className="container login-form" onSubmit = { this.handleSubmit }>
-                        <ListErrors errors={this.props.error} />
+                        <Message message={this.props.error} type={"error"} />
                         <Form.Group as={Row} controlId="form" style={{textAlign:'left'}}>
                             <Select
                                 name="lan"
