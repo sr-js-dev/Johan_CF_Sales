@@ -54,12 +54,17 @@ getTasksData = (data) => {
     Axios.get(API.GetTasksData, header)
     .then(result => {
         if(!data){
-            this.setState({tasksData: result.data.Items, originFilterData: result.data.Items});
+            let itemData = result.data.Items;
+            itemData.sort(function(a, b){return b.Id - a.Id});
+            this.setState({tasksData: itemData, originFilterData: itemData});
         }else{
-            this.setState({tasksData: data});
+            let itemData = data;
+            itemData.sort(function(a, b){return b.Id - a.Id});
+            this.setState({tasksData: itemData});
         }
         this.setState({loading:false})
         this.setState({search_flag: false})
+        
         $('.fitler').on( 'keyup', function () {
             table.search( this.value ).draw();
         } );
