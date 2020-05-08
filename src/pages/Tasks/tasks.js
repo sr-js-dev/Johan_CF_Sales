@@ -56,7 +56,7 @@ getTasksData = (data) => {
         if(!data){
             this.setState({tasksData: result.data.Items, originFilterData: result.data.Items});
         }else{
-            this.setState({userData: data});
+            this.setState({tasksData: data});
         }
         this.setState({loading:false})
         this.setState({search_flag: false})
@@ -108,8 +108,8 @@ filterOptionData = (filterOption) =>{
     if(!filterOption.length){
         dataA=null;
     }
-    $('#example').dataTable().fnDestroy();
-    this.getUserData(dataA);
+    $('#example-task').dataTable().fnDestroy();
+    this.getTasksData(dataA);
 }
 
 changeFilter = () => {
@@ -364,11 +364,11 @@ render () {
                                             <i className="fas fa-eye add-icon" onClick={()=>this.getTaskDocuments(data.Id+','+data.CustomerName+','+data.employee+','+data.Subject)}><span className="action-title">{trls('View')}</span></i>
                                         </Row>
                                     </td> */}
-                                    <td width={200}>
+                                    <td width={100}>
                                         <Row style={{justifyContent:"space-around"}}>
-                                            <i className="fas fa-pen add-icon" onClick={()=>this.taskUpdate(data.Id)}><span className="action-title">{trls('Edit')}</span></i>
-                                            <i className="fas fa-eye add-icon" onClick={()=>this.viewHistory(data.Id)}><span className="action-title">{trls('View')}</span></i>
-                                            <i className="fas fa-trash-alt add-icon" onClick={()=>this.taskDeleteConfirm(data.Id)}><span className="action-title">{trls('Delete')}</span></i>
+                                            <i className="fas fa-pen add-icon" onClick={()=>this.taskUpdate(data.Id)}></i>
+                                            <i className="fas fa-eye add-icon" onClick={()=>this.viewHistory(data.Id)}></i>
+                                            <i className="fas fa-trash-alt add-icon" onClick={()=>this.taskDeleteConfirm(data.Id)}></i>
                                         </Row>
                                     </td>
                                 </tr>

@@ -138,18 +138,20 @@ class Taskform extends Component {
                 username: Auth.getUserName()
             }
             var headers = SessionManager.shared().getAuthorizationHeader();
-            Axios.post(API.PutTask, params, headers)
+            Axios.post(API.PostTask, params, headers)
             .then(result => {
                 taskIds.push(result.data.NewId);
                 k++
                 if(k===employeelength){
                     if(this._isMounted){
-                        this.setState({taskIds: taskIds, selectCustomerLabel:"", selectCustomerValue:"", orderdate: '', pageLoding: false})
-                        SweetAlert({
-                            title: trls('Success'),
-                            icon: "success",
-                            button: "OK",
-                        });
+                        if(result.data.Success){
+                            this.setState({taskIds: taskIds, selectCustomerLabel:"", selectCustomerValue:"", orderdate: '', pageLoding: false})
+                            SweetAlert({
+                                title: trls('Success'),
+                                icon: "success",
+                                button: "OK",
+                            });
+                        }
                     }
                 }
                 // var item = this.state.employee.filter(item => item.key===employee.value)
