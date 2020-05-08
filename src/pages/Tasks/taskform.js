@@ -10,6 +10,8 @@ import API from '../../components/api'
 import Axios from 'axios';
 import { trls } from '../../components/translate';
 import $ from 'jquery';
+import SweetAlert from 'sweetalert';
+import Pageloadspiiner from '../../components/page_load_spinner';
 
 const mapStateToProps = state => ({ 
     ...state,
@@ -37,6 +39,7 @@ class Taskform extends Component {
             taskIds: [],
             remarkData: '',
             taskRemarkComments: [],
+            pageLoding: false
         };
     }
     componentWillUnmount() {
@@ -110,6 +113,7 @@ class Taskform extends Component {
     }
 
     handleSubmit = (event) => {
+        this.setState({pageLoding: true});
         this._isMounted = true;
         event.preventDefault();
         const taskIds = this.state.taskIds;
@@ -134,14 +138,18 @@ class Taskform extends Component {
                 username: Auth.getUserName()
             }
             var headers = SessionManager.shared().getAuthorizationHeader();
-            Axios.post(API.PostTask, params, headers)
+            Axios.post(API.PutTask, params, headers)
             .then(result => {
                 taskIds.push(result.data.NewId);
                 k++
                 if(k===employeelength){
-                    this.setState({taskIds: taskIds});
                     if(this._isMounted){
-                        this.setState({selectCustomerLabel:"", selectCustomerValue:"", orderdate: ''})
+                        this.setState({taskIds: taskIds, selectCustomerLabel:"", selectCustomerValue:"", orderdate: '', pageLoding: false})
+                        SweetAlert({
+                            title: trls('Success'),
+                            icon: "success",
+                            button: "OK",
+                        });
                     }
                 }
                 // var item = this.state.employee.filter(item => item.key===employee.value)
@@ -254,6 +262,7 @@ class Taskform extends Component {
         if(this.state.employee){
             employee = this.state.employee.map( s => ({value:s.key,label:s.value}) );
         }
+        const { pageLoding } = this.state;
         return (
             <Modal
                 show={this.props.show}
@@ -372,6 +381,7 @@ class Taskform extends Component {
                         </div>
                     </Col>
                 </Row>
+                <Pageloadspiiner loading = {pageLoding}/>
             </Modal.Body>
         </Modal>
         );

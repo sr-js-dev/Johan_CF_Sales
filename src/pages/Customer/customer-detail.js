@@ -20,7 +20,6 @@ import Mold from './mold.js'
 import {ArcGauge} from '@progress/kendo-react-gauges';
 import '@progress/kendo-theme-default/dist/all.css';
 import * as Common from '../../components/common';
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { BallBeat } from 'react-pure-loaders';
 
 const mapStateToProps = state => ({ ...state.auth });

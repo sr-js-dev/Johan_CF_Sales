@@ -71,6 +71,7 @@ export default {
     GetTaskStatusses: `${BASEURL}/api/factory/execute/portallvs/getTaskStatusses`,
     GetCustomerRecords: `${BASEURL}/api/factory/execute/portallvs/getCustomerRecords`,
     GetAllCustomers: `${BASEURL}/api/factory/execute/portallvs/getAllCustomers`,
+    DeleteTask: `${BASEURL}/api/factory/execute/portallvs/deleteTask`,
   };
   
-  
+   

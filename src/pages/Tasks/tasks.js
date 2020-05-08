@@ -15,6 +15,9 @@ import Taskdocument from './taskdocument'
 import FileUploadForm from '../../components/drag_drop_fileupload';
 import * as Common from '../../components/common';
 import Filtercomponent from '../../components/filtercomponent';
+import SweetAlert from 'sweetalert';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const mapStateToProps = state => ({
      ...state.auth,
@@ -212,6 +215,53 @@ postTaskDocuments = (docuId) => {
     });
 }
 
+delteTask = (taskId) => {
+    this._isMounted = true;
+    let params = {
+        id: taskId
+    }
+    var headers = SessionManager.shared().getAuthorizationHeader();
+    Axios.post(API.DeleteTask, params, headers)
+    .then(result => {
+        if(this._isMounted){    
+            if(result.data.Success){
+                SweetAlert({
+                    title: trls('Success'),
+                    icon: "success",
+                    button: "OK",
+                });
+                this.getTasksData();
+            }
+        }
+    })
+    .catch(err => {
+        // SweetAlert({
+        //     title: trls('Fail'),
+        //     icon: "warning",
+        //     button: "OK",
+        //   });
+    });
+}
+
+taskDeleteConfirm = (taskId) => {
+    confirmAlert({
+        title: 'Confirm',
+        message: 'Are you sure to do this.',
+        buttons: [
+            {
+            label: 'Delete',
+            onClick: () => {
+                this.delteTask(taskId)
+            }
+            },
+            {
+            label: 'Cancel',
+            onClick: () => {}
+            }
+        ]
+    });
+}
+
 getAttachFileName = (id) =>{
     let tempArray = [];
     let filemane = '';
@@ -318,6 +368,7 @@ render () {
                                         <Row style={{justifyContent:"space-around"}}>
                                             <i className="fas fa-pen add-icon" onClick={()=>this.taskUpdate(data.Id)}><span className="action-title">{trls('Edit')}</span></i>
                                             <i className="fas fa-eye add-icon" onClick={()=>this.viewHistory(data.Id)}><span className="action-title">{trls('View')}</span></i>
+                                            <i className="fas fa-trash-alt add-icon" onClick={()=>this.taskDeleteConfirm(data.Id)}><span className="action-title">{trls('Delete')}</span></i>
                                         </Row>
                                     </td>
                                 </tr>
