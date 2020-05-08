@@ -146,6 +146,7 @@ class Taskform extends Component {
                     if(this._isMounted){
                         if(result.data.Success){
                             this.setState({taskIds: taskIds, selectCustomerLabel:"", selectCustomerValue:"", orderdate: '', pageLoding: false})
+                            this.onHide();
                             SweetAlert({
                                 title: trls('Success'),
                                 icon: "success",
