@@ -127,7 +127,6 @@ changeFilter = () => {
 // filter module
 
 formatDate = (startdate) =>{
-        
     var dd = new Date(startdate).getDate();
     var mm = new Date(startdate).getMonth()+1; 
     var yyyy = new Date(startdate).getFullYear();

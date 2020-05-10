@@ -265,10 +265,10 @@ render () {
                                             <i className="fas fa-eye add-icon" onClick={()=>this.GetVisitreportDocuments(data.Id)}><span className="action-title">{trls('View')}</span></i>
                                         </Row>
                                     </td> */}
-                                    <td style={{width: 200}}>
+                                    <td style={{width: 80}}>
                                         <Row style={{justifyContent:"space-around"}}>
-                                            <i className="fas fa-pen add-icon" onClick={()=>this.updateVisit(data.Id)}><span className="action-title">{trls('Edit')}</span></i>
-                                            <i className="fas fa-eye add-icon" onClick={()=>this.viewAnswer(data.Id)}><span className="action-title">{trls('View')}</span></i>
+                                            <i className="fas fa-pen add-icon" onClick={()=>this.updateVisit(data.Id)}></i>
+                                            <i className="fas fa-eye add-icon" onClick={()=>this.viewAnswer(data.Id)}></i>
                                         </Row>
                                     </td>
                                 </tr>

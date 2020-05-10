@@ -249,11 +249,11 @@ class Userregister extends Component {
                                                 <i className ="fas fa-check-circle inactive-icon"></i>
                                             }
 										</td>
-										<td style={{width: 300}}>
+										<td style={{width: 100}}>
 											<Row style={{justifyContent:"space-around"}}>
-												<i className="fas fa-trash-alt add-icon" onClick={()=>this.userDeleteConfirm(data.Id)}><span className="action-title">{trls('Delete')}</span></i>
-												<i className="fas fa-pen add-icon" onClick={()=>this.userUpdate(data.Id)}><span className="action-title">{trls('Edit')}</span></i>
-												<i className="fas fa-eye add-icon" onClick={()=>this.viewUserData(data.Id)}><span className="action-title">{trls('View')}</span></i>
+												<i className="fas fa-trash-alt add-icon" onClick={()=>this.userDeleteConfirm(data.Id)}></i>
+												<i className="fas fa-pen add-icon" onClick={()=>this.userUpdate(data.Id)}></i>
+												<i className="fas fa-eye add-icon" onClick={()=>this.viewUserData(data.Id)}></i>
 											</Row>
 										</td>
 										<td style={{width: 100}}>

@@ -269,7 +269,7 @@ class Taskform extends Component {
         return (
             <Modal
                 show={this.props.show}
-                onHide={()=>this.onHide()}
+                onHide={()=>this.props.onHide()}
                 size="xl"
                 aria-labelledby="contained-modal-title-vcenter"
                 backdrop= "static"
