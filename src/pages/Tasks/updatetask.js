@@ -8,6 +8,7 @@ import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
 import { trls } from '../../components/translate';
+import Linkify from 'linkifyjs/react';
 
 const mapStateToProps = state => ({ 
     ...state,
@@ -146,7 +147,7 @@ class Updatetask  extends Component {
         }
         const {updateTask} = this.props;
         const {status} = this.state;
-        remarkCommnets = this.state.remarkFlag ? this.state.taskRemarkComments : updateTask.remark
+        remarkCommnets = this.state.remarkFlag ? this.state.taskRemarkComments : updateTask.remark;
         return (
             <Modal
                 show={this.props.show}
@@ -234,7 +235,7 @@ class Updatetask  extends Component {
                                         <b>{data.username}</b>
                                         <div>
                                             <p>{data.createdon}</p>
-                                            {data.remark}
+                                            <Linkify properties={{target: '_blank'}}>{data.remark}</Linkify>
                                         </div>
                                     </div>
                                 ))
