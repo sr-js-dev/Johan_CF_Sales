@@ -9,9 +9,11 @@ import { trls } from '../../components/translate';
 const mapStateToProps = state => ({ 
     ...state.auth,
 });
+
 const mapDispatchToProps = (dispatch) => ({
 
 });
+
 class Qutatedetailform extends Component {
     _isMounted = false;
     constructor(props) {
@@ -20,11 +22,14 @@ class Qutatedetailform extends Component {
             orderDetails:[]
         };
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
     componentDidMount() {
     }
+
     getCurtomerQuoteDetails = (value) => {
         this._isMounted = true;
         let quoteDetailArray = [];
@@ -44,11 +49,13 @@ class Qutatedetailform extends Component {
             }
         });
     }
+
     componentDidUpdate(){
         if(this.props.number){
             this.getCurtomerQuoteDetails(this.props.number)
         }
     }
+
     render(){   
         const {quoteDetails} = this.state;
         return (

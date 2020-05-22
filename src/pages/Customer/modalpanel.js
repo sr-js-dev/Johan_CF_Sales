@@ -51,6 +51,7 @@ class AccordionItem extends React.Component {
             customerId: this.props.customerId
         }
     }
+    
     componentDidMount() {
         this._isMounted=true
         this.setState({loading:true});
@@ -242,5 +243,5 @@ class AccordionItem extends React.Component {
         </div>
         )
     }
-    }
-    export default connect(mapStateToProps, mapDispatchToProps)(Modalpanel);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Modalpanel);

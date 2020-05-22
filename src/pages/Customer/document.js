@@ -17,13 +17,12 @@ const mapDispatchToProps = dispatch => ({
     
 });
 
-class Quotation extends React.Component {
+class Document extends React.Component {
   constructor(props) {
     super(props);
     this.state = {  
     };
   }
-  
   render () {
     return (
       <div {...{ className: 'wrapper' }}>
@@ -45,8 +44,6 @@ class AccordionItem extends React.Component {
         var curyear = date.getFullYear(); 
         super(props);
         this.state = {  
-            lastYear2 : curyear-2,
-            lastYear3 : curyear-3,
             customerId: this.props.customerId
         };
     }
@@ -57,20 +54,19 @@ class AccordionItem extends React.Component {
     }
 
     getCustomerData (value) {
-        
         this._isMounted = true;
         let params = {
-            customerid : this.state.customerId
+            customerid : 20435
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.post(API.GetCustomerQuotes, params, headers)
+        Axios.post(API.GetCustomerDocuments, params, headers)
         .then(result => {
             if(this._isMounted){
-                this.setState({customerQuotes:result.data.Items})
-                this.props.detailmode('quotations');
+                this.setState({documentData:result.data.Items})
+                this.props.detailmode('document');
                 this.setState({loading:false})
-                $('#example-quotation').dataTable().fnDestroy();
-                $('#example-quotation').DataTable(
+                $('#document').dataTable().fnDestroy();
+                $('#document').DataTable(
                     {
                       "language": {
                           "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
@@ -104,64 +100,16 @@ class AccordionItem extends React.Component {
         this.setState({modalShow: true})
     }
 
-    formatDate = (startdate) =>{
-        
-        var dd = new Date(startdate).getDate();
-        var mm = new Date(startdate).getMonth()+1; 
-        var yyyy = new Date(startdate).getFullYear();
-        var formatDate = '';
-        if(dd<10) 
-        {
-            dd='0'+dd;
-        } 
-
-        if(mm<10) 
-        {
-            mm='0'+mm;
-        } 
-        formatDate = dd+'-'+mm+'-'+yyyy;
-        return formatDate;
-    }
-
-    formatNumber = (num) => {
-        if(num){
-            var value = num.toFixed(2);
-            return  "€" + value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-        }else{
-            return "€ 0.00" 
-        }
-       
-    }
-
-    formatOrderNum = (num) => {
-        if(num){
-            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-        }else{
-            return 0 
-        }
-       
-    }
-
-    formatNumberPercent = (num) => {
-        if(num){
-            var value = num.toFixed(2);
-            return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-        }else{
-            return "0.00" 
-        }
-        
-    }
-
     onHiden = () =>{
         this.setState({modalShow:false})
     }
 
-    detailmode = () =>{
-        this.setState({Number: ""})
+    downlaodDocumant = (filepath) => {
+        window.open(filepath, '_blank');
     }
 
     render () {
-        let customerQuotes=this.state.customerQuotes;
+        let documentData=this.state.documentData;
         const {
         props: {
             title
@@ -185,33 +133,21 @@ class AccordionItem extends React.Component {
             <div {...{ className: 'accordion-item__inner' }} style={{borderTop: "1px solid rgba(0,0,0,.125)"}}>
                 <div {...{ className: 'accordion-item__content' }}>
                     <div className="table-responsive credit-history">
-                        <table id="example-quotation" className="place-and-orders__table table" width="100%">
+                        <table id="document" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
-                                <th>{trls('Quotation_Number')}</th>
-                                <th>{trls('Date')}</th>
-                                <th>{trls('Amount')}</th>
-                                <th>{trls('Reference')}</th>
-                                <th>{trls('Delivery')}</th>
-                                <th>{trls('Approved')}</th>
+                                <th>{trls('DocumentName')}</th>
                             </tr>
                         </thead>
-                        {customerQuotes && !this.state.loading &&(<tbody >
+                        {documentData && !this.state.loading &&(<tbody >
                             {
-                                customerQuotes.map((data,i) =>(
+                                documentData.map((data,i) =>(
                                     <tr id={i} key={i}>
                                         <td>
-                                            <div id={data.Number} style={{cursor: "pointer", color:'#004388', fontSize:"16px", fontWeight:'bold'}} onClick={this.viewDetail}>{data.Number}</div>
+                                            <div id={data.Number} style={{cursor: "pointer", color:'#004388', fontSize:"16px", fontWeight:'bold'}} onClick={()=>this.downlaodDocumant(data.filepath)}>{data.filename}</div>
                                         </td>
-                                        <td>{this.formatDate(data.Date)}</td>
-                                        <td>{Common.formatMoney(data.Revenue)}</td>
-                                        <td>{data.Reference}</td>
-                                        <td>{data.Delivery}</td>
-                                        {data.Approved?(
-                                            <td>{trls('Approved')}</td>
-                                        ):<td>{trls('Not_Approved')}</td>}
                                     </tr>
-                            ))
+                                ))
                             }
                         </tbody>)}
                     </table>
@@ -223,13 +159,6 @@ class AccordionItem extends React.Component {
                             />
                         </div>
                     )}
-                    <Qutatedetailform
-                        show={this.state.modalShow}
-                        number={this.state.Number}
-                        orderflag={this.state.flag}
-                        onHide={this.onHiden}
-                        detailmode={this.detailmode}
-                    /> 
                     </div>
                 </div>
             </div>
@@ -237,4 +166,4 @@ class AccordionItem extends React.Component {
         )
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Quotation);
+export default connect(mapStateToProps, mapDispatchToProps)(Document);

@@ -22,16 +22,11 @@ class Taskdocument extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-    
-    componentDidMount() {
-    }
 
-    componentDidUpdate(){
-
-    }
     downlaodDocumant = (event) => {
         window.open(API.DownLoadTaskFile+event.currentTarget.id, '_blank');
     }
+
     render(){
         let documentData = [];
         let documentHeader = [];

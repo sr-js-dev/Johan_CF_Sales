@@ -17,6 +17,7 @@ import Competitor from './competitor';
 import Priceagree from './price-agree';
 import Quotation from './quotation';
 import Mold from './mold.js'
+import Document from './document.js'
 import {ArcGauge} from '@progress/kendo-react-gauges';
 import '@progress/kendo-theme-default/dist/all.css';
 import * as Common from '../../components/common';
@@ -52,7 +53,7 @@ class Userregister extends Component {
             gaugepercent: 0,
             percent: 0,
             currentYear: curyear,
-            detailIdData: {contact: false, product: false, modal: false, orders: false, competitor: false, price: false, quotations: false, mold: false},
+            detailIdData: {contact: false, product: false, modal: false, orders: false, competitor: false, price: false, quotations: false, mold: false, document: false},
             detailShowFlag: false,
             customerId: customerId,
             fullRight: fullRight
@@ -320,13 +321,13 @@ class Userregister extends Component {
                     )}
                 </Row>
                 {!this.state.detailShowFlag && (
-                            <div className="page-loading-spinner loading" style={{textAlign:"center"}}>
-                                <BallBeat
-                                    color={'#000'}
-                                    loading={this.state.loading}
-                                />
-                            </div>
-                        )}
+                    <div className="page-loading-spinner loading" style={{textAlign:"center"}}>
+                        <BallBeat
+                            color={'#000'}
+                            loading={this.state.loading}
+                        />
+                    </div>
+                )}
                 <div className="panel-collapse">
                     <Contactpanel
                         title={trls("Contacts")}
@@ -386,11 +387,17 @@ class Userregister extends Component {
                                 detailmode={this.detailmode}
                             />
                         </div>
+                        <div className="panel-collapse">
+                            <Document
+                                title={trls("Documents")}
+                                customerId={this.state.customerId}
+                                detailmode={this.detailmode}
+                            />
+                        </div>
                     </div>
                 )}
             </Container>
         )
-        };
-  }
-    
-  export default connect(mapStateToProps, mapDispatchToProps)(Userregister);
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Userregister);

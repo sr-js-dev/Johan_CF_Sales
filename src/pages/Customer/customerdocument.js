@@ -101,7 +101,7 @@ class Customerdocument extends Component {
                                             <div id={data.DocumentId} style={{color:"#069AF8", fontWeight:"bold", cursor: "pointer", textDecoration:"underline"}} onClick={this.downlaodDocumant}>{data.DocumentId}</div>
                                         </td>
                                     </tr>
-                            ))
+                                ))
                             }
                         </tbody>)}
                     </table>

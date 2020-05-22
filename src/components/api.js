@@ -74,4 +74,3 @@ export default {
     DeleteTask: `${BASEURL}/api/factory/execute/portallvs/deleteTask`,
   };
   
-   

@@ -17,6 +17,7 @@ const mapStateToProps = state => ({ ...state.auth });
 const mapDispatchToProps = dispatch => ({
     
 });
+
 class Priceagree extends React.Component {
   constructor(props) {
     super(props);
@@ -245,5 +246,5 @@ class AccordionItem extends React.Component {
         </div>
         )
     }
-    }
-    export default connect(mapStateToProps, mapDispatchToProps)(Priceagree);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Priceagree);

@@ -219,5 +219,5 @@ class AccordionItem extends React.Component {
         </div>
         )
     }
-    }
-    export default connect(mapStateToProps, mapDispatchToProps)(Mold);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Mold);

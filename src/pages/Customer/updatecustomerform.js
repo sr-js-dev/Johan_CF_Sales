@@ -14,6 +14,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
 });
+
 class Updatecustomerform extends Component {
     _isMounted = false;
     constructor(props) {
@@ -22,12 +23,15 @@ class Updatecustomerform extends Component {
             value: ''
         };
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
     componentDidMount() {
 
     }
+
     componentWillReceiveProps() {
         if(this.props.customerData){
             this.setState({value:this.props.customerData[0].Phone})

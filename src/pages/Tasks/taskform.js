@@ -4,7 +4,6 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import * as Auth from '../../components/auth'
 import DatePicker from "react-datepicker";
-// import DateTimePicker from "react-datetime-picker";
 import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
@@ -44,9 +43,6 @@ class Taskform extends Component {
     }
     componentWillUnmount() {
         this._isMounted = false;
-    }
-    
-    componentDidMount() {
     }
 
     componentDidUpdate(){

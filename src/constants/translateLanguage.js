@@ -212,7 +212,8 @@ export const TRANSLATIONS = {
       Filter: 'Filter',
       Change_password: 'ChangePassword',
       Old_password: 'OldPassword',
-      New_password: 'NewPassword'
+      New_password: 'NewPassword',
+      DocumentName: 'DocumentName'
     },
 
 
@@ -429,6 +430,7 @@ export const TRANSLATIONS = {
       Filter: 'Filter',
       Change_password: 'VeranderingWachtwoord',
       Old_password: 'OudWachtwoord',
-      New_password: 'NieuwWachtwoord  '
+      New_password: 'NieuwWachtwoord',
+      DocumentName: 'DocumentNaam'
     }
   };

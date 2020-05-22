@@ -37,10 +37,11 @@ class Contactspanel extends React.Component {
 }
 
 class AccordionItem extends React.Component {
-  state = {
-    opened: false,
-    firstLoad: false
-  }
+    state = {
+        opened: false,
+        firstLoad: false
+    }
+
     componentDidMount() {
         this._isMounted=true
         let pathname = window.location.pathname;
@@ -51,6 +52,7 @@ class AccordionItem extends React.Component {
         this.setState({customerId: customerId})
         this.setState({loading: true})
     }
+
     getCustomerData (flag) {
         this._isMounted = true;
         let params = {
@@ -106,11 +108,13 @@ class AccordionItem extends React.Component {
         this.setState({loading: true})
         this.getCustomerData()
     }
+
     componentDidUpdate(){
         if(this.props.customerId){
             this.getCustomerData()
         }
     }
+
     contactUpdate = (event) => {
         this._isMounted = true;
         let contactId=event.currentTarget.id;
@@ -126,6 +130,7 @@ class AccordionItem extends React.Component {
             }
         });
     }
+    
     showActiveContacts = () => {
         
         if(this.state.showCheckFlag){
