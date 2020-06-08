@@ -5,6 +5,7 @@ import SessionManager from '../../components/session_manage';
 import API from '../../components/api'
 import Axios from 'axios';
 import { trls } from '../../components/translate';
+import Productimageform from './productimage_form';
 
 const mapStateToProps = state => ({ 
     ...state.auth,
@@ -19,7 +20,9 @@ class Adduserform extends Component {
     constructor(props) {
         super(props);
         this.state = {  
-            orderDetails:[]
+            orderDetails:[],
+            productNumber: '',
+            imagePath: ''
         };
     }
 
@@ -49,6 +52,20 @@ class Adduserform extends Component {
         if(this.props.orderNum){
             this.getCurtomerOrderDetails(this.props.orderNum)
         }
+    }
+
+    getProductImage = (itemCode) => {
+        this._isMounted = true;
+        let params = {
+            itemcode : itemCode
+        }
+        var headers = SessionManager.shared().getAuthorizationHeader();
+        Axios.post(API.GetProductImage, params, headers)
+        .then(result => {
+            if(this._isMounted){
+                this.setState({imagePath: result.data.Items[0].pathDrawing ? API.GetImage+result.data.Items[0].pathDrawing : '', productNumber: itemCode, modalShow: true})
+            }
+        });
     }
     
     render(){   
@@ -86,7 +103,9 @@ class Adduserform extends Component {
                             {
                                 orderDetails.map((data,i) =>(
                                 <tr id={i} key={i}>
-                                    <td>{data.Id}</td>
+                                    <td>
+                                        <div style={{cursor: "pointer", color:'#004388', fontSize:"16px", fontWeight:'bold'}} onClick={()=>this.getProductImage(data.Item)}>{data.Id}</div>
+                                    </td>
                                     <td>{data.Item}</td>
                                     <td>{data.Color}</td>
                                     <td>{data.Length}</td>
@@ -102,6 +121,12 @@ class Adduserform extends Component {
                     </table>
                 </div>
             </Modal.Body>
+            <Productimageform   
+                show={this.state.modalShow}
+                imagePath={this.state.imagePath}
+                onHide={() => this.setState({modalShow: false})}
+                productNumber={this.state.productNumber}
+            />
             </Modal>
         );
     }

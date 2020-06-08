@@ -20,6 +20,7 @@ class Productimageform extends Component {
     }
 
     render(){
+        console.log('222', this.props.imagePath);
         return (
             <Modal
                 show={this.props.show}
@@ -35,7 +36,9 @@ class Productimageform extends Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <img src={this.props.imagePath} style={{width: '100%'}} alt={'product'}/>
+                {this.props.imagePath && (
+                    <img src={this.props.imagePath} style={{width: '100%'}} alt={'product'}/>
+                )}
             </Modal.Body>
             </Modal>
         );

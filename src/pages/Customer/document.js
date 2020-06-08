@@ -8,8 +8,6 @@ import API from '../../components/api'
 import Axios from 'axios';
 import { BallBeat } from 'react-pure-loaders';
 import 'datatables.net';
-import Qutatedetailform from './quotation-detailform';
-import * as Common from '../../components/common';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -40,8 +38,8 @@ class AccordionItem extends React.Component {
     }
     
     constructor(props) {
-        var date = new Date();
-        var curyear = date.getFullYear(); 
+        // var date = new Date();
+        // var curyear = date.getFullYear(); 
         super(props);
         this.state = {  
             customerId: this.props.customerId

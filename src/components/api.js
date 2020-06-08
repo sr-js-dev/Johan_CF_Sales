@@ -72,5 +72,6 @@ export default {
     GetCustomerRecords: `${BASEURL}/api/factory/execute/portallvs/getCustomerRecords`,
     GetAllCustomers: `${BASEURL}/api/factory/execute/portallvs/getAllCustomers`,
     DeleteTask: `${BASEURL}/api/factory/execute/portallvs/deleteTask`,
+    GetProductImage: `${BASEURL}/api/factory/execute/portallvs/getProductImage`,
   };
-  
+   
