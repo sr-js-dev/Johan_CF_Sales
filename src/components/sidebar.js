@@ -87,6 +87,24 @@ class Sidebar extends Component {
                                 <span>{trls("Visit_report")}</span>
                             </Link>
                         </li>
+                        {Auth.getUserRole()==="Administrator" && (
+                            <li id="5" className="menu__item" onClick={this.changeItem}>
+                                <Link to={'/new-items'} className={window.location.pathname === "/new-items" || window.location.pathname === "/new-items/detail" ? 'menu__link menu__link--active' : 'menu__link menu__link'}>
+                                    <div className="menu__link-div menu__link-div--active"></div>
+                                    <span className="menu__link-img-wrap">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path className="menu-link__icon menu-link__icon--active" d="M15 0H7C6.4 0 6 0.4 6 1V3C6 3.6 6.4 4 7 4H15C15.6 4 16 3.6 16 3V1C16 0.4 15.6 0 15 0Z" fill="#585858"/>
+                                        <path className="menu-link__icon menu-link__icon--active" d="M15 6H7C6.4 6 6 6.4 6 7V9C6 9.6 6.4 10 7 10H15C15.6 10 16 9.6 16 9V7C16 6.4 15.6 6 15 6Z" fill="#585858"/>
+                                        <path className="menu-link__icon menu-link__icon--active" d="M15 12H7C6.4 12 6 12.4 6 13V15C6 15.6 6.4 16 7 16H15C15.6 16 16 15.6 16 15V13C16 12.4 15.6 12 15 12Z" fill="#585858"/>
+                                        <path className="menu-link__icon menu-link__icon--active" d="M3 0H1C0.4 0 0 0.4 0 1V3C0 3.6 0.4 4 1 4H3C3.6 4 4 3.6 4 3V1C4 0.4 3.6 0 3 0Z" fill="#585858"/>
+                                        <path className="menu-link__icon menu-link__icon--active" d="M3 6H1C0.4 6 0 6.4 0 7V9C0 9.6 0.4 10 1 10H3C3.6 10 4 9.6 4 9V7C4 6.4 3.6 6 3 6Z" fill="#585858"/>
+                                        <path className="menu-link__icon menu-link__icon--active" d="M3 12H1C0.4 12 0 12.4 0 13V15C0 15.6 0.4 16 1 16H3C3.6 16 4 15.6 4 15V13C4 12.4 3.6 12 3 12Z" fill="#585858"/>
+                                    </svg>
+                                </span>
+                                    <span>{trls("New_items")}</span>
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </nav>
             </aside>

@@ -87,7 +87,7 @@ getTasksData = (data) => {
                 },
                 "dom": 't<"bottom-datatable" lip>',
                 "ordering": false
-                }
+                },
           );
     });
 }

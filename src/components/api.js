@@ -73,5 +73,10 @@ export default {
     GetAllCustomers: `${BASEURL}/api/factory/execute/portallvs/getAllCustomers`,
     DeleteTask: `${BASEURL}/api/factory/execute/portallvs/deleteTask`,
     GetProductImage: `${BASEURL}/api/factory/execute/portallvs/getProductImage`,
+    GetNewItems:`${BASEURL}/api/factory/execute/portallvs/getNwNewProducts`,
+    GetNewItemsCustomer: `${BASEURL}/api/factory/execute/portallvs/getNwCustomersDropdown`,
+    PostNewItem: `${BASEURL}/api/factory/execute/portallvs/postNwNewProduct`,
+    GetItemDetail: `${BASEURL}/api/factory/execute/portallvs/getNwNewProductDetail`,
+    GetNewItemContact: `${BASEURL}/api/factory/execute/portallvs/getNwContactsDropdown`,
   };
    

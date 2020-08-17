@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import { Col, Row, Form } from 'react-bootstrap';
+import { Col, Row, Form, ProgressBar } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Addcustomerform from './addcustomerform';
+import AddNewItem from './add_newitem';
 import Customerdocument from './customerdocument';
 import Updatecustomerform from './updatecustomerform';
 import SessionManager from '../../components/session_manage';
@@ -15,9 +15,9 @@ import 'datatables.net';
 import history from '../../history';
 import Createtask from '../Tasks/taskform'
 import FileUploadForm from '../../components/drag_drop_fileupload';
-import Pagination from '../../components/pagination';
-import * as Common from '../../components/common';
-import Filtercomponent from '../../components/filtercomponent';
+// import Pagination from '../../components/pagination';
+// import * as Common from '../../components/common';
+// import Filtercomponent from '../../components/filtercomponent';
 import $ from 'jquery';
 
 const mapStateToProps = state => ({ ...state.auth });
@@ -26,13 +26,13 @@ const mapDispatchToProps = dispatch => ({
     
 });
 
-class Userregister extends Component {
+class NewItems extends Component {
 
     _isMounted = false
     constructor(props) {
         super(props);
         this.state = {  
-            customerData:[],
+            newItemsData:[],
             flag:'',
             userUpdateData:[],
             loading:false,
@@ -46,9 +46,9 @@ class Userregister extends Component {
 
     componentDidMount() {
         this._isMounted=true
-        this.getRecordNum(null);
-        this.getCustomerData(10, 1, null, null);
-        this.getAllCustomerData();
+        // this.getRecordNum(null);
+        this.getNewItemsData();
+        // this.getAllCustomerData();
         this.setFilterData();
     }
 
@@ -56,42 +56,45 @@ class Userregister extends Component {
         this._isMounted = false
     }
 
-    getRecordNum (search) {
-        this._isMounted = true;
-        this.setState({loading:true});
-        let params = {
-            search: search ? search : ''
-        }
-        var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.post(API.GetCustomerRecords, params, headers)
-        .then(result => {
-            if(this._isMounted){
-                this.setState({recordNum: result.data.Items[0].numCustomers});
-            }
-        });
-    }
+    // getRecordNum (search) {
+    //     this._isMounted = true;
+    //     this.setState({loading:true});
+    //     let params = {
+    //         search: search ? search : ''
+    //     }
+    //     var headers = SessionManager.shared().getAuthorizationHeader();
+    //     Axios.post(API.GetCustomerRecords, params, headers)
+    //     .then(result => {
+    //         if(this._isMounted){
+    //             this.setState({recordNum: result.data.Items[0].numCustomers});
+    //         }
+    //     });
+    // }
 
-    getCustomerData (pageSize, page, data, search) {
+    getNewItemsData = (data) => {
         this._isMounted = true;
-        let params = {
-            "page" :page,
-            "pagesize": pageSize,
-            "search": search ? search : ''
-        }
+        // let params = {
+        //     "page" :page,
+        //     "pagesize": pageSize,
+        //     "search": search ? search : ''
+        // }
+        let params = {}
         var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.post(API.GetCustomerData, params, headers)
+        Axios.post(API.GetNewItems, params, headers)
         .then(result => {
             if(this._isMounted){
                 if(!data){
-                    this.setState({customerData: result.data.Items.length>0 ? result.data.Items : []});
+                    this.setState({newItemsData: result.data.Items});
                 }else{
-                    this.setState({customerData: data});
+                    this.setState({newItemsData: data});
                 }
                 this.setState({loading:false})
-                $('#example-task').dataTable().fnDestroy();
-                if(this.state.filterDataFlag){
-                    $('#example').dataTable().fnDestroy();
-                    $('#example').DataTable(
+                // if(this.state.filterDataFlag){
+                    $('.filter').on( 'keyup', function () {
+                        table.search( this.value ).draw();
+                    } );
+                    $('#new_items').dataTable().fnDestroy();
+                    var table = $('#new_items').DataTable(
                         {
                         "language": {
                             "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
@@ -103,31 +106,32 @@ class Userregister extends Component {
                             "paginate": {
                                 "previous": trls('Previous'),
                                 "next": trls('Next')
-                            }
+                            },
                         },
-                        "searching": false,
+                        // "searching": false,
                         "dom": 't<"bottom-datatable" lip>',
-                        "ordering": false
-                    }
+                        // "lengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+                        // "ordering": false
+                    },
                     );
-                }
+                // }
             }
         });
     }
 
-    getAllCustomerData (data) {
-        var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.get(API.GetAllCustomers, headers)
-        .then(result => {
-            if(this._isMounted){
-                this.setState({originFilterData: result.data.Items});
-            }
-        });
-    }
+    // getAllCustomerData (data) {
+    //     var headers = SessionManager.shared().getAuthorizationHeader();
+    //     Axios.get(API.GetAllCustomers, headers)
+    //     .then(result => {
+    //         if(this._isMounted){
+    //             this.setState({originFilterData: result.data.Items});
+    //         }
+    //     });
+    // }
     
     quickSeach = (evt) => {
-        this.getCustomerData(10, 1, null, evt.target.value);
-        this.getRecordNum(evt.target.value);
+        // this.getNewItemsData(10, 1, null, evt.target.value);
+        // this.getRecordNum(evt.target.value);
     }
 
     // filter module
@@ -142,19 +146,19 @@ class Userregister extends Component {
         this.setState({filterData: filterData});
     }
 
-    filterOptionData = (filterOption) =>{
-        let dataA = []
-        dataA = Common.filterData(filterOption, this.state.originFilterData);
-        if(!filterOption.length){
-            this.setState({filterDataFlag: false});
-            dataA=null;
-        }else{
-            this.setState({filterDataFlag: true});
-        }
+    // filterOptionData = (filterOption) =>{
+    //     let dataA = []
+    //     dataA = Common.filterData(filterOption, this.state.originFilterData);
+    //     if(!filterOption.length){
+    //         this.setState({filterDataFlag: false});
+    //         dataA=null;
+    //     }else{
+    //         this.setState({filterDataFlag: true});
+    //     }
        
-        $('#example').dataTable().fnDestroy();
-        this.getCustomerData(10, 1, dataA, null);
-    }
+    //     $('#new-items').dataTable().fnDestroy();
+    //     // this.getCustomerData(10, 1, dataA, null);
+    // }
 
     changeFilter = () => {
         if(this.state.filterFlag){
@@ -164,11 +168,10 @@ class Userregister extends Component {
         }
     }
     // filter module
-    viewCustomerDetail = (data) => {
-        var string = data.id+","+data.fullrights;
-        var b64 = btoa(unescape(encodeURIComponent(string)));
+    viewItemDetail = (id) => {
         history.push({
-            pathname: '/customer/detail/'+b64,
+            pathname: '/new-items/'+id,
+            params: { id: id}
         })
     }
 
@@ -194,8 +197,9 @@ class Userregister extends Component {
     }
 
     onHide = () => {
-        this.setState({modalcreateTaskShow: false});
-        this.getCustomerData();
+        // this.setState({modalcreateTaskShow: false});
+        // this.getNewItemsData();
+        this.setState({ modalShow: false })
     }
 
     detailmode = () =>{
@@ -285,85 +289,87 @@ class Userregister extends Component {
     //       });
     // }
     render () {
-        let customerData=this.state.customerData;
+        let newItemsData=this.state.newItemsData;
         return (
             <div className="order_div">
                 <div className="content__header content__header--with-line">
-                    <h2 className="title">{trls('Customer')}</h2>
+                    <h2 className="title">{trls('New_items')}</h2>
                 </div>
                 <div className="orders">
                     <Row>
                         <Col sm={6}>
                             {!this.state.loading?(
-                                <Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_Customer')}</Button>
+                                <Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_new_item')}</Button>
                             ):
-                                <Button variant="primary" disabled onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_Customer')}</Button>
+                                <Button variant="primary" disabled onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_new_item')}</Button>
                             }
                         </Col>
                         <Col sm={6} className="has-search">
                             <div style={{display: 'flex', float: 'right'}}>
-                                <Button variant="light" onClick={()=>this.changeFilter()}><i className="fas fa-filter add-icon"></i>{trls('Filter')}</Button>   
+                                {/* <Button variant="light" onClick={()=>this.changeFilter()}><i className="fas fa-filter add-icon"></i>{trls('Filter')}</Button>    */}
                                 <div style={{marginLeft: 20}}>
                                     <span className="fa fa-search form-control-feedback"></span>
-                                    <Form.Control className="form-control fitler" type="text" name="number"placeholder={trls("Quick_search")} onChange={(evt)=>this.quickSeach(evt)}/>
+                                    <Form.Control className="form-control filter" type="text" name="number"placeholder={trls("Quick_search")}/>
                                 </div>
                             </div>
                         </Col>
-                        {this.state.filterData.length>0&&(
+                        {/* {this.state.filterData.length>0&&(
                             <Filtercomponent
                                 onHide={()=>this.setState({filterFlag: false})}
                                 filterData={this.state.filterData}
                                 onFilterData={(filterOption)=>this.filterOptionData(filterOption)}
                                 showFlag={this.state.filterFlag}
                             />
-                        )}
+                        )} */}
                     </Row>
                     <div className="table-responsive">
-                        <table id="example" className="place-and-orders__table table" width="100%">
+                        <table id="new_items" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
-                                <th>{trls('CustomerName')}</th>
-                                <th>{trls('Address')}</th>
-                                <th>{trls('Postcode')}</th>
-                                <th>{trls('City')}</th>
-                                <th>{trls('Country')}</th>
-                                {/* <th>{trls('Attachment')}</th> */}
-                                <th>{trls('Action')}</th>
+                                <th>{trls('Code')}</th>
+                                <th>{trls('Customer')}</th>
+                                <th>{trls('Contact')}</th>
+                                <th>{trls('Description')}</th>
+                                <th>{trls('Percentage_finished')}</th>
+                                <th>{trls('Assigned_to')}</th>
+                                {/* <th>{trls('Action')}</th> */}
                             </tr>
                         </thead>
-                        {!this.state.loading &&(<tbody >
+                        {newItemsData && !this.state.loading &&(<tbody >
                             {
-                                customerData.map((data,i) =>(
+                                newItemsData.map((data,i) =>(
                                     <tr id={i} key={i}>
                                         <td>
-                                            <div id={data.id} style={{cursor: "pointer", color:'#004388', fontSize:"15px", fontWeight:'bold'}} onClick={()=>this.viewCustomerDetail(data)}>{data.CustomerName}</div>
+                                            <div id={data.id} style={{cursor: "pointer", color:'#004388', fontSize:"15px", fontWeight:'bold'}} onClick={()=>this.viewItemDetail(data.id)}>{data.code}</div>
                                         </td>
-                                        <td>{data.Address}</td>
-                                        <td>{data.Zipcode}</td>
-                                        <td>{data.City}</td>
-                                        <td>{data.Country}</td>
+                                        <td>{data.customer}</td>
+                                        <td>{data.contact}</td>
+                                        <td>{data.description}</td>
+                                        <td><ProgressBar animated now={data.percentage_finished} label={`${data.percentage_finished}%`} /></td>
+                                        <td>{data.assigned_to}</td>
+                                        
                                         {/* <td width={200}>
                                             <Row style={{justifyContent:"space-around"}}>
                                                 <i className="fas fa-file-upload add-icon" onClick={()=>this.setState({fileUploadModalShow: true, attachtaskId: data.id})}><span className="action-title">{trls('Attach')}</span></i>
                                                 <i className="fas fa-eye add-icon" onClick={()=>this.getTaskDocuments(data.id+','+data.CustomerName+','+data.Address+','+data.City+','+data.Country)}><span className="action-title">{trls('View')}</span></i>
                                             </Row>
                                         </td> */}
-                                        <td>    
+                                        {/* <td>    
                                             <Row style={{justifyContent:"space-around"}}>
                                                 <i className="fas fa-pen add-icon" onClick={()=>this.customerUpdate(data.id)}><span className="action-title">{trls('Edit')}</span></i>
                                             </Row>
-                                        </td>
+                                        </td> */}
                                     </tr>
                             ))
                             }
                         </tbody>)}
                     </table>
-                    {!this.state.filterDataFlag&&(
+                    {/* {!this.state.filterDataFlag&&(
                         <Pagination
                             recordNum={this.state.recordNum}
-                            getData={(pageSize, page)=>this.getCustomerData(pageSize, page)}
+                            getData={(pageSize, page)=>this.getNewItemsData(pageSize, page)}
                         />
-                    )}
+                    )} */}
                     { this.state.loading&& (
                         <div className="col-md-4 offset-md-4 col-xs-12 loading" style={{textAlign:"center"}}>
                             <BallBeat
@@ -374,18 +380,18 @@ class Userregister extends Component {
                     )}
                     </div>
                 </div>
-                <Addcustomerform
+                <AddNewItem
                     show={this.state.modalShow}
                     onHide={() => this.setState({modalShow: false})}
-                    onGetCustomer={()=> this.getCustomerData()}
-                    createTask={(newId)=> this.createTask(newId)}
+                    getNewItems={()=> this.getNewItemsData()}
+                    // createTask={(newId)=> this.createTask(newId)}
                 />
                 <Updatecustomerform
                     show={this.state.modalupdateShow}
                     onHide={() => this.setState({modalupdateShow: false})}
                     customerData={this.state.customerUpdateData}
                     customerId={this.state.customerId}
-                    onGetCustomer={()=> this.getCustomerData()}
+                    onGetCustomer={()=> this.getNewItemsData()}
                 /> 
                 <Createtask
                     show={this.state.modalcreateTaskShow}
@@ -410,4 +416,4 @@ class Userregister extends Component {
         )
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Userregister);
+export default connect(mapStateToProps, mapDispatchToProps)(NewItems);

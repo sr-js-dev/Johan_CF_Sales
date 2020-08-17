@@ -9,6 +9,8 @@ import Visitreport from '../pages/Visitreport/visit_report.js'
 import Creatvisitreport from '../pages/Visitreport/create_visitreport'
 import Visitreportquestion from '../pages/Visitreport/visitreport_question'
 import Customer from '../pages/Customer/customer.js'
+import NewItems from '../pages/Newitems/new-items.js'
+import ItemDetail from '../pages/Newitems/item-detail.js'
 import Dashboard from '../pages/Dashboard/dashboard.js'
 import Customerdetail from '../pages/Customer/customer-detail.js'
 import { Switch,Router, Route } from 'react-router-dom';
@@ -30,6 +32,8 @@ class Layout extends Component {
                     <Route path="/tasks" component={Tasks}/>
                     <Route path="/customer/detail" component={Customerdetail}/>
                     <Route path="/customer" component={Customer}/>
+                    <Route exact path="/new-items" component={NewItems}/>
+                    <Route exact path="/new-items/:id" component={ItemDetail}/>
                     <Route path="/visit-report/create-question" component={Visitreportquestion}/>
                     <Route path="/visit-report/create" component={Creatvisitreport}/>
                     <Route path="/visit-report" component={Visitreport}/>
