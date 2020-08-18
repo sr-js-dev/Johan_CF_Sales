@@ -9,7 +9,7 @@ import { trls } from '../../components/translate';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import 'datatables.net';
-// import Contactpanel from './contactpanel';
+import RawMaterials from './RawMaterials';
 // import Modalpanel from './modalpanel';
 // import Products from './products';
 // import Orders from './orders';
@@ -21,7 +21,7 @@ import 'datatables.net';
 import {ArcGauge} from '@progress/kendo-react-gauges';
 import '@progress/kendo-theme-default/dist/all.css';
 import * as Common from '../../components/common';
-// import { BallBeat } from 'react-pure-loaders';
+import { BallBeat } from 'react-pure-loaders';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -38,13 +38,8 @@ class ItemDetail extends Component {
     constructor(props) {
         var date = new Date();
         var curyear = date.getFullYear(); 
-        // console.log("$$$$$$",params.id)
-        // let pathArray = pathname.split('/')
-        // var str = decodeURIComponent(escape(window.atob(pathArray.pop())));
-        // let styArray = str.split(',');
-        // let customerId = styArray[0];
-        // let fullRight = styArray[1];
         super(props);
+        const { match: { params } } = props;
         this.state = {  
             itemDetail: [],
             flag:'',
@@ -55,16 +50,15 @@ class ItemDetail extends Component {
             currentYear: curyear,
             detailIdData: {contact: false, product: false, modal: false, orders: false, competitor: false, price: false, quotations: false, mold: false, document: false},
             detailShowFlag: false,
-            customerId: 0,
-            fullRight: "true"
+            itemDetailId: params.id,
         };
     }
 
     componentDidMount() {
         this._isMounted=true;
-        const { match: { params } } = this.props;
-        this.getItemDetail(params.id)
-        this.getCustomerFinancialDetails(this.state.customerId);
+        // const { match: { params } } = this.props;
+        this.getItemDetail(this.state.itemDetailId)
+        // this.getCustomerFinancialDetails(this.state.customerId);
     }
 
     componentWillUnmount() {
@@ -77,58 +71,58 @@ class ItemDetail extends Component {
             id : id
         }
         // this.setState({customerId: value})
-        this.setState({loadingvalue:true})
+        this.setState({loading:true})
         var headers = SessionManager.shared().getAuthorizationHeader();
         Axios.post(API.GetItemDetail, params,  headers)
         .then(result => {
             if(this._isMounted){
                 if(result.data.Success) {
-                    console.log("^^^^^^^^^^^^^", result.data.Items)
+                    this.setState({loading: false})
                     this.setState({itemDetail: result.data.Items})
                 }
             }
         });
     }
 
-    getCustomerFinancialDetails (value) {
-        this._isMounted = true;
-        let params = {
-            customerid : value
-        }
-        let currentRevenue=0;
-        let lastRevenue=0;
-        this.setState({customerId: value})
-        this.setState({loadingvalue:true})
-        var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.post(API.GetCustomerFinancialDetailData, params,  headers)
-        .then(result => {
-            var date = new Date();
-            var curyear = date.getFullYear();    
-            if(this._isMounted){
-                let detailData=result.data.Items
-                if(detailData){
-                    detailData.map((data, index) => {
-                        if(data.Year===curyear){
-                            this.setState({customerFinancialData4: data})
-                            currentRevenue=data.Revenue
-                        }else if(data.Year===curyear-1){
-                            this.setState({customerFinancialData3: data})
-                            lastRevenue=data.Revenue
-                        }else if(data.Year===curyear-2){
-                            this.setState({customerFinancialData2: data})
-                        }else if(data.Year===curyear-3){
-                            this.setState({customerFinancialData1: data})
-                        }
-                        return detailData;
-                    })
-                }
-                if(currentRevenue&&lastRevenue){
-                    this.setState({gaugepercent:(lastRevenue/currentRevenue)/2});
-                    this.setState({percent:(currentRevenue/lastRevenue)*100})
-                }
-            }
-        });
-    }
+    // getCustomerFinancialDetails (value) {
+    //     this._isMounted = true;
+    //     let params = {
+    //         customerid : value
+    //     }
+    //     let currentRevenue=0;
+    //     let lastRevenue=0;
+    //     this.setState({customerId: value})
+    //     this.setState({loadingvalue:true})
+    //     var headers = SessionManager.shared().getAuthorizationHeader();
+    //     Axios.post(API.GetCustomerFinancialDetailData, params,  headers)
+    //     .then(result => {
+    //         var date = new Date();
+    //         var curyear = date.getFullYear();    
+    //         if(this._isMounted){
+    //             let detailData=result.data.Items
+    //             if(detailData){
+    //                 detailData.map((data, index) => {
+    //                     if(data.Year===curyear){
+    //                         this.setState({customerFinancialData4: data})
+    //                         currentRevenue=data.Revenue
+    //                     }else if(data.Year===curyear-1){
+    //                         this.setState({customerFinancialData3: data})
+    //                         lastRevenue=data.Revenue
+    //                     }else if(data.Year===curyear-2){
+    //                         this.setState({customerFinancialData2: data})
+    //                     }else if(data.Year===curyear-3){
+    //                         this.setState({customerFinancialData1: data})
+    //                     }
+    //                     return detailData;
+    //                 })
+    //             }
+    //             if(currentRevenue&&lastRevenue){
+    //                 this.setState({gaugepercent:(lastRevenue/currentRevenue)/2});
+    //                 this.setState({percent:(currentRevenue/lastRevenue)*100})
+    //             }
+    //         }
+    //     });
+    // }
 
     userDeleteConfirm = (event) => {
         this.setState({userId:event.currentTarget.id})
@@ -299,7 +293,6 @@ class ItemDetail extends Component {
                                 </Card.Body>
                         </Card>
                     </Col>
-                    {fullRight==="true"&&(
                         <Col sm={6} className="card-container-col-finance">
                         <Card>
                             <Card.Header><i className="fas fa-money-check-alt" style={{paddingRight:"5px", fontSize:"18px"}}></i>{trls("New_product")}</Card.Header>
@@ -351,12 +344,11 @@ class ItemDetail extends Component {
                                                         arcCenterRender={arcCenterRenderer}
                                                     />
                                                 </div>
-                                        </Col>
-                                    </Row>
-                                </Card.Body>
+                                    </Col>
+                                </Row>
+                            </Card.Body>
                         </Card>
                     </Col>
-                    )}
                 </Row>
                 {/* {!this.state.detailShowFlag && (
                     <div className="page-loading-spinner loading" style={{textAlign:"center"}}>
@@ -365,75 +357,79 @@ class ItemDetail extends Component {
                             loading={this.state.loading}
                         />
                     </div>
-                )}
+                )} */}
+                {/* <div className="page-loading-spinner loading" style={{textAlign:"center"}}>
+                        <BallBeat
+                            color={'#000'}
+                            loading={this.state.loading}
+                        />
+                    </div> */}
                 <div className="panel-collapse">
-                    <Contactpanel
-                        title={trls("Contacts")}
-                        customerId={this.state.customerId}
-                        detailmode={(detail_Id)=>this.detailmode(detail_Id)}
-                        contactFlag={this.state.detailIdData.contact}
+                    <RawMaterials
+                        title={trls("Raw_materials")}
+                        itemDetailId={this.state.itemDetailId}
+                        // detailmode={(detail_Id)=>this.detailmode(detail_Id)}
+                        // contactFlag={this.state.detailIdData.contact}
                     />
                 </div>
-                {fullRight==="true"&&(
-                    <div>
-                        <div className="panel-collapse">
-                            <Priceagree
-                                title={trls("Price_agreements")}
-                                customerId={this.state.customerId}
-                                detailmode={this.detailmode}
-                            />
-                        </div>
-                        <div className="panel-collapse">
-                            <Quotation
-                                title={trls("Quotations")}
-                                customerId={this.state.customerId}
-                                detailmode={this.detailmode}
-                            />
-                        </div>
-                        <div className="panel-collapse">
-                            <Modalpanel
-                                title={trls("Models")}
-                                customerId={this.state.customerId}
-                                detailmode={this.detailmode}
-                            />
-                        </div>
-                        <div className="panel-collapse">
-                            <Products
-                                title={trls("Articles")}
-                                customerId={this.state.customerId}
-                                detailmode={this.detailmode}
-                            />
-                        </div>
-                        <div className="panel-collapse">
-                            <Competitor
-                                title={trls("Competitor_models")}
-                                customerId={this.state.customerId}
-                                detailmode={this.detailmode}
-                            />
-                        </div>
-                        <div className="panel-collapse">
-                            <Orders
-                                title={trls("Orders")}
-                                customerId={this.state.customerId}
-                                detailmode={this.detailmode}
-                            />
-                        </div>
-                        <div className="panel-collapse">
-                            <Mold
-                                title={trls("Mold")}
-                                customerId={this.state.customerId}
-                                detailmode={this.detailmode}
-                            />
-                        </div>
-                        <div className="panel-collapse">
-                            <Document
-                                title={trls("Documents")}
-                                customerId={this.state.customerId}
-                                detailmode={this.detailmode}
-                            />
-                        </div>
+                {/* <div>
+                    <div className="panel-collapse">
+                        <Priceagree
+                            title={trls("Price_agreements")}
+                            customerId={this.state.customerId}
+                            detailmode={this.detailmode}
+                        />
                     </div>
-                )} */}
+                    <div className="panel-collapse">
+                        <Quotation
+                            title={trls("Quotations")}
+                            customerId={this.state.customerId}
+                            detailmode={this.detailmode}
+                        />
+                    </div>
+                    <div className="panel-collapse">
+                        <Modalpanel
+                            title={trls("Models")}
+                            customerId={this.state.customerId}
+                            detailmode={this.detailmode}
+                        />
+                    </div>
+                    <div className="panel-collapse">
+                        <Products
+                            title={trls("Articles")}
+                            customerId={this.state.customerId}
+                            detailmode={this.detailmode}
+                        />
+                    </div>
+                    <div className="panel-collapse">
+                        <Competitor
+                            title={trls("Competitor_models")}
+                            customerId={this.state.customerId}
+                            detailmode={this.detailmode}
+                        />
+                    </div>
+                    <div className="panel-collapse">
+                        <Orders
+                            title={trls("Orders")}
+                            customerId={this.state.customerId}
+                            detailmode={this.detailmode}
+                        />
+                    </div>
+                    <div className="panel-collapse">
+                        <Mold
+                            title={trls("Mold")}
+                            customerId={this.state.customerId}
+                            detailmode={this.detailmode}
+                        />
+                    </div>
+                    <div className="panel-collapse">
+                        <Document
+                            title={trls("Documents")}
+                            customerId={this.state.customerId}
+                            detailmode={this.detailmode}
+                        />
+                    </div>
+                </div> */}
             </Container>
         )
     };

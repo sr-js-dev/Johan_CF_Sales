@@ -78,5 +78,9 @@ export default {
     PostNewItem: `${BASEURL}/api/factory/execute/portallvs/postNwNewProduct`,
     GetItemDetail: `${BASEURL}/api/factory/execute/portallvs/getNwNewProductDetail`,
     GetNewItemContact: `${BASEURL}/api/factory/execute/portallvs/getNwContactsDropdown`,
+    GetRawMaterials: `${BASEURL}/api/factory/execute/portallvs/getNwRawMaterial`,
+    PostNewRawMaterial: `${BASEURL}/api/factory/execute/portallvs/postNwRawMaterial`,
+    GetNewMaterialTypes: `${BASEURL}/api/factory/execute/portallvs/getNwRawMaterialTypeDropdown`,
+    GetNewMaterialValues: `${BASEURL}/api/factory/execute/portallvs/getNwRawMaterialDropdown`
   };
    

@@ -1,5 +1,10 @@
 export const TRANSLATIONS = {
     en_US: {
+      Value: 'Value',
+      Create_new_raw_material: 'Create new raw material',
+      Raw_material: 'Raw material',
+      Add_new: 'Add new',
+      Raw_materials: 'Raw materials',
       New_product: 'New product',
       Zip_code: "Zip code",
       Create_new_item: 'Create new item',
@@ -226,6 +231,11 @@ export const TRANSLATIONS = {
       DocumentName: 'DocumentName'
     },
     nl_BE: {
+      Value: 'Waarde',
+      Create_new_raw_material: '',
+      Raw_material: 'Grondstof',
+      Add_new: 'Nieuwe toevoegen',
+      Raw_materials: 'Grondstoffen',
       New_product: 'Nieuw product',
       Zip_code: 'postcode',
       Create_new_item: 'Maak een nieuw item',
