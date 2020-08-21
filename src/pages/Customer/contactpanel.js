@@ -111,6 +111,7 @@ class AccordionItem extends React.Component {
 
     componentDidUpdate(){
         if(this.props.customerId){
+            console.log("##########", this.props.customerId)
             this.getCustomerData()
         }
     }

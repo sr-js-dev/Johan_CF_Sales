@@ -10,6 +10,9 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import 'datatables.net';
 import RawMaterials from './RawMaterials';
+import Application from './Application';
+import Production from './Production';
+import Periphery from './Periphery';
 // import Modalpanel from './modalpanel';
 // import Products from './products';
 // import Orders from './orders';
@@ -367,6 +370,30 @@ class ItemDetail extends Component {
                 <div className="panel-collapse">
                     <RawMaterials
                         title={trls("Raw_materials")}
+                        itemDetailId={this.state.itemDetailId}
+                        // detailmode={(detail_Id)=>this.detailmode(detail_Id)}
+                        // contactFlag={this.state.detailIdData.contact}
+                    />
+                </div>
+                <div className="panel-collapse">
+                    <Application
+                        title={trls("Application")}
+                        itemDetailId={this.state.itemDetailId}
+                        // detailmode={(detail_Id)=>this.detailmode(detail_Id)}
+                        // contactFlag={this.state.detailIdData.contact}
+                    />
+                </div>
+                <div className="panel-collapse">
+                    <Production
+                        title={trls("Production")}
+                        itemDetailId={this.state.itemDetailId}
+                        // detailmode={(detail_Id)=>this.detailmode(detail_Id)}
+                        // contactFlag={this.state.detailIdData.contact}
+                    />
+                </div>
+                <div className="panel-collapse">
+                    <Periphery
+                        title={trls("Periphery")}
                         itemDetailId={this.state.itemDetailId}
                         // detailmode={(detail_Id)=>this.detailmode(detail_Id)}
                         // contactFlag={this.state.detailIdData.contact}

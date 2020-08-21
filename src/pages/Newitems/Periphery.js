@@ -10,7 +10,7 @@ import API from '../../components/api'
 import Axios from 'axios';
 import 'datatables.net';
 import { BallBeat } from 'react-pure-loaders';
-import AddNewRawMaterial from './AddNewRawMaterial';
+import AddNewPeriphery from './AddNewPeriphery';
 // import Updatecontact from './updatecontact';
 
 const mapStateToProps = state => ({ ...state.auth });
@@ -18,7 +18,7 @@ const mapStateToProps = state => ({ ...state.auth });
 const mapDispatchToProps = dispatch => ({
     
 });
-class RawMaterials extends React.Component {
+class Periphery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {  
@@ -41,32 +41,31 @@ class AccordionItem extends React.Component {
     state = {
         opened: false,
         firstLoad: false,
-        rawMaterialsData: [],
+        peripheryDatas: [],
         newRawMaterialFlag: false
     }
 
     componentDidMount() {
         this._isMounted=true
         this.setState({loading: true});
-        this.getRawMaterialsData();
+        this.getPeripheryDatas();
     }
     
-    getRawMaterialsData = () => {
+    getPeripheryDatas = () => {
         this.setState({loading: true});
         this._isMounted = true;
         let params = {
-            id: Number(this.props.itemDetailId)
+            headerid: Number(this.props.itemDetailId)
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.post(API.GetRawMaterials, params, headers)
+        Axios.post(API.GetNwPeriphery, params, headers)
         .then(result => {
             if(this._isMounted){
                 if(result.data.Success){
-                    console.log("YYYYY", result.data.Items)
-                    this.setState({rawMaterialsData: result.data.Items});
+                    this.setState({peripheryDatas: result.data.Items});
                     this.setState({loading:false})
-                    $('#raw_materials').dataTable().fnDestroy();
-                    $('#raw_materials').DataTable(
+                    $('#periphery').dataTable().fnDestroy();
+                    $('#periphery').DataTable(
                         {
                         "language": {
                             "lengthMenu": trls("Show")+" _MENU_ "+trls("Entries"),
@@ -97,7 +96,7 @@ class AccordionItem extends React.Component {
         },
         state: {
             opened,
-            rawMaterialsData
+            peripheryDatas
         }
         } = this
         return (
@@ -115,24 +114,24 @@ class AccordionItem extends React.Component {
             <div {...{ className: 'accordion-item__inner' }} style={{borderTop: "1px solid rgba(0,0,0,.125)"}}>
                 <div {...{ className: 'accordion-item__content' }}>
                     <div className="contact-detail-header">
-                        <Button type="button" onClick={()=>this.setState({ modalShow:true, newRawMaterialFlag: true })}>{trls('Add_new')}</Button>
+                        <Button type="button" onClick={()=>this.setState({ modalShow:true, newRawMaterialFlag: true })}>{trls('Add_periphery')}</Button>
                     </div>
                     <div className="table-responsive credit-history">
-                        <table id="raw_materials" className="place-and-orders__table table" width="100%">
+                        <table id="periphery" className="place-and-orders__table table" width="100%">
                         <thead>
                             <tr>
-                                <th>{trls('Id')}</th>
                                 <th>{trls('Type')}</th>
-                                <th>{trls('Raw_material')}</th>
+                                <th>{trls('Description')}</th>
+                                <th>{trls('Post_processing')}</th>
                             </tr>
                         </thead>
-                        {rawMaterialsData && !this.state.loading &&(<tbody >
+                        {peripheryDatas && !this.state.loading &&(<tbody >
                             {
-                                rawMaterialsData.map((data,i) =>(
+                                peripheryDatas.map((data,i) =>(
                                     <tr id={i} key={i}>
-                                        <td>{data.id}</td>
                                         <td>{data.type}</td>
-                                        <td>{data.grondstof}</td>
+                                        <td>{data.description}</td>
+                                        <td><Form.Check type="checkbox" name="postProcessing" style={{fontSize:"16px",marginRight:"40px", marginTop:'10px'}} checked={data.postProcessing === '1' ? true : false } readOnly/></td>
                                     </tr>
                             ))
                             }
@@ -150,10 +149,10 @@ class AccordionItem extends React.Component {
                     </div>
                 </div>
             </div>
-            <AddNewRawMaterial
+            <AddNewPeriphery
                 show={this.state.modalShow}
                 onHide={() => this.setState({modalShow: false})}
-                getRawMaterials={() => this.getRawMaterialsData()}
+                getRawMaterials={() => this.getPeripheryDatas()}
                 itemDetailId={this.props.itemDetailId}
                 newRawMaterialFlag={this.state.newRawMaterialFlag}
                 detailMode={() => this.setState({newRawMaterialFlag: false})}
@@ -161,6 +160,6 @@ class AccordionItem extends React.Component {
         </div>
         )
     }
-    }
-    export default connect(mapStateToProps, mapDispatchToProps)(RawMaterials);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Periphery);
 

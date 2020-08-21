@@ -762,6 +762,7 @@ table.dataTable.no-footer {
 }
 .bottom-datatable{
   display: flex;
+  padding: 0 30px;
 }
 .dataTables_info{
   margin-left: auto;

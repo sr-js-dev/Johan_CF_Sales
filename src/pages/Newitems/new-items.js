@@ -299,9 +299,9 @@ class NewItems extends Component {
                     <Row>
                         <Col sm={6}>
                             {!this.state.loading?(
-                                <Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_new_item')}</Button>
+                                <Button variant="primary" onClick={()=>this.setState({modalShow:true, mode:"add", flag:false, newItemFlag: true})}><i className="fas fa-plus add-icon"></i>{trls('Add_new_item')}</Button>
                             ):
-                                <Button variant="primary" disabled onClick={()=>this.setState({modalShow:true, mode:"add", flag:false})}><i className="fas fa-plus add-icon"></i>{trls('Add_new_item')}</Button>
+                                <Button variant="primary" disabled onClick={()=>this.setState({modalShow:true, mode:"add", flag:false, newItemFlag: true})}><i className="fas fa-plus add-icon"></i>{trls('Add_new_item')}</Button>
                             }
                         </Col>
                         <Col sm={6} className="has-search">
@@ -384,6 +384,8 @@ class NewItems extends Component {
                     show={this.state.modalShow}
                     onHide={() => this.setState({modalShow: false})}
                     getNewItems={()=> this.getNewItemsData()}
+                    newItemFlag = {this.state.newItemFlag}
+                    detailMode={() => this.setState({newItemFlag: false})}
                     // createTask={(newId)=> this.createTask(newId)}
                 />
                 <Updatecustomerform

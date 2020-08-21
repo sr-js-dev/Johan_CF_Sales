@@ -57,7 +57,8 @@ class Addcontactform extends Component {
         .then(result => {
             this.setState({telvalue:'', value: ''})
             this.props.onHide();
-            this.props.onGetContact(this.state.customerId);
+            // this.props.onGetContact(this.state.customerId);
+            this.props.onGetContact();
         });
     }
 

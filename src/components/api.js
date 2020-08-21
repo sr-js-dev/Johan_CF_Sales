@@ -81,6 +81,12 @@ export default {
     GetRawMaterials: `${BASEURL}/api/factory/execute/portallvs/getNwRawMaterial`,
     PostNewRawMaterial: `${BASEURL}/api/factory/execute/portallvs/postNwRawMaterial`,
     GetNewMaterialTypes: `${BASEURL}/api/factory/execute/portallvs/getNwRawMaterialTypeDropdown`,
-    GetNewMaterialValues: `${BASEURL}/api/factory/execute/portallvs/getNwRawMaterialDropdown`
+    GetNewMaterialValues: `${BASEURL}/api/factory/execute/portallvs/getNwRawMaterialDropdown`,
+    GetApplication: `${BASEURL}/api/factory/execute/portallvs/getApplication`,
+    PutApplication: `${BASEURL}/api/factory/execute/portallvs/putApplication`,
+    GetProduction: `${BASEURL}/api/factory/execute/portallvs/getProduction`,
+    PutProduction: `${BASEURL}/api/factory/execute/portallvs/putProduction`,
+    GetNwPeriphery: `${BASEURL}/api/factory/execute/portallvs/getNwPeriphery`,
+    GetNwPeriferieTypesDropdown: `${BASEURL}/api/factory/execute/portallvs/getNwPeriferieTypesDropdown`,
+    postNwPeriphery: `${BASEURL}/api/factory/execute/portallvs/postNwPeriphery`,
   };
-   

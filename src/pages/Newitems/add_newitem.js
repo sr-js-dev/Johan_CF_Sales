@@ -35,7 +35,7 @@ class AddNewItem extends Component {
             customers: [],
             employee: [],
             employeeSelectData: [{'value': 34, 'label': 'Esther Sauer'}],
-            taskIds: [],
+            // taskIds: [],
             remarkData: '',
             pageLoding: false
         };
@@ -44,13 +44,19 @@ class AddNewItem extends Component {
         this._isMounted = false;
     }
 
-    componentDidMount(){
-        this.setState({updateTask: this.props.updateTask, taskId: this.props.taskId})
-        this.getCustomers();
-        this.getEmployee();
+    // componentDidMount(){
+    //     this.getCustomers();
+    // }
+    
+    componentDidUpdate(){
+        if(this.props.newItemFlag){
+            console.log("*******")
+            this.getCustomers();
+        }
     }
 
     getCustomers = () => {
+        this.props.detailMode();
         var headers = SessionManager.shared().getAuthorizationHeader();
         let params = {};
         Axios.post(API.GetNewItemsCustomer, params, headers)
@@ -60,17 +66,17 @@ class AddNewItem extends Component {
         });
     }
 
-    getEmployee = () => {
-        if(this.props.customerNewCreate){
+    // getEmployee = () => {
+    //     if(this.props.customerNewCreate){
             
-            this.setState({val2:1})
-        }
-        var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.get(API.GetEmployee, headers)
-        .then(result => {
-            this.setState({employee: result.data.Items});
-        });
-    }
+    //         this.setState({val2:1})
+    //     }
+    //     var headers = SessionManager.shared().getAuthorizationHeader();
+    //     Axios.get(API.GetEmployee, headers)
+    //     .then(result => {
+    //         this.setState({employee: result.data.Items});
+    //     });
+    // }
     getContacts = (customerNumber) => {
         var headers = SessionManager.shared().getAuthorizationHeader();
         let params = {
@@ -121,6 +127,12 @@ class AddNewItem extends Component {
             if(this._isMounted){
                 if(result.data.Success){
                     this.setState({pageLoding: false});
+                    this.setState({
+                        customers: [],
+                        contacts: [],
+                        selectedCustomer: {},
+                        selectedContact: {} 
+                    })
                     this.onHide();
                     // history.push({
                     //     pathname: '/new-items/'+result.data.NewId,
@@ -139,10 +151,6 @@ class AddNewItem extends Component {
     onHide = () => {
         this.props.onHide();
         this.props.getNewItems();
-        this.setState({
-            customers: [],
-            contacts: []
-        })
     }
 
     render(){

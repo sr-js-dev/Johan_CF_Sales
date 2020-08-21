@@ -15,56 +15,40 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
 });
-class AddNewRawMaterial extends Component {
+class AddNewPeriphery extends Component {
     _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {  
             types: [],
-            values: [],
             pageLoading: false,
-            show: props.show
+            show: props.show,
+            postProcessing: false,
+            description: ''
         };
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
 
-    componentDidMount(){
+    componentDidUpdate(){
         if(this.props.newRawMaterialFlag){
-            this.getNewRawMaterialTypes();
+            this.getNewPeripheryTypes();
         }
     }
 
-    getNewRawMaterialTypes = () => {
+    getNewPeripheryTypes = () => {
         this.props.detailMode();
         var headers = SessionManager.shared().getAuthorizationHeader();
         let params = {};
-        Axios.post(API.GetNewMaterialTypes, params, headers)
+        Axios.post(API.GetNwPeriferieTypesDropdown, params, headers)
         .then(result => {
-            console.log("rowmaterialtypes===", result)
-            let types = result.data.Items.map(item => ({value: item.key, label: item.key}));
+            let types = result.data.Items.map(item => ({value: item.key, label: item.value}));
             this.setState({types: types});
-        });
-    }
-
-    getValues = (type) => {
-        var headers = SessionManager.shared().getAuthorizationHeader();
-        let params = {
-            type: type
-        };
-        Axios.post(API.GetNewMaterialValues, params, headers)
-        .then(result => {
-            let values = result.data.Items.map(item => ({value: item.key, label: item.value}));
-            this.setState({values: values});
         });
     }
     changeType = (val) => {
         this.setState({selectedType: val})
-        this.getValues(val.value)
-    }
-    changeValue = (val) => {
-        this.setState({selectedValue: val})
     }
 
     handleSubmit = (event) => {
@@ -78,13 +62,13 @@ class AddNewRawMaterial extends Component {
         }
         let params = {};
         params = {          
-            'username': Auth.getUserName(),
-            'nwartid': Number(this.props.itemDetailId),
+            'headerid': Number(this.props.itemDetailId),
             'type': Number(data.type),
-            'rawmaterialid': Number(data.value)
+            'description': data.description,
+            'postProcessing': this.state.postProcessing
         }
         var headers = SessionManager.shared().getAuthorizationHeader();
-        Axios.post(API.PostNewRawMaterial, params, headers)
+        Axios.post(API.postNwPeriphery, params, headers)
         .then(result => {
             if(this._isMounted){
                 if(result.data.Success){
@@ -95,19 +79,31 @@ class AddNewRawMaterial extends Component {
         });
     }
 
+    changeDescription = (e) => {
+        this.setState({
+            description: e.target.value
+        })
+    }
+
+    changeCheckedState = (e) => {
+        this.setState({
+            postProcessing: e.target.checked
+        })
+    }
+
     onHide = () => {
         this.props.onHide();
         this.props.getRawMaterials();
         this.setState({
             types: [],
-            values: [],
-            selectedType: {},
-            selectedValue: {}
+            description: '',
+            postProcessing: false,
+            selectedType: null
         })
     }
 
     render(){
-        const { pageLoading, types, selectedType, values, selectedValue } = this.state;
+        const { pageLoading, types, selectedType } = this.state;
         return (
             <Modal
                 show={this.props.show}
@@ -119,7 +115,7 @@ class AddNewRawMaterial extends Component {
             >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    {trls('Create_new_raw_material')}
+                    {trls('Create_new_periphery')}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -138,14 +134,13 @@ class AddNewRawMaterial extends Component {
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextSupplier">
                         <Col className="product-text" style={{height:"auto"}}>
-                            <Select
-                                name="value"
-                                placeholder={trls('Select')}
-                                options={values}
-                                onChange={val => this.changeValue(val)}
-                                value = {selectedValue}
-                            />
-                            <label className="placeholder-label">{trls('Value')}</label>
+                            <Form.Control type="text" name="description" placeholder={trls('Description')} value={this.state.description} onChange={this.changeDescription}/>
+                            <label className="placeholder-label">{trls('Description')}</label>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="checkbox3" style={{padding:"0 10px"}}>
+                        <Col>
+                            <Form.Check type="checkbox" name="postProcessing" label={trls("Post_processing")} style={{fontSize:"16px",marginRight:"40px", marginTop:'10px'}} checked={this.state.postProcessing} onChange={this.changeCheckedState}/>
                         </Col>
                     </Form.Group>
                     <Form.Group style={{textAlign:"center"}}>
@@ -158,4 +153,4 @@ class AddNewRawMaterial extends Component {
         );
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(AddNewRawMaterial);
+export default connect(mapStateToProps, mapDispatchToProps)(AddNewPeriphery);

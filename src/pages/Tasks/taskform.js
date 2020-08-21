@@ -47,6 +47,7 @@ class Taskform extends Component {
 
     componentDidUpdate(){
         if(this.props.taskflag){
+            console.log("9090")
             this.setState({updateTask: this.props.updateTask, taskId: this.props.taskId})
             this.getCustomer();
             this.getEmployee();
