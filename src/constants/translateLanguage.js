@@ -1,5 +1,14 @@
 export const TRANSLATIONS = {
     en_US: {
+      Changed_by: 'Changed by',
+      Activities: 'Activities',
+      Add_new_answer: 'Add new answer',
+      Question_by: 'Question by',
+      Question_to: 'Question to',
+      Ask_to: 'Ask to',
+      Create_new_question: 'Create new question',
+      Answer: 'Answer',
+      Questions: 'Questions',
       Value: 'Value',
       Periphery: 'Periphery',
       Add_periphery: 'Add periphery',
@@ -252,6 +261,15 @@ export const TRANSLATIONS = {
       DocumentName: 'DocumentName'
     },
     nl_BE: {
+      Changed_by: 'Veranderd door',
+      Activities: 'Activiteiten',
+      Add_new_answer: 'Voeg een nieuw antwoord toe',
+      Question_by: 'Vraag door',
+      Question_to: 'Vraag aan',
+      Ask_to: 'Vragen om',
+      Create_new_question: 'Maak een nieuwe vraag',
+      Answer: 'Antwoord',
+      Questions: 'Vragen',
       Value: 'Waarde',
       Periphery: 'Omtrek',
       Add_periphery: 'Periferie toevoegen',

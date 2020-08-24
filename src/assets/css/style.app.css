@@ -323,6 +323,10 @@ table.dataTable.no-footer {
   border-color:rgba(0,0,0,.125);
 
 }
+.card-questions {
+  height:  500px;
+  max-height: 500px;
+}
 .card-container-col-finance{
   padding: 0px;
   box-shadow: -5px 0 10px 2px rgba(0, 0, 0, .1);

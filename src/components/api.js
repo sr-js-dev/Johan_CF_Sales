@@ -89,4 +89,9 @@ export default {
     GetNwPeriphery: `${BASEURL}/api/factory/execute/portallvs/getNwPeriphery`,
     GetNwPeriferieTypesDropdown: `${BASEURL}/api/factory/execute/portallvs/getNwPeriferieTypesDropdown`,
     postNwPeriphery: `${BASEURL}/api/factory/execute/portallvs/postNwPeriphery`,
+    GetNwQuestions: `${BASEURL}/api/factory/execute/portallvs/getNwQuestions`,
+    GetEmployeeDropdown: `${BASEURL}/api/factory/execute/portallvs/getEmployeeDropdown`,
+    PostNwQuestion: `${BASEURL}/api/factory/execute/portallvs/postNwQuestion`,
+    PostNwAnswer: `${BASEURL}/api/factory/execute/portallvs/postNwAnswer`,
+    GetNwActivities: `${BASEURL}/api/factory/execute/portallvs/getNwActivities`
   };
