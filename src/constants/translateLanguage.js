@@ -271,7 +271,7 @@ export const TRANSLATIONS = {
       Answer: 'Antwoord',
       Questions: 'Vragen',
       Value: 'Waarde',
-      Periphery: 'Omtrek',
+      Periphery: 'Periferie',
       Add_periphery: 'Periferie toevoegen',
       Create_new_periphery: 'Creëer nieuwe periferie',
       Post_processing: 'Nabewerking',
